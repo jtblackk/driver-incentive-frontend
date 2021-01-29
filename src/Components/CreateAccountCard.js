@@ -1,11 +1,18 @@
-import { Button, TextField, Typography } from '@material-ui/core'
-import react, { useState } from 'react'
+import {
+  Button,
+  TextField,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core'
+import { useState } from 'react'
 
 function CreateAccountCard() {
   let userDetailObj = {
     Email_ID: 'DEFAULT',
     FirstName: 'DEFAULT',
     LastName: 'DEFAULT',
+    AccountType: 'DEFAULT',
   }
   const [userDetails, setUserDetails] = useState(userDetailObj)
 
@@ -46,6 +53,23 @@ function CreateAccountCard() {
           }}
         />
         <br />
+        <br />
+        <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
+        <Select
+          labelId="AccountTypeLabel"
+          id="AccountType"
+          onChange={(event) => {
+            // update account type in state
+            let newUserDetails = userDetails
+            newUserDetails.AccountType = event.target.value
+            setUserDetails(newUserDetails)
+          }}
+        >
+          <MenuItem value="driver">Driver</MenuItem>
+          <MenuItem value="sponsor">Sponsor</MenuItem>
+          <MenuItem value="admin">Admin</MenuItem>
+        </Select>
+        <br />
         <TextField
           id="Password"
           label="Password"
@@ -59,7 +83,7 @@ function CreateAccountCard() {
         />
         <br />
         <TextField
-          id="Confirm Password"
+          id="ConfirmPassword"
           label="Confirm Password"
           type="password"
           onChange={(event) => {
@@ -70,30 +94,29 @@ function CreateAccountCard() {
           }}
         />
         <br />
+        <br />
+        <Button
+          variant="outlined"
+          onClick={() => {
+            // set up fetch request -> create new user entry in driver detail database
+            let URL = ''
+            let requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                Email_ID: userDetails.Email_ID,
+                FirstName: userDetails.FirstName,
+                LastName: userDetails.LastName,
+              }),
+            }
+
+            fetch(URL, requestOptions)
+          }}
+        >
+          Create account
+        </Button>
       </form>
-
       <br />
-
-      <Button
-        variant="outlined"
-        onClick={() => {
-          // set up fetch request -> create new user entry in driver detail database
-          let URL = ''
-          let requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              Email_ID: userDetails.Email_ID,
-              FirstName: userDetails.FirstName,
-              LastName: userDetails.LastName,
-            }),
-          }
-
-          // fetch(URL, requestOptions)
-        }}
-      >
-        Create account
-      </Button>
     </div>
   )
 }
