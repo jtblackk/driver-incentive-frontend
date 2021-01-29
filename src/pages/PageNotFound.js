@@ -1,8 +1,12 @@
+import Grid from '@material-ui/core/Grid'
+
 function PageNotFound() {
   return (
-    <div>
-      <p>404: No such page on this site</p>
-    </div>
+    <Grid container justify="space-evenly">
+      <Grid item>
+        <p>404: page doesn't exist :(</p>
+      </Grid>
+    </Grid>
   )
 }
 
