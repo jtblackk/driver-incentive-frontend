@@ -1,5 +1,5 @@
-import TopAppBar from './../Components/TopAppBar'
-import CreateAccountCard from './../Components/CreateAccountCard'
+import TopAppBar from '../Components/TopAppBar'
+import CreateAccountCard from '../Components/CreateAccountCard'
 import { Grid } from '@material-ui/core'
 
 function Signup() {
