@@ -1,3 +1,5 @@
+import email_validator from 'email-validator'
+
 import {
   Button,
   TextField,
@@ -9,10 +11,12 @@ import { useState } from 'react'
 
 function CreateAccountCard() {
   let userDetailObj = {
-    Email_ID: 'DEFAULT',
-    FirstName: 'DEFAULT',
-    LastName: 'DEFAULT',
-    AccountType: 'DEFAULT',
+    Email_ID: '',
+    FirstName: '',
+    LastName: '',
+    AccountType: '',
+    Password: '',
+    ConfirmPassword: '',
   }
   const [userDetails, setUserDetails] = useState(userDetailObj)
 
@@ -75,9 +79,9 @@ function CreateAccountCard() {
           label="Password"
           type="password"
           onChange={(event) => {
-            // update email in state
+            // update password in state
             let newUserDetails = userDetails
-            newUserDetails.Email_ID = event.target.value
+            newUserDetails.Password = event.target.value
             setUserDetails(newUserDetails)
           }}
         />
@@ -87,9 +91,9 @@ function CreateAccountCard() {
           label="Confirm Password"
           type="password"
           onChange={(event) => {
-            // update email in state
+            // validate password exists
             let newUserDetails = userDetails
-            newUserDetails.Email_ID = event.target.value
+            newUserDetails.ConfirmPassword = event.target.value
             setUserDetails(newUserDetails)
           }}
         />
@@ -98,6 +102,29 @@ function CreateAccountCard() {
         <Button
           variant="outlined"
           onClick={() => {
+            // validate input
+            if (userDetails.FirstName === '')
+              alert('Please enter your first name')
+
+            if (userDetails.LastName === '')
+              alert('Please enter your last name')
+
+            if (userDetails.Email_ID === '')
+              alert('Please enter your email address')
+            else if (email_validator.validate(userDetails.Email_ID) === false)
+              alert('Please enter a valid email address')
+
+            if (userDetails.AccountType === '')
+              alert('Please choose an account type')
+
+            if (
+              userDetails.Password === '' ||
+              userDetails.ConfirmPassword === ''
+            )
+              alert('Please enter a password')
+            else if (userDetails.Password !== userDetails.ConfirmPassword)
+              alert("Passwords don't match")
+
             // set up fetch request -> create new user entry in driver detail database
             let URL = ''
             let requestOptions = {
