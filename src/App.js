@@ -2,18 +2,18 @@ import './App.css'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import Index from './pages/Index'
-import Signup from './pages/Signup'
-import PageNotFound from './pages/PageNotFound'
+import IndexPage from './pages/IndexPage'
+import SignupPage from './pages/SignupPage'
+import PageNotFoundPage from './pages/PageNotFoundPage'
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" component={Index} />
-          <Route exact path="/signup" component={Signup} />
-          <Route component={PageNotFound} />
+          <Route exact path="/" component={IndexPage} />
+          <Route exact path="/signup" component={SignupPage} />
+          <Route component={PageNotFoundPage} />
         </Switch>
       </BrowserRouter>
     </div>
