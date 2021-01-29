@@ -15,7 +15,6 @@ function CreateAccountCard() {
         <TextField
           id="FirstName"
           label="First name"
-          required="true"
           onChange={(event) => {
             // update first name in state
             let newUserDetails = userDetails
@@ -27,7 +26,6 @@ function CreateAccountCard() {
         <TextField
           id="LastName"
           label="Last name"
-          required="true"
           onChange={(event) => {
             // update last name in state
             let newUserDetails = userDetails
@@ -40,7 +38,6 @@ function CreateAccountCard() {
           id="Email_ID"
           label="Email"
           type="email"
-          required="true"
           onChange={(event) => {
             // update email in state
             let newUserDetails = userDetails
@@ -53,7 +50,18 @@ function CreateAccountCard() {
           id="Password"
           label="Password"
           type="password"
-          required="true"
+          onChange={(event) => {
+            // update email in state
+            let newUserDetails = userDetails
+            newUserDetails.Email_ID = event.target.value
+            setUserDetails(newUserDetails)
+          }}
+        />
+        <br />
+        <TextField
+          id="Confirm Password"
+          label="Confirm Password"
+          type="password"
           onChange={(event) => {
             // update email in state
             let newUserDetails = userDetails
