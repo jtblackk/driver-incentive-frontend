@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Index from './pages/Index'
 import Signup from './pages/Signup'
 import PageNotFound from './pages/PageNotFound'
-import TopAppBar from './Components/TopAppBar'
 
 function App() {
   return (
