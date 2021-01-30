@@ -2,7 +2,7 @@ import TopAppBar from '../Components/TopAppBar'
 import CreateAccountCard from '../Components/CreateAccountCard'
 import { Grid } from '@material-ui/core'
 
-function Signup() {
+function SignupPage() {
   return (
     <div>
       <TopAppBar pageTitle="Create an account" />
@@ -15,4 +15,4 @@ function Signup() {
   )
 }
 
-export default Signup
+export default SignupPage

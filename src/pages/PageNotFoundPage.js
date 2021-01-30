@@ -1,6 +1,6 @@
 import Grid from '@material-ui/core/Grid'
 
-function PageNotFound() {
+function PageNotFoundPage() {
   return (
     <Grid container justify="space-evenly">
       <Grid item>
@@ -10,4 +10,4 @@ function PageNotFound() {
   )
 }
 
-export default PageNotFound
+export default PageNotFoundPage
