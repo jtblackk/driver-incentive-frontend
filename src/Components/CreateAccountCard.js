@@ -1,4 +1,5 @@
 import email_validator from 'email-validator'
+import { Auth } from "aws-amplify";
 
 import {
   Button,
@@ -22,28 +23,7 @@ function CreateAccountCard() {
   }
   const [userDetails, setUserDetails] = useState(userDetailObj)
   
-  handleSubmit = async event => {
-    
-    // AWS Cognito integration here
-    try {
-      const user = await Auth.signIn(this.userDetailObj.Email_ID, this.userDetailObj.Password);
-      console.log(user);
-      this.props.auth.setAuthStatus(true);
-      this.props.auth.setUser(user);
-      this.props.history.push("/");
-    }catch(error) {
-      let err = null;
-      !error.message ? err = { "message": error } : err = error;
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          cognito: err
-        }
-      });
-    }
-  };
-  
-
+ 
   let history = useHistory()
 
   return (
@@ -151,7 +131,24 @@ function CreateAccountCard() {
               alert('Please enter a password')
             else if (userDetails.Password !== userDetails.ConfirmPassword)
               alert("Passwords don't match")
-
+//********************* AUTH
+            try {
+              const user = await Auth.signIn(this.userDetailObj.Email_ID, this.userDetailObj.Password);
+              console.log(user);
+              this.props.auth.setAuthStatus(true);
+              this.props.auth.setUser(user);
+              this.props.history.push("/");
+               }catch(error) {
+                let err = null;
+                !error.message ? err = { "message": error } : err = error;
+                this.setState({
+                errors: {
+                  ...this.state.errors,
+                  cognito: err
+                   }
+                });
+              }       
+//****************** Auth 
             // set up fetch request -> create new user entry in driver detail database
             let CREATE_USER_URL =
               'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
