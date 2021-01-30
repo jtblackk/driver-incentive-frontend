@@ -22,14 +22,12 @@ function CreateAccountCard() {
     ConfirmPassword: '',
   }
   const [userDetails, setUserDetails] = useState(userDetailObj)
-  
- 
+
   let history = useHistory()
 
   return (
     <div>
       <form>
-      
         <TextField
           id="FirstName"
           label="First name"
@@ -131,8 +129,8 @@ function CreateAccountCard() {
               alert('Please enter a password')
             else if (userDetails.Password !== userDetails.ConfirmPassword)
               alert("Passwords don't match")
-//********************* AUTH
-/*            try {
+            //********************* AUTH
+            /*            try {
               const user = await Auth.signIn(this.userDetailObj.Email_ID, this.userDetailObj.Password);
               console.log(user);
               this.props.auth.setAuthStatus(true);
@@ -147,8 +145,8 @@ function CreateAccountCard() {
                   cognito: err
                    }
                 });
-              }  */     
-//****************** Auth 
+              }  */
+            //****************** Auth
             // set up fetch request -> create new user entry in driver detail database
             let CREATE_USER_URL =
               'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
@@ -165,13 +163,13 @@ function CreateAccountCard() {
             }
             fetch(CREATE_USER_URL, requestOptions)
 
-            // let GET_USERDATA_URL = `https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?email=${userDetails.Email_ID}`
-            // fetch(GET_USERDATA_URL)
-            //   .then((response) => response.json())
-            //   .then((data) => {
-            //     console.log(data)
-            //    // verify that account was successfully created
-            //   })
+            let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userDetails.Email_ID}`
+            fetch(GET_USERDATA_URL)
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data)
+                // verify that account was successfully created
+              })
 
             // route user to appropriate home page
             if (userDetails.AccountType === 'driver') {
