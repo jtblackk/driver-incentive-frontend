@@ -143,7 +143,7 @@ function CreateAccountCard() {
                 LastName: userDetails.LastName,
               }),
             }
-            fetch(CREATE_USER_URL, requestOptions)
+            // fetch(CREATE_USER_URL, requestOptions)
 
             // let GET_USER_URL = ''
             // fetch(GET_USER_URL)
