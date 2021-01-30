@@ -22,36 +22,7 @@ function CreateAccountCard() {
   }
   const [userDetails, setUserDetails] = useState(userDetailObj)
   
-  handleSubmit = async event => {
-    event.preventDefault();
-
-    // Form validation
-    this.clearErrorState();
-    const error = Validate(event, this.state);
-    if (error) {
-      this.setState({
-        errors: { ...this.state.errors, ...error }
-      });
-    }
-
-    // AWS Cognito integration here
-    try {
-      const user = await Auth.signIn(this.state.email, this.state.password);
-      console.log(user);
-      this.props.auth.setAuthStatus(true);
-      this.props.auth.setUser(user);
-      this.props.history.push("/");
-    }catch(error) {
-      let err = null;
-      !error.message ? err = { "message": error } : err = error;
-      this.setState({
-        errors: {
-          ...this.state.errors,
-          cognito: err
-        }
-      });
-    }
-  };
+  
 
   let history = useHistory()
 
