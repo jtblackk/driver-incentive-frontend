@@ -27,5 +27,5 @@ function App() {
   )
 }
 
-export default App <- normal export
+export default App 
 //export default withAuthenticator(App);
