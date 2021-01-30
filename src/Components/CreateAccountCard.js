@@ -32,7 +32,7 @@ function CreateAccountCard() {
       
         <TextField
           id="FirstName"
-          label="First name2"
+          label="First name"
           onChange={(event) => {
             // update first name in state
             let newUserDetails = userDetails
