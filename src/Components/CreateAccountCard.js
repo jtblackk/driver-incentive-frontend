@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core'
 import { useState } from 'react'
 
+import { useHistory } from 'react-router-dom'
+
 function CreateAccountCard() {
   let userDetailObj = {
     Email_ID: '',
@@ -19,6 +21,8 @@ function CreateAccountCard() {
     ConfirmPassword: '',
   }
   const [userDetails, setUserDetails] = useState(userDetailObj)
+
+  let history = useHistory()
 
   return (
     <div>
@@ -126,18 +130,38 @@ function CreateAccountCard() {
               alert("Passwords don't match")
 
             // set up fetch request -> create new user entry in driver detail database
-            let URL = ''
+            let CREATE_USER_URL = ''
+            //   'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
             let requestOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                Email_ID: userDetails.Email_ID,
+                Email_id: userDetails.Email_ID,
+                AccountType: userDetails.AccountType,
+                ApplicationStatus: 0,
                 FirstName: userDetails.FirstName,
                 LastName: userDetails.LastName,
               }),
             }
+            fetch(CREATE_USER_URL, requestOptions)
 
-            fetch(URL, requestOptions)
+            // let GET_USER_URL = ''
+            // fetch(GET_USER_URL)
+            //   .then((response) => response.json())
+            //   .then((data) => {
+            //     console.log(data)
+            //    // verify that account was successfully created
+            //   })
+
+            // route user to appropriate home page
+            if (userDetails.AccountType === 'driver') {
+              history.push('/driver')
+            } else if (userDetails.AccountType === 'sponsor') {
+              history.push('/sponsor')
+            } else if (userDetails.AccountType === 'admin') {
+              history.push('/admin')
+            } else {
+            }
           }}
         >
           Create account
