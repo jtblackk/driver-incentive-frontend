@@ -1,7 +1,7 @@
 import './App.css'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+//import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 
 import IndexPage from './pages/IndexPage'
 import SignupPage from './pages/SignupPage'
@@ -27,5 +27,5 @@ function App() {
   )
 }
 
-//export default App <- normal export
-export default withAuthenticator(App);
+export default App <- normal export
+//export default withAuthenticator(App);
