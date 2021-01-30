@@ -132,7 +132,7 @@ function CreateAccountCard() {
             else if (userDetails.Password !== userDetails.ConfirmPassword)
               alert("Passwords don't match")
 //********************* AUTH
-            try {
+/*            try {
               const user = await Auth.signIn(this.userDetailObj.Email_ID, this.userDetailObj.Password);
               console.log(user);
               this.props.auth.setAuthStatus(true);
@@ -147,7 +147,7 @@ function CreateAccountCard() {
                   cognito: err
                    }
                 });
-              }       
+              }  */     
 //****************** Auth 
             // set up fetch request -> create new user entry in driver detail database
             let CREATE_USER_URL =
