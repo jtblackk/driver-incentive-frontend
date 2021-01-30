@@ -48,7 +48,7 @@ function CreateAccountCard() {
 
   return (
     <div>
-      <form>
+      <form onSubmit={this.handleSubmit}>
       
         <TextField
           id="FirstName"
