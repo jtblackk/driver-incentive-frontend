@@ -130,8 +130,8 @@ function CreateAccountCard() {
               alert("Passwords don't match")
 
             // set up fetch request -> create new user entry in driver detail database
-            let CREATE_USER_URL = ''
-            //   'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+            let CREATE_USER_URL =
+              'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
             let requestOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -143,10 +143,10 @@ function CreateAccountCard() {
                 LastName: userDetails.LastName,
               }),
             }
-            // fetch(CREATE_USER_URL, requestOptions)
+            fetch(CREATE_USER_URL, requestOptions)
 
-            // let GET_USER_URL = ''
-            // fetch(GET_USER_URL)
+            // let GET_USERDATA_URL = `https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?email=${userDetails.Email_ID}`
+            // fetch(GET_USERDATA_URL)
             //   .then((response) => response.json())
             //   .then((data) => {
             //     console.log(data)
