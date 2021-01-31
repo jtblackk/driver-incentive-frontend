@@ -20,10 +20,10 @@ steps:
 
     $stageDir = '$(Build.SourcesDirectory)' | Split-Path
     $githubDir = $stageDir +"\"+"gitHub"
-    $destination = $githubDir +"\"+"<master>.git"
-    $alias = '<jpugmire>:'+ "$(Github.PAT)"
-    $sourceURL = 'https://$(AzureDevOps.PAT)@<S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith@dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master>'
-    $destURL = 'https://' + $alias + '@<github.com/jpugmire/driver-incentive-frontend.git>'
+    $destination = $githubDir +"\"+"master.git"
+    $alias = 'jpugmire:'+ "$(Github.PAT)"
+    $sourceURL = 'https://$(AzureDevOps.PAT)@S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith@dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
+    $destURL = 'https://' + $alias + '@github.com/jpugmire/driver-incentive-frontend.git'
 
     #Check if the parent directory exists and delete
     if((Test-Path -path $githubDir))
