@@ -22,6 +22,7 @@ steps:
     $githubDir = $stageDir +"\"+"gitHub"
     $destination = $githubDir +"\"+"Master.git"
     echo Pass: $(GithubAcc.PAT)
+    echo ADOPass: ${env:AZUREDEVOPS_PAT}
     $alias = 'jpugmire:dhNRAYD99sTwm9N'
     $sourceURL = 'https://' + ${env:AZUREDEVOPS_PAT} + 'dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
     $destURL = 'https://' + $alias + '@github.com/jpugmire/driver-incentive-frontend.git'
