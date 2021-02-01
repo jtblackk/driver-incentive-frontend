@@ -25,7 +25,7 @@ steps:
     git config --global user.email "jpugmire@clemson.edu"
     git config --global user.name "jpugmire"
     $sourceURL = 'https://dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
-    $destURL = 'https://' + $env:MAPPED_ENV_PAT + '@github.com/jpugmire/driver-incentive-frontend.git'
+    $destURL = 'https://' + ${env:MAPPED_ENV_PAT} + '@github.com/jpugmire/driver-incentive-frontend.git'
 
     #Check if the parent directory exists and delete
     if((Test-Path -path $githubDir))
