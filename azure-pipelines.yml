@@ -4,9 +4,6 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-- group: Pipeline Vars
-
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
@@ -24,9 +21,7 @@ steps:
     $stageDir = '$(Build.SourcesDirectory)' | Split-Path
     $githubDir = $stageDir +"\"+"gitHub"
     $destination = $githubDir +"\"+"Master.git"
-    echo Pass: $(env:GITHUBVERIF_PAT)
-    echo ADOPass: ${env:AZUREVERIF_PAT}
-    $alias = 'jpugmire:dhNRAYD99sTwm9N'
+    $alias = 'jpugmire:536152ea92e3054902eec72e738e4f3bf6154dc8'
     $sourceURL = 'https://' + ${env:AZUREDEVOPS_PAT} + 'dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
     $destURL = 'https://' + $alias + '@github.com/jpugmire/driver-incentive-frontend.git'
 
