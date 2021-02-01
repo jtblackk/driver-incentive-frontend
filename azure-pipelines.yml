@@ -23,10 +23,7 @@ steps:
     $stageDir = '$(Build.SourcesDirectory)' | Split-Path
     $githubDir = $stageDir +"\"+"gitHub"
     $destination = $githubDir +"\"+"Master.git"
-    $authorUser = git log -1 --pretty=format:'%an'
-    Write-Host "Author test: $authorUser"
-    Write-Host "PAT: $env:MAPPED_ENV_PAT"
-    Write-Host "User: $(Build.RequestedFor)"
+    Write-Host "Build Started By: $(Build.RequestedFor)"
     git config --global user.email "jpugmire@clemson.edu"
     git config --global user.name "jpugmire"
     $sourceURL = 'https://dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
