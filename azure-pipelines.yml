@@ -66,5 +66,5 @@ steps:
     }
 
   env:
-    MAPPED_ENV_PAT: $(GithubAcc.PAT)
+    MAPPED_ENV_PAT: 'TEST'
 
