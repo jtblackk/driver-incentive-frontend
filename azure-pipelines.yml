@@ -23,6 +23,7 @@ steps:
     $stageDir = '$(Build.SourcesDirectory)' | Split-Path
     $githubDir = $stageDir +"\"+"gitHub"
     $destination = $githubDir +"\"+"Master.git"
+    $authorUser = git log -1 --pretty=format:'%an'
     Write-Host "PAT: $env:MAPPED_ENV_PAT"
     Write-Host "User: $(Build.RequestedFor)"
     git config --global user.email "jpugmire@clemson.edu"
