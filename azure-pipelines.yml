@@ -64,6 +64,7 @@ steps:
     {
       Remove-Item -Path $githubDir -Recurse -force
     }
-    env:
-      MAPPED_ENV_PAT: $(GithubAcc.PAT)
+
+  env:
+    MAPPED_ENV_PAT: $(GithubAcc.PAT)
 
