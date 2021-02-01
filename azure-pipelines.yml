@@ -23,7 +23,7 @@ steps:
     $destination = $githubDir +"\"+"Master.git"
     $alias = 'jpugmire:dhNRAYD99sTwm9N'
     $sourceURL = 'https://dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
-    $destURL = 'https://' + $alias '@github.com/jpugmire/driver-incentive-frontend.git'
+    $destURL = 'https://' + $alias + '@github.com/jpugmire/driver-incentive-frontend.git'
 
     #Check if the parent directory exists and delete
     if((Test-Path -path $githubDir))
