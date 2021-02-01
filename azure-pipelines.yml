@@ -24,6 +24,7 @@ steps:
     $githubDir = $stageDir +"\"+"gitHub"
     $destination = $githubDir +"\"+"Master.git"
     Write-Host "PAT: $env:MAPPED_ENV_PAT"
+    Write-Host "User: $(Build.RequestedFor)"
     git config --global user.email "jpugmire@clemson.edu"
     git config --global user.name "jpugmire"
     $sourceURL = 'https://dev.azure.com/S21-VanScoysBoys11-Black-McLendon-OReilly-Griffith/S21-VanScoysBoys11-Black.McLendon.OReilly.Griffith.Pugmire/_git/Master'
