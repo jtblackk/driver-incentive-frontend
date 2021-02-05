@@ -9,6 +9,7 @@ import AdminHomePage from './pages/AdminHomePage'
 import SponsorHomePage from './pages/SponsorHomePage'
 import DriverHomePage from './pages/DriverHomePage'
 import PageNotFoundPage from './pages/PageNotFoundPage'
+import ProfilePage from './pages/ProfilePage'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={IndexPage} />
+          <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/signup" component={SignupPage} />
           <Route exact path="/driver" component={DriverHomePage} />
           <Route exact path="/sponsor" component={SponsorHomePage} />
@@ -27,5 +29,5 @@ function App() {
   )
 }
 
-export default App 
+export default App
 //export default withAuthenticator(App);
