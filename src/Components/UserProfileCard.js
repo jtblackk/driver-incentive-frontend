@@ -20,9 +20,6 @@ const UserProfileCard = (props) => {
     fetch(GET_USERDATA_URL)
       .then((response) => response.json())
       .then((data) => {
-        console.log('bop')
-        console.log(data)
-
         setUserProfileDetails({
           FirstName: data.Item.FirstName,
           LastName: data.Item.LastName,
@@ -34,9 +31,7 @@ const UserProfileCard = (props) => {
         })
       })
       .then(() => {
-        console.log('boop')
         setIsLoading(false)
-        console.log(userProfileDetails)
       })
       .catch((err) => {
         console.log(err)
