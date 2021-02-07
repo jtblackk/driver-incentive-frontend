@@ -95,8 +95,13 @@ function CreateAccountCard() {
             fetch(GET_USERDATA_URL)
               .then((response) => response.json())
               .then((data) => {
-                console.log(data)
-                // verify that account was successfully created
+                // verify that account was successfully created. save email id to browser storage
+                localStorage.setItem('account-email', data.Item.Email_id)
+                console.log(localStorage.getItem('account-email'))
+              })
+              .catch((err) => {
+                localStorage.setItem('account-email', userDetails.Email_ID)
+                console.log(localStorage.getItem('account-email'))
               })
 
             history.push('/account-setup')
