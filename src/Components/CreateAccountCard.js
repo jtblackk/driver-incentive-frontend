@@ -13,43 +13,17 @@ import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 function CreateAccountCard() {
-  let userDetailObj = {
+  const [userDetails, setUserDetails] = useState({
     Email_ID: '',
-    FirstName: '',
-    LastName: '',
-    AccountType: '',
     Password: '',
     ConfirmPassword: '',
-  }
-  const [userDetails, setUserDetails] = useState(userDetailObj)
+  })
 
   let history = useHistory()
 
   return (
     <div>
       <form>
-        <TextField
-          id="FirstName"
-          label="First name"
-          onChange={(event) => {
-            // update first name in state
-            let newUserDetails = userDetails
-            newUserDetails.FirstName = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        />
-        <br />
-        <TextField
-          id="LastName"
-          label="Last name"
-          onChange={(event) => {
-            // update last name in state
-            let newUserDetails = userDetails
-            newUserDetails.LastName = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        />
-        <br />
         <TextField
           id="Email_ID"
           label="Email"
@@ -61,23 +35,6 @@ function CreateAccountCard() {
             setUserDetails(newUserDetails)
           }}
         />
-        <br />
-        <br />
-        <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
-        <Select
-          labelId="AccountTypeLabel"
-          id="AccountType"
-          onChange={(event) => {
-            // update account type in state
-            let newUserDetails = userDetails
-            newUserDetails.AccountType = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        >
-          <MenuItem value="driver">Driver</MenuItem>
-          <MenuItem value="sponsor">Sponsor</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-        </Select>
         <br />
         <TextField
           id="Password"
@@ -108,19 +65,10 @@ function CreateAccountCard() {
           variant="outlined"
           onClick={() => {
             // validate input
-            if (userDetails.FirstName === '')
-              alert('Please enter your first name')
-
-            if (userDetails.LastName === '')
-              alert('Please enter your last name')
-
             if (userDetails.Email_ID === '')
               alert('Please enter your email address')
             else if (email_validator.validate(userDetails.Email_ID) === false)
               alert('Please enter a valid email address')
-
-            if (userDetails.AccountType === '')
-              alert('Please choose an account type')
 
             if (
               userDetails.Password === '' ||
@@ -129,24 +77,7 @@ function CreateAccountCard() {
               alert('Please enter a password')
             else if (userDetails.Password !== userDetails.ConfirmPassword)
               alert("Passwords don't match")
-            //********************* AUTH
-            /*            try {
-              const user = await Auth.signIn(this.userDetailObj.Email_ID, this.userDetailObj.Password);
-              console.log(user);
-              this.props.auth.setAuthStatus(true);
-              this.props.auth.setUser(user);
-              this.props.history.push("/");
-               }catch(error) {
-                let err = null;
-                !error.message ? err = { "message": error } : err = error;
-                this.setState({
-                errors: {
-                  ...this.state.errors,
-                  cognito: err
-                   }
-                });
-              }  */
-            //****************** Auth
+
             // set up fetch request -> create new user entry in driver detail database
             let CREATE_USER_URL =
               'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
@@ -155,10 +86,7 @@ function CreateAccountCard() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 Email_id: userDetails.Email_ID,
-                AccountType: userDetails.AccountType,
                 ApplicationStatus: 0,
-                FirstName: userDetails.FirstName,
-                LastName: userDetails.LastName,
               }),
             }
             fetch(CREATE_USER_URL, requestOptions)
@@ -171,15 +99,7 @@ function CreateAccountCard() {
                 // verify that account was successfully created
               })
 
-            // route user to appropriate home page
-            if (userDetails.AccountType === 'driver') {
-              history.push('/driver')
-            } else if (userDetails.AccountType === 'sponsor') {
-              history.push('/sponsor')
-            } else if (userDetails.AccountType === 'admin') {
-              history.push('/admin')
-            } else {
-            }
+            history.push('/account-setup')
           }}
         >
           Create account
