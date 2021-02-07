@@ -5,10 +5,10 @@ import { Grid } from '@material-ui/core'
 function AccountSetupPage() {
   return (
     <div>
-      <TopAppBar pageTitle="Create an account" />
+      <TopAppBar pageTitle="Configure your account" />
       <Grid container justify="space-evenly">
         <Grid item>
-          <AccountSetupCard />
+          <AccountSetupCard accountEmail="again@gmail.com" />
         </Grid>
       </Grid>
     </div>
