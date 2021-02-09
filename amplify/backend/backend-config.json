@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "vanscoysboysamplify9173efa6": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
