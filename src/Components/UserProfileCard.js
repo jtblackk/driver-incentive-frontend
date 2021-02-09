@@ -81,7 +81,7 @@ const UserProfileCard = (props) => {
     )
   }
 
-  function LoadingScreen() {
+  function LoadingIcon() {
     return (
       <Grid container justify="center">
         <Grid item xs={8} sm={6} md={5} lg={3} align="center">
@@ -97,7 +97,7 @@ const UserProfileCard = (props) => {
   }
 
   function ProfileCard() {
-    return isLoading ? <LoadingScreen /> : <ProfileDetails />
+    return isLoading ? <LoadingIcon /> : <ProfileDetails />
   }
 
   return (
