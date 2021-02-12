@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Divider,
   Drawer,
@@ -5,15 +6,15 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
+import { makeStyles } from '@material-ui/core/styles'
+
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
 
 import { useHistory } from 'react-router-dom'
-
-import React from 'react'
+import { Auth } from 'aws-amplify'
 
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 
@@ -94,16 +95,19 @@ const LeftDrawer = () => {
           ))}
         </List>
         <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
+        <List>
+          <ListItem button key={'Sign out'}>
+            <ListItemIcon>
+              <MeetingRoomIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'Sign out'}
+              onClick={() => {
+                Auth.signOut()
+              }}
+            />
+          </ListItem>
+        </List>
       </Drawer>
     </div>
   )
