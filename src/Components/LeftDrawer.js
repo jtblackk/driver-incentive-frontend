@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Divider,
   Drawer,
+  Grid,
   List,
   ListItem,
   ListItemText,
@@ -12,6 +13,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/core/styles'
 
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 import { useHistory } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
@@ -55,14 +57,14 @@ const LeftDrawer = () => {
   const classes = useStyles()
   let history = useHistory()
 
-  let pages = [
+  let top_pages = [
     {
       name: 'Home',
       route: '/',
       icon: <HomeIcon />,
     },
     {
-      name: 'My Profile',
+      name: 'My profile',
       route: '/profile',
       icon: <PersonIcon />,
     },
@@ -79,9 +81,10 @@ const LeftDrawer = () => {
         anchor="left"
       >
         <div className={classes.toolbar} />
+
         <Divider />
         <List>
-          {pages.map((page, index) => (
+          {top_pages.map((page, index) => (
             <ListItem
               button
               key={page.name}
@@ -93,21 +96,45 @@ const LeftDrawer = () => {
               <ListItemText primary={page.name} />
             </ListItem>
           ))}
+          <Divider />
         </List>
-        <Divider />
-        <List>
-          <ListItem button key={'Sign out'}>
-            <ListItemIcon>
-              <MeetingRoomIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={'Sign out'}
-              onClick={() => {
-                Auth.signOut()
-              }}
-            />
-          </ListItem>
-        </List>
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            overflow: 'hidden',
+          }}
+        >
+          <Divider />
+
+          <List>
+            <ListItem button key={'Settings'}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={'Settings'}
+                onClick={() => {
+                  history.push('/settings')
+                }}
+              />
+            </ListItem>
+
+            <ListItem button key={'Sign out'}>
+              <ListItemIcon>
+                <MeetingRoomIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={'Sign out'}
+                onClick={() => {
+                  Auth.signOut()
+                }}
+              />
+            </ListItem>
+          </List>
+        </div>
       </Drawer>
     </div>
   )
