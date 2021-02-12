@@ -6,6 +6,7 @@ import TopAppBar from '../Components/TopAppBar'
 import UserProfileCard from '../Components/UserProfileCard'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LeftDrawer from '../Components/LeftDrawer'
+import { Auth } from 'aws-amplify'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,13 +44,26 @@ const useStyles = makeStyles((theme) => ({
 function ProfilePage() {
   const classes = useStyles()
 
+  const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect(() => {
+    Auth.currentAuthenticatedUser().then((user) => {
+      console.log(user.attributes.email)
+      setCurrentUser(user.attributes.email)
+    })
+  }, [])
+
   return (
     <div className={classes.root}>
       <LeftDrawer />
       <TopAppBar pageTitle="Your profile" />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <UserProfileCard profileEmail={'Driver@gmail.com'} />
+        {currentUser ? (
+          <UserProfileCard profileEmail={currentUser} />
+        ) : (
+          <p>loading</p>
+        )}
       </main>
     </div>
   )

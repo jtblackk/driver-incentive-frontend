@@ -75,7 +75,7 @@ const UserProfileCard = (props) => {
             <PointsTypography />
           ) : null}
           <br />
-          <Typography align="left">{userProfileDetails.UserBio}</Typography>
+          <Typography align="center">{userProfileDetails.UserBio}</Typography>
         </Grid>
       </Grid>
     )
@@ -85,11 +85,6 @@ const UserProfileCard = (props) => {
     return (
       <Grid container justify="center">
         <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
           <CircularProgress></CircularProgress>
         </Grid>
       </Grid>
