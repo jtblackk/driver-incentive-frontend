@@ -8,8 +8,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
+import HomeIcon from '@material-ui/icons/Home'
+import PersonIcon from '@material-ui/icons/Person'
 
 import { useHistory } from 'react-router-dom'
 
@@ -58,12 +58,12 @@ const LeftDrawer = () => {
     {
       name: 'Home',
       route: '/',
-      icon: <InboxIcon />,
+      icon: <HomeIcon />,
     },
     {
-      name: 'Profile',
+      name: 'My Profile',
       route: '/profile',
-      icon: <InboxIcon />,
+      icon: <PersonIcon />,
     },
   ]
 
@@ -94,7 +94,7 @@ const LeftDrawer = () => {
           ))}
         </List>
         <Divider />
-        <List>
+        {/* <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
@@ -103,7 +103,7 @@ const LeftDrawer = () => {
               <ListItemText primary={text} />
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
     </div>
   )
