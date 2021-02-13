@@ -1,37 +1,16 @@
-import React from 'react'
-
-// import CssBaseline from '@material-ui/core/CssBaseline'
+import React, { useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
-
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
-
+import { makeStyles } from '@material-ui/core/styles'
+import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: DRAWER_WIDTH,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${DRAWER_WIDTH}px)`,
-      marginLeft: DRAWER_WIDTH,
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: DRAWER_WIDTH,
@@ -44,12 +23,27 @@ const useStyles = makeStyles((theme) => ({
 
 function IndexPage() {
   const classes = useStyles()
+  let history = useHistory()
+
+  useEffect(() => {
+    // check if the current user has registered their account details. if they have not, take them to the account setup page.
+    Auth.currentAuthenticatedUser().then((user) => {
+      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user.attributes.email}`
+      fetch(GET_USERDATA_URL)
+        .then((response) => response.json())
+        .then((data) => {
+          if (!data.Item.AccountType) history.push('/account-setup')
+        })
+    })
+  }, [])
+
   return (
     <div className={classes.root}>
-      {/* <CssBaseline /> */}
+      {/* layout stuff */}
       <TopAppBar pageTitle="Welcome"></TopAppBar>
       <LeftDrawer />
 
+      {/* page content (starts after first div) */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Typography paragraph>

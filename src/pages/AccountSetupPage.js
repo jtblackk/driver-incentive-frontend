@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function LoadingIcon() {
+  return (
+    <Grid container justify="center">
+      <Grid item xs={8} sm={6} md={5} lg={3} align="center">
+        <CircularProgress></CircularProgress>
+      </Grid>
+    </Grid>
+  )
+}
+
 function AccountSetupPage() {
   const classes = useStyles()
   const [currentUser, setCurrentUser] = useState(null)
@@ -57,7 +67,7 @@ function AccountSetupPage() {
             {currentUser ? (
               <AccountSetupCard accountEmail={currentUser} />
             ) : (
-              <CircularProgress />
+              <LoadingIcon />
             )}
           </Grid>
         </Grid>

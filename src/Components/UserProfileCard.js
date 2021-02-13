@@ -25,7 +25,6 @@ const UserProfileCard = (props) => {
           LastName: data.Item.LastName,
           UserBio: data.Item.UserBio,
           AccountType: data.Item.AccountType,
-
           SponsorEmailID: data.Item.SponsorEmailID,
           TotalPoints: data.Item.TotalPoints,
         })
@@ -38,9 +37,12 @@ const UserProfileCard = (props) => {
       })
   }, [])
 
+  // component that shows how many points the user has and with what sponsor
   function PointsTypography() {
     if (sponsorName === '') {
       setIsLoading(true)
+
+      //
       let GET_SPONSORDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userProfileDetails.SponsorEmailID}`
       fetch(GET_SPONSORDATA_URL)
         .then((sponsor_response) => sponsor_response.json())
@@ -62,6 +64,7 @@ const UserProfileCard = (props) => {
     )
   }
 
+  // component that shows the user's profile details
   function ProfileDetails() {
     return (
       <Grid container justify="center">
@@ -81,6 +84,7 @@ const UserProfileCard = (props) => {
     )
   }
 
+  // loading icon that shows up when waiting for data to load
   function LoadingIcon() {
     return (
       <Grid container justify="center">
@@ -91,15 +95,8 @@ const UserProfileCard = (props) => {
     )
   }
 
-  function ProfileCard() {
-    return isLoading ? <LoadingIcon /> : <ProfileDetails />
-  }
-
-  return (
-    <div>
-      <ProfileCard />
-    </div>
-  )
+  // final card
+  return isLoading ? <LoadingIcon /> : <ProfileDetails />
 }
 
 export default UserProfileCard
