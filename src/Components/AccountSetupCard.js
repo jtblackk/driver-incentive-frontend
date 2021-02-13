@@ -118,29 +118,28 @@ const AccountSetupCard = (props) => {
               return
             }
 
-            // fetch -> save userdata in DB
             // TODO: replace this with an api call that doesn't clear empty fields in dynamo on POST
-            // let SAVE_USER_PROFILE_URL =
-            //   'https://5u7lb05615.execute-api.us-east-1.amazonaws.com/saveuserprofile'
-            // let requestOptions = {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({
-            //     Email_id: userDetails.Email_ID,
-            //     FirstName: userDetails.FirstName,
-            //     LastName: userDetails.LastName,
-            //     AccountType: userDetails.AccountType,
-            //     UserBio: userDetails.UserBio,
-            //   }),
-            // }
-            // fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
-            //   // route user to appropriate page
-            //   if (userDetails.AccountType === 'Driver') {
-            //     history.push('/application')
-            //   } else {
-            //     history.push('/')
-            //   }
-            // })
+            let SAVE_USER_PROFILE_URL =
+              'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+            let requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                Email_id: userDetails.Email_ID,
+                FirstName: userDetails.FirstName,
+                LastName: userDetails.LastName,
+                AccountType: userDetails.AccountType,
+                UserBio: userDetails.UserBio,
+              }),
+            }
+            fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+              // route user to appropriate page
+              if (userDetails.AccountType === 'Driver') {
+                history.push('/application')
+              } else {
+                history.push('/')
+              }
+            })
           }}
         >
           Save account details
