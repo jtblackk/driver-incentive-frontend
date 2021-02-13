@@ -3,10 +3,11 @@ import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
+import WaitingForApplicationApprovalScreen from '../Components/WaitingForApplicationAprovalScreen'
 import { makeStyles } from '@material-ui/core/styles'
+
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { AppBar, CircularProgress, Grid, Toolbar } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,6 @@ function IndexPage() {
       fetch(GET_USERDATA_URL)
         .then((response) => response.json())
         .then((data) => {
-          if (!data.Item.AccountType) history.push('/account-setup')
           setUserProfileDetails({
             Email_ID: data.Item.Email_id,
             FirstName: data.Item.FirstName,
@@ -53,6 +53,8 @@ function IndexPage() {
             SponsorID: data.Item.SponsorEmailID,
             TotalPoints: data.Item.TotalPoints,
           })
+          if ((userProfileDetails.AccountType = ''))
+            history.push('/account-setup')
         })
     })
   }, [])
@@ -61,31 +63,7 @@ function IndexPage() {
     userProfileDetails.AccountType === 'Driver' &&
     !userProfileDetails.SponsorID
   ) {
-    return (
-      <div className={classes.root}>
-        {/* app bar */}
-        <AppBar position="fixed">
-          <Toolbar>
-            <Grid container justify="space-evenly" spacing={24}>
-              <Grid item>
-                <Typography variant="h6">
-                  Waiting for driver application approval
-                </Typography>
-              </Grid>
-            </Grid>
-          </Toolbar>
-        </AppBar>
-
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Grid container justify="center">
-            <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-              <CircularProgress></CircularProgress>
-            </Grid>
-          </Grid>
-        </main>
-      </div>
-    )
+    return <WaitingForApplicationApprovalScreen />
   } else {
     return (
       <div className={classes.root}>
