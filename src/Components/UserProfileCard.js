@@ -39,7 +39,7 @@ const UserProfileCard = (props) => {
 
   // component that shows how many points the user has and with what sponsor
   function PointsTypography() {
-    if (sponsorName === '') {
+    if (sponsorName === '' || !userProfileDetails.Email_ID) {
       setIsLoading(true)
 
       //
