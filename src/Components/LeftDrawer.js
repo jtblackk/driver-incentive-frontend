@@ -16,6 +16,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 
+// pages to show on the upper part of the drawer
 const pages = [
   {
     name: 'Home',
