@@ -118,11 +118,11 @@ const AccountSetupCard = (props) => {
               return
             }
 
-            // TODO: replace this with an api call that doesn't clear empty fields in dynamo on POST
+            // save the profile information
             let SAVE_USER_PROFILE_URL =
-              'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+              'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
             let requestOptions = {
-              method: 'POST',
+              method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 Email_id: userDetails.Email_ID,
