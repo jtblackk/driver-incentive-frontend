@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Button,
   Grid,
@@ -6,10 +8,9 @@ import {
   Select,
   TextField,
 } from '@material-ui/core'
-import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 
 const AccountSetupCard = (props) => {
+  let history = useHistory()
   const [userDetails, setUserDetails] = useState({
     Email_ID: props.accountEmail,
     FirstName: '',
@@ -17,8 +18,6 @@ const AccountSetupCard = (props) => {
     AccountType: '',
     UserBio: '',
   })
-
-  let history = useHistory()
 
   return (
     <Grid
@@ -28,32 +27,57 @@ const AccountSetupCard = (props) => {
       alignItems="center"
       spacing={2}
     >
+      {/* account type */}
       <Grid item xs={12} align="center">
-        <TextField
-          id="FirstName"
-          label="First name"
+        <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
+        <Select
+          labelId="AccountTypeLabel"
+          id="AccountType"
           onChange={(event) => {
-            // update first name in state
+            // update account type in state
             let newUserDetails = userDetails
-            newUserDetails.FirstName = event.target.value
+            newUserDetails.AccountType = event.target.value
             setUserDetails(newUserDetails)
           }}
-        />
+        >
+          <MenuItem value="Driver">Driver</MenuItem>
+          <MenuItem value="Sponsor">Sponsor</MenuItem>
+        </Select>
       </Grid>
 
-      <Grid item xs={12} align="center">
-        <TextField
-          id="LastName"
-          label="Last name"
-          onChange={(event) => {
-            // update last name in state
-            let newUserDetails = userDetails
-            newUserDetails.LastName = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        />
+      {/* name row */}
+      <Grid container xs={12} spacing={1} justify="center" direction="row">
+        {/* first name */}
+        <Grid item xs={2} align="center">
+          <TextField
+            id="FirstName"
+            label="First name"
+            onChange={(event) => {
+              // update first name in state
+              let newUserDetails = userDetails
+              newUserDetails.FirstName = event.target.value
+              setUserDetails(newUserDetails)
+            }}
+          />
+        </Grid>
+
+        {/* last name */}
+        <Grid item xs={2} align="center">
+          <TextField
+            id="LastName"
+            label="Last name"
+            onChange={(event) => {
+              // update last name in state
+              let newUserDetails = userDetails
+              newUserDetails.LastName = event.target.value
+              setUserDetails(newUserDetails)
+            }}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={5} align="center">
+
+      {/* bio */}
+      <Grid item xs={4} align="center">
         <br></br>
         <TextField
           id="user-bio"
@@ -72,24 +96,8 @@ const AccountSetupCard = (props) => {
           }}
         />
       </Grid>
-      <Grid item xs={12} align="center">
-        <br></br>
-        <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
-        <Select
-          labelId="AccountTypeLabel"
-          id="AccountType"
-          onChange={(event) => {
-            // update account type in state
-            let newUserDetails = userDetails
-            newUserDetails.AccountType = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        >
-          <MenuItem value="Driver">Driver</MenuItem>
-          <MenuItem value="Sponsor">Sponsor</MenuItem>
-          {/* <MenuItem value="Admin">Admin</MenuItem> */}
-        </Select>
-      </Grid>
+
+      {/* submit button */}
       <Grid item xs={12} align="center">
         <br></br>
         <Button
@@ -99,24 +107,19 @@ const AccountSetupCard = (props) => {
             if (userDetails.FirstName === '') {
               alert('Please enter your first name')
               return
-            }
-
-            if (userDetails.LastName === '') {
+            } else if (userDetails.LastName === '') {
               alert('Please enter your last name')
               return
-            }
-
-            if (userDetails.AccountType === '') {
+            } else if (userDetails.AccountType === '') {
               alert('Please choose an account type')
               return
-            }
-
-            if (userDetails.UserBio === '') {
+            } else if (userDetails.UserBio === '') {
               alert('Please write a bio')
               return
             }
 
-            // set up fetch request -> save userdata in DB
+            // fetch -> save userdata in DB
+            // TODO: replace this with an api call that doesn't clear empty fields in dynamo on POST
             let SAVE_ACCOUNT_DETAILS_URL =
               'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
             let requestOptions = {
@@ -131,10 +134,14 @@ const AccountSetupCard = (props) => {
                 ApplicationStatus: 0,
               }),
             }
-            fetch(SAVE_ACCOUNT_DETAILS_URL, requestOptions)
-
-            // route user to home page
-            history.push('/')
+            fetch(SAVE_ACCOUNT_DETAILS_URL, requestOptions).then(() => {
+              // route user to appropriate page
+              if (userDetails.AccountType === 'Driver') {
+                history.push('/application')
+              } else {
+                history.push('/')
+              }
+            })
           }}
         >
           Save account details
