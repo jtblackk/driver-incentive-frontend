@@ -3,7 +3,6 @@ import Amplify from 'aws-amplify'
 import awsconfig from './aws-exports'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-//import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { withAuthenticator } from 'aws-amplify-react'
 
 import IndexPage from './pages/IndexPage'
@@ -16,6 +15,8 @@ import AccountSetupPage from './pages/AccountSetupPage'
 import ProfilePage from './pages/ProfilePage'
 
 import '@aws-amplify/ui/dist/style.css'
+import ApplicationPage from './pages/ApplicationPage'
+import Bootstrap from 'aws-amplify-react/lib-esm/AmplifyTheme'
 Amplify.configure(awsconfig)
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route exact path="/sponsor" component={SponsorHomePage} />
           <Route exact path="/admin" component={AdminHomePage} />
           <Route exact path="/account-setup" component={AccountSetupPage} />
+          <Route exact apth="/apply" component={ApplicationPage} />
           <Route component={PageNotFoundPage} />
         </Switch>
       </BrowserRouter>
@@ -38,4 +40,10 @@ function App() {
 }
 
 // export default App
-export default withAuthenticator(App)
+export default withAuthenticator(App, {
+  // theme: Bootstrap,
+  usernameAttributes: 'email',
+  signUpConfig: {
+    hiddenDefaults: ['phone_number'],
+  },
+})
