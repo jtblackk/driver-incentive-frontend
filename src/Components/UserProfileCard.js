@@ -39,10 +39,9 @@ const UserProfileCard = (props) => {
 
   // component that shows how many points the user has and with what sponsor
   function PointsTypography() {
-    if (sponsorName === '' || !userProfileDetails.Email_ID) {
+    if (sponsorName === '' && userProfileDetails.SponsorEmailID) {
       setIsLoading(true)
 
-      //
       let GET_SPONSORDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userProfileDetails.SponsorEmailID}`
       fetch(GET_SPONSORDATA_URL)
         .then((sponsor_response) => sponsor_response.json())
@@ -57,11 +56,15 @@ const UserProfileCard = (props) => {
         })
     }
 
-    return (
-      <Typography>
-        {userProfileDetails.TotalPoints} pts with {sponsorName}
-      </Typography>
-    )
+    if (!isLoading) {
+      return (
+        <Typography>
+          {userProfileDetails.TotalPoints} pts with {sponsorName}
+        </Typography>
+      )
+    } else {
+      return <p></p>
+    }
   }
 
   // component that shows the user's profile details
