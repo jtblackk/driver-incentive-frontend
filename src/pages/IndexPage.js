@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Auth } from 'aws-amplify'
 import Typography from '@material-ui/core/Typography'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import WaitingForApplicationApprovalScreen from '../Components/WaitingForApplicationAprovalScreen'
 import { makeStyles } from '@material-ui/core/styles'
-import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 
+// set up styling
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -23,25 +24,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// loading icon that shows up when waiting for data to load
-
 function IndexPage() {
   const classes = useStyles()
   let history = useHistory()
-
+  const [isLoading, setIsLoading] = useState(true)
   const [userProfileDetails, setUserProfileDetails] = useState({
     Email_ID: '',
-    FirstName: '',
-    LastName: '',
     AccountType: '',
-    UserBio: '',
-    TotalPoints: '',
-    SponsorEmailID: '',
   })
 
-  const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
+    // start loading animation
     setIsLoading(true)
     ;(async () => {
       const user = await Auth.currentAuthenticatedUser()
@@ -50,23 +43,21 @@ function IndexPage() {
       let response = await fetch(GET_USERDATA_URL)
       let data = await response.json()
 
+      // load the user's account type into state
       let newUserProfileDetails = userProfileDetails
       userProfileDetails.Email_ID = data.Item.Email_id
-      userProfileDetails.FirstName = data.Item.FirstName
-      userProfileDetails.LastName = data.Item.LastName
-      userProfileDetails.UserBio = data.Item.UserBio
       userProfileDetails.AccountType = data.Item.AccountType
-      userProfileDetails.SponsorID = data.Item.SponsorEmailID
-      userProfileDetails.TotalPoints = data.Item.TotalPoints
       setUserProfileDetails(newUserProfileDetails)
       setIsLoading(false)
 
+      // if the user has no specified account type, force them to set up an account
       if (!userProfileDetails.AccountType) {
         history.push('/account-setup')
       }
     })()
   }, [])
 
+  // show loading screen if data is still being fetched
   if (isLoading) {
     return (
       <div className={classes.root}>
