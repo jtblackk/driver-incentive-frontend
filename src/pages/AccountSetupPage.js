@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import {
-  AppBar,
-  CircularProgress,
-  Grid,
-  Toolbar,
-  Typography,
-} from '@material-ui/core'
+import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountSetupCard from '../Components/AccountSetupCard'
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
+import LoadingIcon from '../Components/LoadingIcon'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,16 +19,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }))
-
-function LoadingIcon() {
-  return (
-    <Grid container justify="center">
-      <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-        <CircularProgress></CircularProgress>
-      </Grid>
-    </Grid>
-  )
-}
 
 function AccountSetupPage() {
   const classes = useStyles()

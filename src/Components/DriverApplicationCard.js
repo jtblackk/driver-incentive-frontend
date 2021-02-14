@@ -9,6 +9,7 @@ import {
   TextField,
 } from '@material-ui/core'
 
+// filler data for sponsor selection
 const sponsors = [
   {
     SponsorEmailID: 'sponsor1@gmail.com',
@@ -96,7 +97,7 @@ const DriverApplicationCard = (props) => {
           fullWidth
           rows={4}
           onChange={(event) => {
-            // update UserBio in state
+            // update application comments in state
             let newApplicationDetails = applicationDetails
             newApplicationDetails.Comments = event.target.value
             setApplicationDetails(newApplicationDetails)

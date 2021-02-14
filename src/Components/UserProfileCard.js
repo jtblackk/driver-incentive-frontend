@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Avatar, Grid, Typography } from '@material-ui/core'
+import LoadingIcon from './LoadingIcon'
 
 const UserProfileCard = (props) => {
   const [userProfileDetails, setUserProfileDetails] = useState({
@@ -82,17 +83,6 @@ const UserProfileCard = (props) => {
           ) : null}
           <br />
           <Typography align="center">{userProfileDetails.UserBio}</Typography>
-        </Grid>
-      </Grid>
-    )
-  }
-
-  // loading icon that shows up when waiting for data to load
-  function LoadingIcon() {
-    return (
-      <Grid container justify="center">
-        <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-          <CircularProgress></CircularProgress>
         </Grid>
       </Grid>
     )

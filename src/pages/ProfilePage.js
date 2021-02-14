@@ -8,6 +8,7 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LeftDrawer from '../Components/LeftDrawer'
 import { Auth } from 'aws-amplify'
 import { CircularProgress, Grid } from '@material-ui/core'
+import LoadingIcon from '../Components/LoadingIcon'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,20 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// loading icon that shows up when waiting for data to load
-function LoadingIcon() {
-  return (
-    <Grid container justify="center">
-      <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-        <CircularProgress></CircularProgress>
-      </Grid>
-    </Grid>
-  )
-}
-
 function ProfilePage() {
   const classes = useStyles()
-
   const [currentUser, setCurrentUser] = useState(null)
 
   useEffect(() => {
