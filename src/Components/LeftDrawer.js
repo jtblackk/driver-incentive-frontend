@@ -88,6 +88,19 @@ const LeftDrawer = () => {
       >
         <Divider />
 
+        {/* sign out */}
+        <ListItem button key={'Sign out'}>
+          <ListItemIcon>
+            <MeetingRoomIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={'Sign out'}
+            onClick={() => {
+              Auth.signOut()
+            }}
+          />
+        </ListItem>
+
         {/* settings */}
         <List>
           <ListItem button key={'Settings'}>
@@ -98,19 +111,6 @@ const LeftDrawer = () => {
               primary={'Settings'}
               onClick={() => {
                 history.push('/settings')
-              }}
-            />
-          </ListItem>
-
-          {/* sign out */}
-          <ListItem button key={'Sign out'}>
-            <ListItemIcon>
-              <MeetingRoomIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={'Sign out'}
-              onClick={() => {
-                Auth.signOut()
               }}
             />
           </ListItem>

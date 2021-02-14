@@ -77,7 +77,7 @@ function IndexPage() {
       return (
         <div className={classes.root}>
           {/* layout stuff */}
-          <TopAppBar pageTitle="Welcome"></TopAppBar>
+          <TopAppBar pageTitle="Home"></TopAppBar>
           <LeftDrawer />
 
           {/* page content (starts after first div) */}
