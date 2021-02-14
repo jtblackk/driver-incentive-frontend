@@ -1,8 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { AppBar, CircularProgress, Grid, Toolbar } from '@material-ui/core'
+import { AppBar, Grid, Toolbar } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
+import LoadingIcon from './LoadingIcon'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,11 +40,7 @@ const WaitingForApplicationAprovalScreen = () => {
       {/* loading screen */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container justify="center">
-          <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-            <CircularProgress></CircularProgress>
-          </Grid>
-        </Grid>
+        <LoadingIcon />
       </main>
     </div>
   )
