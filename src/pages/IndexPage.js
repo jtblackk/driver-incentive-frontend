@@ -5,10 +5,9 @@ import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import WaitingForApplicationApprovalScreen from '../Components/WaitingForApplicationAprovalScreen'
 import { makeStyles } from '@material-ui/core/styles'
-
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { CircularProgress, Grid } from '@material-ui/core'
+import LoadingIcon from '../Components/LoadingIcon'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,15 +24,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // loading icon that shows up when waiting for data to load
-function LoadingIcon() {
-  return (
-    <Grid container justify="center">
-      <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-        <CircularProgress></CircularProgress>
-      </Grid>
-    </Grid>
-  )
-}
 
 function IndexPage() {
   const classes = useStyles()
@@ -49,42 +39,49 @@ function IndexPage() {
     SponsorEmailID: '',
   })
 
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
-    // check if the current user has registered their account details. if they have not, take them to the account setup page.
-    Auth.currentAuthenticatedUser().then((user) => {
+    setIsLoading(true)
+    ;(async () => {
+      const user = await Auth.currentAuthenticatedUser()
+
       let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user.attributes.email}`
-      fetch(GET_USERDATA_URL)
-        .then((response) => response.json())
-        .then((data) => {
-          if (
-            !userProfileDetails.AccountType ||
-            userProfileDetails.AccountType === ''
-          )
-            history.push('/account-setup')
-          setUserProfileDetails({
-            Email_ID: data.Item.Email_id,
-            FirstName: data.Item.FirstName,
-            LastName: data.Item.LastName,
-            UserBio: data.Item.UserBio,
-            AccountType: data.Item.AccountType,
-            SponsorID: data.Item.SponsorEmailID,
-            TotalPoints: data.Item.TotalPoints,
-          })
-        })
-    })
+      let response = await fetch(GET_USERDATA_URL)
+      let data = await response.json()
+
+      let newUserProfileDetails = userProfileDetails
+      userProfileDetails.Email_ID = data.Item.Email_id
+      userProfileDetails.FirstName = data.Item.FirstName
+      userProfileDetails.LastName = data.Item.LastName
+      userProfileDetails.UserBio = data.Item.UserBio
+      userProfileDetails.AccountType = data.Item.AccountType
+      userProfileDetails.SponsorID = data.Item.SponsorEmailID
+      userProfileDetails.TotalPoints = data.Item.TotalPoints
+      setUserProfileDetails(newUserProfileDetails)
+      setIsLoading(false)
+
+      if (!userProfileDetails.AccountType) {
+        history.push('/account-setup')
+      }
+    })()
   }, [])
 
-  if (
-    userProfileDetails.AccountType === 'Driver' &&
-    !userProfileDetails.SponsorID
-  ) {
-    return <WaitingForApplicationApprovalScreen />
+  if (isLoading) {
+    return (
+      <div className={classes.root}>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <LoadingIcon />
+        </main>
+      </div>
+    )
   } else {
     if (
-      !userProfileDetails.AccountType ||
-      userProfileDetails.AccountType === ''
+      userProfileDetails.AccountType === 'Driver' &&
+      !userProfileDetails.SponsorID
     ) {
-      return <LoadingIcon />
+      return <WaitingForApplicationApprovalScreen />
     } else {
       return (
         <div className={classes.root}>
