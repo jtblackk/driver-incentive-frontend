@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Avatar, Grid, Typography } from '@material-ui/core'
+import LoadingIcon from './LoadingIcon'
 
 const UserProfileCard = (props) => {
   const [userProfileDetails, setUserProfileDetails] = useState({
@@ -25,7 +26,6 @@ const UserProfileCard = (props) => {
           LastName: data.Item.LastName,
           UserBio: data.Item.UserBio,
           AccountType: data.Item.AccountType,
-
           SponsorEmailID: data.Item.SponsorEmailID,
           TotalPoints: data.Item.TotalPoints,
         })
@@ -38,9 +38,11 @@ const UserProfileCard = (props) => {
       })
   }, [])
 
+  // component that shows how many points the user has and with what sponsor
   function PointsTypography() {
-    if (sponsorName === '') {
+    if (sponsorName === '' && userProfileDetails.SponsorEmailID) {
       setIsLoading(true)
+
       let GET_SPONSORDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userProfileDetails.SponsorEmailID}`
       fetch(GET_SPONSORDATA_URL)
         .then((sponsor_response) => sponsor_response.json())
@@ -55,13 +57,18 @@ const UserProfileCard = (props) => {
         })
     }
 
-    return (
-      <Typography>
-        {userProfileDetails.TotalPoints} pts with {sponsorName}
-      </Typography>
-    )
+    if (!isLoading) {
+      return (
+        <Typography>
+          {userProfileDetails.TotalPoints} pts with {sponsorName}
+        </Typography>
+      )
+    } else {
+      return <p></p>
+    }
   }
 
+  // component that shows the user's profile details
   function ProfileDetails() {
     return (
       <Grid container justify="center">
@@ -75,36 +82,14 @@ const UserProfileCard = (props) => {
             <PointsTypography />
           ) : null}
           <br />
-          <Typography align="left">{userProfileDetails.UserBio}</Typography>
+          <Typography align="center">{userProfileDetails.UserBio}</Typography>
         </Grid>
       </Grid>
     )
   }
 
-  function LoadingIcon() {
-    return (
-      <Grid container justify="center">
-        <Grid item xs={8} sm={6} md={5} lg={3} align="center">
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <CircularProgress></CircularProgress>
-        </Grid>
-      </Grid>
-    )
-  }
-
-  function ProfileCard() {
-    return isLoading ? <LoadingIcon /> : <ProfileDetails />
-  }
-
-  return (
-    <div>
-      <ProfileCard />
-    </div>
-  )
+  // final card
+  return isLoading ? <LoadingIcon /> : <ProfileDetails />
 }
 
 export default UserProfileCard

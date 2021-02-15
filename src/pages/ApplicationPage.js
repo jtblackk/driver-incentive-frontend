@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import AccountSetupCard from '../Components/AccountSetupCard'
+import DriverApplicationCard from '../Components/DriverApplicationCard'
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function AccountSetupPage() {
+function ApplicationPage() {
   const classes = useStyles()
   const [currentUser, setCurrentUser] = useState(null)
 
@@ -38,7 +38,7 @@ function AccountSetupPage() {
         <Toolbar>
           <Grid container justify="space-evenly" spacing={24}>
             <Grid item>
-              <Typography variant="h6">Set up your account</Typography>
+              <Typography variant="h6">Apply to a sponsor</Typography>
             </Grid>
           </Grid>
         </Toolbar>
@@ -50,7 +50,7 @@ function AccountSetupPage() {
         <Grid container justify="space-evenly">
           <Grid item>
             {currentUser ? (
-              <AccountSetupCard accountEmail={currentUser} />
+              <DriverApplicationCard accountEmail={currentUser} />
             ) : (
               <LoadingIcon />
             )}
@@ -61,4 +61,4 @@ function AccountSetupPage() {
   )
 }
 
-export default AccountSetupPage
+export default ApplicationPage
