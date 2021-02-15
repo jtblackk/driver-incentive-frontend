@@ -31,6 +31,7 @@ function IndexPage() {
   const [userProfileDetails, setUserProfileDetails] = useState({
     Email_ID: '',
     AccountType: '',
+    SponsorID: null,
   })
 
   useEffect(() => {
@@ -47,6 +48,7 @@ function IndexPage() {
       let newUserProfileDetails = userProfileDetails
       userProfileDetails.Email_ID = data.Item.Email_id
       userProfileDetails.AccountType = data.Item.AccountType
+      userProfileDetails.SponsorID = data.Item.SponsorEmailID
       setUserProfileDetails(newUserProfileDetails)
       setIsLoading(false)
 
