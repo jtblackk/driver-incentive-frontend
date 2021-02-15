@@ -107,7 +107,7 @@ function IndexPage() {
               suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
               volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
               Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
-              ornare massa eget egestas purus viverra accumsan in. In hendrerit
+              ornare massa eget egestas viverra accumsan in. In hendrerit
               gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
               aliquam sem et tortor. Habitant morbi tristique senectus et.
               Adipiscing elit duis tristique sollicitudin nibh sit. Ornare
