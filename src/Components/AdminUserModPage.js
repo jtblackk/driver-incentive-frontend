@@ -30,9 +30,7 @@ function AdminUserModPage() {
 
   return (
     <div className="App">
-      <div className="container">
-        <h1>User Tables</h1>
-      </div>
+      <div className="container"></div>
       <div className="repo-container">
         <ListLoading isLoading={appState.loading} repos={appState.repos} />
       </div>

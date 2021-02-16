@@ -190,11 +190,11 @@ const EnhancedTableToolbar = (props) => {
       ) : (
         <Typography
           className={classes.title}
-          variant="h6"
+          variant="h3"
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          User Table
         </Typography>
       )}
 
@@ -314,6 +314,7 @@ const List = (props) => {
     data.push(repos[x])
     if (!rows.includes(repos[x])) {
       rows.push(repos[x])
+      console.log(rows[x])
     }
   }
   // console.log(rows[5])
