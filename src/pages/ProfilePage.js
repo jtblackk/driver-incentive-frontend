@@ -45,8 +45,8 @@ function ProfilePageContent(props) {
   if (!isEditing) {
     return (
       <div className={classes.root}>
-        <Grid container justify="center" width>
-          <Grid item xs={12} sm={8} md={6} lg={4} xl={3}>
+        <Grid container justify="center">
+          <Grid item container xs={12} sm={8} md={6} lg={4} xl={3}>
             <Paper className={classes.paper}>
               <Grid container justify="flex-end">
                 <Button
