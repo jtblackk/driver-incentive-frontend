@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import LoadingIcon from '../Components/LoadingIcon'
-import AccountSetupCard from '../Components/AccountSetupCard'
+import EditAccountCard from '../Components/EditAccountCard'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +46,17 @@ function ProfilePageContent(props) {
     return (
       <div className={classes.root}>
         <Grid container justify="center">
-          <Grid item container xs={12} sm={8} md={6} lg={4} xl={3}>
+          <Grid
+            item
+            container
+            xs={12}
+            sm={8}
+            md={6}
+            lg={4}
+            xl={3}
+            justify="center"
+          >
+            {/* edit button */}
             <Paper className={classes.paper}>
               <Grid container justify="flex-end">
                 <Button
@@ -59,6 +69,8 @@ function ProfilePageContent(props) {
                   <Typography>Edit</Typography>
                 </Button>
               </Grid>
+
+              {/* profile info section */}
               <Grid item>
                 <UserProfileCard profileEmail={props.currentUser} />
               </Grid>
@@ -66,8 +78,16 @@ function ProfilePageContent(props) {
             </Paper>
           </Grid>
         </Grid>
-        {/* <Grid container justify="flex-end">
-              <Grid item>
+      </div>
+    )
+  } else {
+    return (
+      <div className={classes.root}>
+        <Grid container justify="center">
+          <Grid item container xs={12} sm={8} md={6} lg={4} xl={3}>
+            <Paper className={classes.paper}>
+              <Grid container justify="flex-end">
+                {/* cancel button */}
                 <Button
                   variant="text"
                   size="small"
@@ -75,42 +95,31 @@ function ProfilePageContent(props) {
                     setIsEditing(!isEditing)
                   }}
                 >
-                  <Typography>Edit</Typography>
+                  <Typography>Cancel</Typography>
                 </Button>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <UserProfileCard profileEmail={props.currentUser} />
-            </Grid>
-            <Grid item xs={12}></Grid> */}
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <Grid container justify="center" xs={12}>
-          <Paper className={classes.paper}>
-            <Grid container justify="flex-end" xs={12}>
-              <Grid item>
+
+                {/* submit button */}
                 <Button
-                  variant="text"
+                  variant="contained"
                   size="small"
+                  color="primary"
                   onClick={() => {
+                    // TODO: save the account info form's information
                     setIsEditing(!isEditing)
                   }}
                 >
                   <Typography>Save</Typography>
                 </Button>
               </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              {/* <UserProfileCard profileEmail={props.currentUser} /> */}
-              <p>put stuff here</p>
-            </Grid>
-            <Grid item xs={12}>
-              <br />
-            </Grid>
-          </Paper>
+
+              {/* account info form */}
+              <Grid item>
+                <EditAccountCard accountEmail={props.currentUser} />
+              </Grid>
+
+              <br></br>
+            </Paper>
+          </Grid>
         </Grid>
       </div>
     )
