@@ -111,7 +111,7 @@ const LeftDrawer = () => {
             <ListItemText
               primary={'Settings'}
               onClick={() => {
-                history.push('/settings')
+                // history.push('/settings')
               }}
             />
           </ListItem>
