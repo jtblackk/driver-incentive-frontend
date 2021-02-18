@@ -71,25 +71,29 @@ const UserProfileCard = (props) => {
   // component that shows the user's profile details
   function ProfileDetails() {
     return (
-      <Grid container justify="center">
-        <Grid item align="center">
-          <br />
-          <Avatar></Avatar>
-          <Typography>
-            {userProfileDetails.FirstName} {userProfileDetails.LastName}
-          </Typography>
-          {userProfileDetails.AccountType === 'Driver' ? (
-            <PointsTypography />
-          ) : null}
-          <br />
-          <Typography align="center">{userProfileDetails.UserBio}</Typography>
-        </Grid>
-      </Grid>
+      <div>
+        <br />
+        <Avatar></Avatar>
+        <Typography>
+          {userProfileDetails.FirstName} {userProfileDetails.LastName}
+        </Typography>
+        {userProfileDetails.AccountType === 'Driver' ? (
+          <PointsTypography />
+        ) : null}
+        <br />
+        <Typography align="center">{userProfileDetails.UserBio}</Typography>
+      </div>
     )
   }
 
   // final card
-  return isLoading ? <LoadingIcon /> : <ProfileDetails />
+  return (
+    <Grid container justify="center">
+      <Grid item align="center" xs={12}>
+        {isLoading ? <LoadingIcon /> : <ProfileDetails />}
+      </Grid>
+    </Grid>
+  )
 }
 
 export default UserProfileCard
