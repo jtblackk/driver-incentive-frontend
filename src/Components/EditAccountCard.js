@@ -11,36 +11,10 @@ import { useHistory } from 'react-router-dom'
 import LoadingIcon from './LoadingIcon'
 
 const EditAccountCard = (props) => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [userDetails, setUserDetails] = useState({
-    Email_ID: props.accountEmail,
-    FirstName: '',
-    LastName: '',
-    AccountType: '',
-    UserBio: '',
-  })
+  const setProfileState = props.userProfile.setProfileState
+  const userDetails = props.userProfile.userProfile
 
-  useEffect(() => {
-    // retrieve user data
-    let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userDetails.Email_ID}`
-    fetch(GET_USERDATA_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        setUserDetails({
-          Email_ID: props.accountEmail,
-          FirstName: data.Item.FirstName,
-          LastName: data.Item.LastName,
-          UserBio: data.Item.UserBio,
-        })
-      })
-      .then(() => {
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+  const [isLoading, setIsLoading] = useState(false)
 
   if (isLoading) {
     return <LoadingIcon />
@@ -65,7 +39,7 @@ const EditAccountCard = (props) => {
                 // update first name in state
                 let newUserDetails = userDetails
                 newUserDetails.FirstName = event.target.value
-                setUserDetails(newUserDetails)
+                setProfileState(newUserDetails)
               }}
             />
           </Grid>
@@ -80,7 +54,7 @@ const EditAccountCard = (props) => {
                 // update last name in state
                 let newUserDetails = userDetails
                 newUserDetails.LastName = event.target.value
-                setUserDetails(newUserDetails)
+                setProfileState(newUserDetails)
               }}
             />
           </Grid>
@@ -103,7 +77,7 @@ const EditAccountCard = (props) => {
               // update UserBio in state
               let newUserDetails = userDetails
               newUserDetails.UserBio = event.target.value
-              setUserDetails(newUserDetails)
+              setProfileState(newUserDetails)
             }}
           />
         </Grid>

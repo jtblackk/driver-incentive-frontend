@@ -39,6 +39,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function ProfilePageContent(props) {
+  // console.log(props)
+
   const classes = useStyles()
   const [isEditing, setIsEditing] = useState(false)
 
@@ -72,7 +74,7 @@ function ProfilePageContent(props) {
 
               {/* profile info section */}
               <Grid item>
-                <UserProfileCard profileEmail={props.currentUser} />
+                <UserProfileCard userProfile={props} />
               </Grid>
               <br></br>
             </Paper>
@@ -104,7 +106,20 @@ function ProfilePageContent(props) {
                   size="small"
                   color="primary"
                   onClick={() => {
-                    // TODO: save the account info form's information
+                    let SAVE_USER_PROFILE_URL =
+                      'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
+                    let requestOptions = {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        Email_id: props.userProfile.Email_ID,
+                        FirstName: props.userProfile.FirstName,
+                        LastName: props.userProfile.LastName,
+                        AccountType: props.userProfile.AccountType,
+                        UserBio: props.userProfile.UserBio,
+                      }),
+                    }
+                    fetch(SAVE_USER_PROFILE_URL, requestOptions)
                     setIsEditing(!isEditing)
                   }}
                 >
@@ -114,7 +129,7 @@ function ProfilePageContent(props) {
 
               {/* account info form */}
               <Grid item>
-                <EditAccountCard accountEmail={props.currentUser} />
+                <EditAccountCard userProfile={props} />
               </Grid>
 
               <br></br>
@@ -128,33 +143,78 @@ function ProfilePageContent(props) {
 
 function ProfilePage() {
   const classes = useStyles()
-  const [currentUser, setCurrentUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [userProfileDetails, setUserProfileDetails] = useState({
+    Email_ID: '',
+    FirstName: '',
+    LastName: '',
+    AccountType: '',
+    UserBio: '',
+    TotalPoints: '',
+    SponsorEmailID: '',
+  })
+
+  function setProfileState(state) {
+    setUserProfileDetails(state)
+  }
 
   useEffect(() => {
-    // fetch current user's email
-    Auth.currentAuthenticatedUser().then((user) => {
-      console.log(user.attributes.email)
-      setCurrentUser(user.attributes.email)
-    })
+    ;(async () => {
+      const user = await Auth.currentAuthenticatedUser()
+      let user_email = user.attributes.email
+
+      // get user's data
+      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user_email}`
+      const response = await fetch(GET_USERDATA_URL)
+      const data = await response.json()
+      let profile_details = {
+        Email_ID: data.Item.Email_id,
+        FirstName: data.Item.FirstName,
+        LastName: data.Item.LastName,
+        UserBio: data.Item.UserBio,
+        AccountType: data.Item.AccountType,
+        SponsorEmailID: data.Item.SponsorEmailID,
+        TotalPoints: data.Item.TotalPoints,
+      }
+      setUserProfileDetails(profile_details)
+
+      setIsLoading(false)
+    })()
   }, [])
 
-  return (
-    <div className={classes.root}>
-      {/* layout stuff */}
-      <LeftDrawer />
-      <TopAppBar pageTitle="Your profile" />
+  if (!isLoading) {
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <LeftDrawer />
+        <TopAppBar pageTitle="Your profile" />
 
-      {/* content (starts after first div) */}
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {currentUser ? (
-          <ProfilePageContent currentUser={currentUser} />
-        ) : (
+        {/* content (starts after first div) */}
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+
+          <ProfilePageContent
+            userProfile={userProfileDetails}
+            setProfileState={setProfileState}
+          />
+        </main>
+      </div>
+    )
+  } else {
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <LeftDrawer />
+        <TopAppBar pageTitle="Your profile" />
+
+        {/* content (starts after first div) */}
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
           <LoadingIcon />
-        )}
-      </main>
-    </div>
-  )
+        </main>
+      </div>
+    )
+  }
 }
 
 export default ProfilePage
