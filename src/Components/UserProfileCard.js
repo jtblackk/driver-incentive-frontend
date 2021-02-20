@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Grid, Typography } from '@material-ui/core'
+import { Avatar, Box, Grid, Typography } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 
 const UserProfileCard = (props) => {
@@ -41,12 +41,14 @@ const UserProfileCard = (props) => {
     return (
       <Grid container spacing={1} justify="center" direction="column">
         <Grid item align="center">
-          <Avatar />
+          <Avatar src="https://graphicriver.img.customer.envatousercontent.com/files/196773956/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=7a31538609c92f7c6311fda597948a84" />
         </Grid>
 
         <Grid item align="center">
           <Typography>
-            {userDetails.FirstName} {userDetails.LastName}
+            <Box fontWeight="fontWeightBold">
+              {userDetails.FirstName} {userDetails.LastName}
+            </Box>
           </Typography>
         </Grid>
 
