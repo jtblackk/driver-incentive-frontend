@@ -1,14 +1,5 @@
-import {
-  Button,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@material-ui/core'
+import { Grid, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import LoadingIcon from './LoadingIcon'
 
 const EditAccountCard = (props) => {
   const setProfileState = props.userProfile.setProfileState
@@ -17,7 +8,7 @@ const EditAccountCard = (props) => {
   const [isLoading, setIsLoading] = useState(false)
 
   if (isLoading) {
-    return <LoadingIcon />
+    return <div></div>
   } else {
     return (
       <Grid
