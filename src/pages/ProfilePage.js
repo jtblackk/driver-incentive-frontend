@@ -9,14 +9,7 @@ import UserProfileCard from '../Components/UserProfileCard'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LeftDrawer from '../Components/LeftDrawer'
 import { Auth } from 'aws-amplify'
-import {
-  Button,
-  CircularProgress,
-  Grid,
-  Paper,
-  Typography,
-} from '@material-ui/core'
-import LoadingIcon from '../Components/LoadingIcon'
+import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import EditAccountCard from '../Components/EditAccountCard'
 
 const useStyles = makeStyles((theme) => ({
