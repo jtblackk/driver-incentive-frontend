@@ -84,7 +84,22 @@ function ProfilePageContent(props) {
                   variant="text"
                   size="small"
                   onClick={() => {
-                    setIsEditing(!isEditing)
+                    ;(async () => {
+                      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${props.userProfile.Email_ID}`
+                      const response = await fetch(GET_USERDATA_URL)
+                      const data = await response.json()
+                      let profile_details = {
+                        Email_ID: data.Item.Email_id,
+                        FirstName: data.Item.FirstName,
+                        LastName: data.Item.LastName,
+                        UserBio: data.Item.UserBio,
+                        AccountType: data.Item.AccountType,
+                        SponsorEmailID: data.Item.SponsorEmailID,
+                        TotalPoints: data.Item.TotalPoints,
+                      }
+                      props.setProfileState(profile_details)
+                      setIsEditing(!isEditing)
+                    })()
                   }}
                 >
                   <Typography>Cancel</Typography>
