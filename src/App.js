@@ -8,6 +8,7 @@ import AccountSetupPage from './pages/AccountSetupPage'
 import ProfilePage from './pages/ProfilePage'
 import IndexPage from './pages/IndexPage'
 import ApplicationPage from './pages/ApplicationPage'
+import RewardsPage from './pages/RewardsPage'
 import '@aws-amplify/ui/dist/style.css'
 
 Amplify.configure(awsconfig)
