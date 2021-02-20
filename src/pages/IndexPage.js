@@ -80,7 +80,7 @@ function IndexPage() {
         <div className={classes.root}>
           {/* layout stuff */}
           <TopAppBar pageTitle="Home"></TopAppBar>
-          <LeftDrawer />
+          <LeftDrawer AccountType={userProfileDetails.AccountType} />
 
           {/* page content (starts after first div) */}
           <main className={classes.content}>

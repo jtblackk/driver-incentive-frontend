@@ -16,6 +16,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount'
 
 // pages to show on the upper part of the drawer
 const pages = [
@@ -23,11 +24,19 @@ const pages = [
     name: 'Home',
     route: '/',
     icon: <HomeIcon />,
+    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+  },
+  {
+    name: 'My applicants',
+    route: '/applicants',
+    icon: <SupervisorAccountIcon />,
+    reqAccTypes: ['Sponsor'],
   },
   {
     name: 'My profile',
     route: '/profile',
     icon: <PersonIcon />,
+    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
   },
 ]
 
@@ -44,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const LeftDrawer = () => {
+const LeftDrawer = (props) => {
   let history = useHistory()
   const classes = useStyles()
 
@@ -63,18 +72,24 @@ const LeftDrawer = () => {
 
       {/* top pages */}
       <List>
-        {pages.map((page, index) => (
-          <ListItem
-            button
-            key={page.name}
-            onClick={() => {
-              history.push(page.route)
-            }}
-          >
-            <ListItemIcon>{page.icon}</ListItemIcon>
-            <ListItemText primary={page.name} />
-          </ListItem>
-        ))}
+        {pages.map((page, index) => {
+          if (page.reqAccTypes.includes(props.AccountType)) {
+            return (
+              <ListItem
+                button
+                key={page.name}
+                onClick={() => {
+                  history.push(page.route)
+                }}
+              >
+                <ListItemIcon>{page.icon}</ListItemIcon>
+                <ListItemText primary={page.name} />
+              </ListItem>
+            )
+          } else {
+            return null
+          }
+        })}
         <Divider />
       </List>
 

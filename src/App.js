@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage'
 import IndexPage from './pages/IndexPage'
 import ApplicationPage from './pages/ApplicationPage'
 import '@aws-amplify/ui/dist/style.css'
+import ApplicantManagementPage from './pages/ApplicantManagementPage'
 
 Amplify.configure(awsconfig)
 
@@ -20,7 +21,8 @@ function App() {
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/account-setup" component={AccountSetupPage} />
-          <Route exact apth="/apply" component={ApplicationPage} />
+          <Route exact path="/apply" component={ApplicationPage} />
+          <Route exact path="/applicants" component={ApplicantManagementPage} />
           <Route component={PageNotFoundPage} />
         </Switch>
       </BrowserRouter>

@@ -25,6 +25,7 @@ const UserProfileCard = (props) => {
           console.log(err)
         })
     }
+    setIsLoading(false)
   }, [])
 
   // component that shows how many points the user has and with what sponsor

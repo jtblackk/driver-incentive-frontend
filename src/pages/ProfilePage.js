@@ -190,7 +190,7 @@ function ProfilePage() {
   return (
     <div className={classes.root}>
       {/* layout stuff */}
-      <LeftDrawer />
+      <LeftDrawer AccountType={userProfileDetails.AccountType} />
       <TopAppBar pageTitle="Your profile" />
 
       {/* content (starts after first div) */}
