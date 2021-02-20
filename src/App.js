@@ -20,7 +20,8 @@ function App() {
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/account-setup" component={AccountSetupPage} />
-          <Route exact apth="/apply" component={ApplicationPage} />
+          <Route exact path="/apply" component={ApplicationPage} />
+          <Route exact path="/rewards-page" component={RewardsPage} />
           <Route component={PageNotFoundPage} />
         </Switch>
       </BrowserRouter>
