@@ -39,48 +39,45 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function ProfilePageContent(props) {
-  // console.log(props)
-
   const classes = useStyles()
   const [isEditing, setIsEditing] = useState(false)
 
   if (!isEditing) {
     return (
-      <div className={classes.root}>
-        <Grid container justify="center">
-          <Grid
-            item
-            container
-            xs={12}
-            sm={8}
-            md={6}
-            lg={4}
-            xl={3}
-            justify="center"
-          >
-            {/* edit button */}
-            <Paper className={classes.paper}>
-              <Grid container justify="flex-end">
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={() => {
-                    setIsEditing(!isEditing)
-                  }}
-                >
-                  <Typography>Edit</Typography>
-                </Button>
-              </Grid>
+      <Grid container direction="row" xs={12} justify="center">
+        <Grid
+          item
+          container
+          direction="column"
+          xs={12}
+          sm={8}
+          md={6}
+          lg={4}
+          xl={3}
+        >
+          <Paper className={classes.paper}>
+            <Grid item container justify="flex-end">
+              <Button
+                variant="text"
+                size="small"
+                onClick={() => {
+                  setIsEditing(!isEditing)
+                }}
+              >
+                <Typography>Edit</Typography>
+              </Button>
+            </Grid>
 
-              {/* profile info section */}
-              <Grid item>
-                <UserProfileCard userProfile={props} />
-              </Grid>
-              <br></br>
-            </Paper>
-          </Grid>
+            <Grid item>
+              <UserProfileCard userProfile={props} />
+            </Grid>
+
+            <Grid item>
+              <br />
+            </Grid>
+          </Paper>
         </Grid>
-      </div>
+      </Grid>
     )
   } else {
     return (
@@ -182,39 +179,26 @@ function ProfilePage() {
     })()
   }, [])
 
-  if (!isLoading) {
-    return (
-      <div className={classes.root}>
-        {/* layout stuff */}
-        <LeftDrawer />
-        <TopAppBar pageTitle="Your profile" />
+  return (
+    <div className={classes.root}>
+      {/* layout stuff */}
+      <LeftDrawer />
+      <TopAppBar pageTitle="Your profile" />
 
-        {/* content (starts after first div) */}
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-
+      {/* content (starts after first div) */}
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {isLoading ? (
+          <div></div>
+        ) : (
           <ProfilePageContent
             userProfile={userProfileDetails}
             setProfileState={setProfileState}
           />
-        </main>
-      </div>
-    )
-  } else {
-    return (
-      <div className={classes.root}>
-        {/* layout stuff */}
-        <LeftDrawer />
-        <TopAppBar pageTitle="Your profile" />
-
-        {/* content (starts after first div) */}
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <LoadingIcon />
-        </main>
-      </div>
-    )
-  }
+        )}
+      </main>
+    </div>
+  )
 }
 
 export default ProfilePage

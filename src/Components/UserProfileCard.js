@@ -39,27 +39,64 @@ const UserProfileCard = (props) => {
   // component that shows the user's profile details
   function ProfileDetails() {
     return (
-      <div>
-        <br />
-        <Avatar></Avatar>
-        <Typography>
-          {userDetails.FirstName} {userDetails.LastName}
-        </Typography>
-        {userDetails.AccountType === 'Driver' ? <PointsTypography /> : null}
-        <br />
-        <Typography align="center">{userDetails.UserBio}</Typography>
-      </div>
+      <Grid container spacing={1} justify="center" direction="column">
+        <Grid item align="center">
+          <Avatar />
+        </Grid>
+
+        <Grid item align="center">
+          <Typography>
+            {userDetails.FirstName} {userDetails.LastName}
+          </Typography>
+        </Grid>
+
+        <Grid item align="center">
+          {userDetails.AccountType === 'Driver' ? <PointsTypography /> : null}
+        </Grid>
+
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+
+        <Grid item align="center">
+          <Typography align="center">{userDetails.UserBio}</Typography>
+        </Grid>
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+      </Grid>
     )
   }
 
-  // final card
-  return (
-    <Grid container justify="center">
-      <Grid item align="center" xs={12}>
-        {isLoading ? <LoadingIcon /> : <ProfileDetails />}
+  function LoadingFiller() {
+    return (
+      <Grid container spacing={1} justify="center" direction="column">
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+        <Grid item xs align="center">
+          <LoadingIcon />
+        </Grid>
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+        <Grid item xs align="center">
+          <br />
+        </Grid>
+        <Grid item xs align="center">
+          <br />
+        </Grid>
       </Grid>
-    </Grid>
-  )
+    )
+  }
+
+  return isLoading ? <LoadingFiller /> : <ProfileDetails />
 }
 
 export default UserProfileCard
