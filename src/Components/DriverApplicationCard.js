@@ -31,7 +31,7 @@ const sponsors = [
 const DriverApplicationCard = (props) => {
   let history = useHistory()
   const [applicationDetails, setApplicationDetails] = useState({
-    ApplicantEmailID: props.accountEmail,
+    Email_ID: props.accountEmail,
     FirstName: '',
     LastName: '',
     UserBio: '',
@@ -66,8 +66,8 @@ const DriverApplicationCard = (props) => {
       <Grid item xs={12} align="center">
         <InputLabel id="Sponsor">Sponsor</InputLabel>
         <Select
-          labelId="AccountTypeLabel"
-          id="AccountType"
+          labelId="SponsorLabel"
+          id="Sponsor"
           onChange={(event) => {
             // update sponsor
             let newApplicationDetails = applicationDetails
@@ -112,37 +112,36 @@ const DriverApplicationCard = (props) => {
           variant="outlined"
           onClick={() => {
             // validate input
-            if (applicationDetails.SponsorCompany === '') {
+            if (applicationDetails.Sponsor === '') {
               alert('Please choose a sponsor company')
               return
             }
 
-            console.log(applicationDetails)
+            // fetch -> save application in application table
+            let SEND_APPLICATION_URL =
+              'https://z8yu8acjwj.execute-api.us-east-1.amazonaws.com/dev/submitapplication'
+            let requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                applicant_email: applicationDetails.Email_ID,
+                FirstName: applicationDetails.FirstName,
+                LastName: applicationDetails.LastName,
+                UserBio: applicationDetails.UserBio,
+                sponsor_email: applicationDetails.Sponsor,
+                comments: applicationDetails.Comments,
+              }),
+            }
+            fetch(SEND_APPLICATION_URL, requestOptions)
 
-            // TODO:  fetch -> save application in application table
-            // let SAVE_USER_PROFILE_URL =
-            //   'https://5u7lb05615.execute-api.us-east-1.amazonaws.com/saveuserprofile'
-            // let requestOptions = {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({
-            //     Email_id: userDetails.Email_ID,
-            //     FirstName: userDetails.FirstName,
-            //     LastName: userDetails.LastName,
-            //     AccountType: userDetails.AccountType,
-            //     UserBio: userDetails.UserBio,
-            //   }),
-            // }
-            // fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
-            //   // route user to appropriate page
-            //   if (userDetails.AccountType === 'Driver') {
-            //     history.push('/application')
-            //   } else {
-            //     history.push('/')
-            //   }
+            // console.log({
+            //   applicant_email: applicationDetails.Email_ID,
+            //   FirstName: applicationDetails.FirstName,
+            //   LastName: applicationDetails.LastName,
+            //   UserBio: applicationDetails.UserBio,
+            //   sponsor_email: applicationDetails.Sponsor,
+            //   comments: applicationDetails.Comments,
             // })
-
-            // direct driver to home page
             history.push('/')
           }}
         >
