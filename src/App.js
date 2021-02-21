@@ -8,6 +8,7 @@ import AccountSetupPage from './pages/AccountSetupPage'
 import ProfilePage from './pages/ProfilePage'
 import IndexPage from './pages/IndexPage'
 import ApplicationPage from './pages/ApplicationPage'
+import RewardsPage from './pages/RewardsPage'
 import '@aws-amplify/ui/dist/style.css'
 
 Amplify.configure(awsconfig)
@@ -20,7 +21,8 @@ function App() {
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/account-setup" component={AccountSetupPage} />
-          <Route exact apth="/apply" component={ApplicationPage} />
+          <Route exact path="/apply" component={ApplicationPage} />
+          <Route exact path="/rewards-page" component={RewardsPage} />
           <Route component={PageNotFoundPage} />
         </Switch>
       </BrowserRouter>
