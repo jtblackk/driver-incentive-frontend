@@ -21,7 +21,7 @@ function App() {
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/profile" component={ProfilePage} />
           <Route exact path="/account-setup" component={AccountSetupPage} />
-          <Route exact path="/apply" component={ApplicationPage} />
+          <Route exact path="/application" component={ApplicationPage} />
           <Route exact path="/applicants" component={ApplicantManagementPage} />
           <Route component={PageNotFoundPage} />
         </Switch>
