@@ -32,30 +32,43 @@ function IndexPage() {
     Email_ID: '',
     AccountType: '',
     SponsorID: null,
+    ApplicationStatus: null,
   })
+
+  async function getUserData() {
+    setIsLoading(true)
+    const user = await Auth.currentAuthenticatedUser()
+
+    let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user.attributes.email}`
+    let response = await fetch(GET_USERDATA_URL)
+    let data = await response.json()
+
+    // load the user's account type into state
+    let newUserProfileDetails = userProfileDetails
+    userProfileDetails.Email_ID = data.Item.Email_id
+    userProfileDetails.AccountType = data.Item.AccountType
+    userProfileDetails.SponsorID = data.Item.SponsorEmailID
+    userProfileDetails.ApplicationStatus = data.Item.ApplicationStatus
+    setUserProfileDetails(newUserProfileDetails)
+
+    console.log(newUserProfileDetails)
+    setIsLoading(false)
+  }
 
   useEffect(() => {
     // start loading animation
     setIsLoading(true)
     ;(async () => {
-      const user = await Auth.currentAuthenticatedUser()
-
-      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user.attributes.email}`
-      let response = await fetch(GET_USERDATA_URL)
-      let data = await response.json()
-
-      // load the user's account type into state
-      let newUserProfileDetails = userProfileDetails
-      userProfileDetails.Email_ID = data.Item.Email_id
-      userProfileDetails.AccountType = data.Item.AccountType
-      userProfileDetails.SponsorID = data.Item.SponsorEmailID
-      setUserProfileDetails(newUserProfileDetails)
-      setIsLoading(false)
+      await getUserData()
+      if (userProfileDetails.ApplicationStatus <= 1) {
+        setInterval(getUserData, 10000)
+      }
 
       // if the user has no specified account type, force them to set up an account
       if (!userProfileDetails.AccountType) {
         history.push('/account-setup')
       }
+      setIsLoading(false)
     })()
   }, [])
 
@@ -72,7 +85,7 @@ function IndexPage() {
   } else {
     if (
       userProfileDetails.AccountType === 'Driver' &&
-      !userProfileDetails.SponsorID
+      userProfileDetails.ApplicationStatus <= 1
     ) {
       return <WaitingForApplicationApprovalScreen />
     } else {
