@@ -51,7 +51,7 @@ function IndexPage() {
     userProfileDetails.ApplicationStatus = data.Item.ApplicationStatus
     setUserProfileDetails(newUserProfileDetails)
 
-    console.log(newUserProfileDetails)
+    // console.log(newUserProfileDetails)
     setIsLoading(false)
   }
 
@@ -60,7 +60,10 @@ function IndexPage() {
     setIsLoading(true)
     ;(async () => {
       await getUserData()
-      if (userProfileDetails.ApplicationStatus <= 1) {
+      if (
+        userProfileDetails.ApplicationStatus <= 1 &&
+        userProfileDetails.AccountType === 'Driver'
+      ) {
         setInterval(getUserData, 10000)
       }
 
