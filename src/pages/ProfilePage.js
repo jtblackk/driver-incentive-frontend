@@ -131,6 +131,7 @@ function ProfilePageContent(props) {
                   <Typography>Save</Typography>
                 </Button>
               </Grid>
+              <br></br>
 
               {/* account info form */}
               <Grid item>
