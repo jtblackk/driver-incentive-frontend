@@ -38,20 +38,20 @@ export default function ApplicationManagementDialog(props) {
     },
     {
       name: 'Submission date',
-      prop: props.applicationDetails.submissionDate,
+      prop: Date.parse(props.applicationDetails.submissionDate).toUTCString(),
     },
   ]
 
   const [decisionReason, setDecisionReason] = useState(null)
   let initial_response_fields = [
     { name: 'Response', prop: props.applicationDetails.response },
+    { name: 'Response reason', prop: props.applicationDetails.responseReason },
     {
       name: 'Response date',
       prop: props.applicationDetails.responseDate
-        ? props.applicationDetails.responseDate
+        ? Date.parse(props.applicationDetails.responseDate).toUTCString()
         : null,
     },
-    { name: 'Response reason', prop: props.applicationDetails.responseReason },
   ]
 
   let LEFT_COL_WIDTH = 5
