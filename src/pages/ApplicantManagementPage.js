@@ -68,7 +68,7 @@ const ApplicantManagementPage = () => {
           applicantBio: val.UserBio.S,
           applicantEmail: val.applicant_email.S,
           applicantComments: val.comments.S,
-          submissionDate: val.dateTime.S,
+          submissionDate: val.dateTime.S.split('.')[0],
           sponsorEmail: val.sponsor_email.S,
           isApplicationAccepted: val.decision ? val.decision.S : null,
         }
