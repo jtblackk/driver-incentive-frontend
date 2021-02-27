@@ -6,7 +6,14 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
+import {
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 
 export default function ApplicationManagementDialog(props) {
@@ -25,6 +32,32 @@ export default function ApplicationManagementDialog(props) {
   let RIGHT_COL_WIDTH = 6
   let COLUMN_SPACING = 1
 
+  let applicationFields = [
+    {
+      name: 'Email',
+      prop: props.applicationDetails.ApplicantEmail,
+    },
+    {
+      name: 'Name',
+      prop:
+        props.applicationDetails.ApplicantFirstName +
+        ' ' +
+        props.applicationDetails.ApplicantLastName,
+    },
+    {
+      name: 'Bio',
+      prop: props.applicationDetails.ApplicantBio,
+    },
+    {
+      name: 'Comments',
+      prop: props.applicationDetails.ApplicantComments,
+    },
+    {
+      name: 'Submission date',
+      prop: props.applicationDetails.SubmissionDate,
+    },
+  ]
+
   return (
     <div>
       <Dialog
@@ -36,13 +69,19 @@ export default function ApplicationManagementDialog(props) {
         fullWidth
         maxWidth="sm"
       >
-        <Grid container xs={12} justify="space-between" direction="row">
+        <Grid
+          container
+          xs={12}
+          justify="space-between"
+          alignItems="center"
+          direction="row"
+        >
           <Grid item>
             <DialogTitle id="form-dialog-title">
               Driver's Application
             </DialogTitle>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item>
             <IconButton
               onClick={() => {
                 handleClose(false)
@@ -62,232 +101,158 @@ export default function ApplicationManagementDialog(props) {
               spacing={COLUMN_SPACING}
               justify="space-evenly"
             >
-              <Grid item xs={LEFT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="right" fontWeight="fontWeightBold">
-                    Email:
-                  </Box>
-                </DialogContentText>
+              {applicationFields.map((field) => {
+                return (
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={COLUMN_SPACING}
+                    justify="space-evenly"
+                  >
+                    <Grid item xs={LEFT_COL_WIDTH}>
+                      <DialogContentText>
+                        <Box textAlign="right" fontWeight="fontWeightBold">
+                          {field.name}:
+                        </Box>
+                      </DialogContentText>
+                    </Grid>
+                    <Grid item xs={RIGHT_COL_WIDTH}>
+                      <DialogContentText>
+                        <Box textAlign="left">{field.prop}</Box>
+                      </DialogContentText>
+                    </Grid>
+                  </Grid>
+                )
+              })}
+
+              <Grid item xs={12}>
+                <br />
+                <Divider />
+
+                <br />
+                <br />
               </Grid>
 
-              <Grid item xs={RIGHT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="left">
-                    {' '}
-                    {props.applicationDetails.ApplicantEmail}
-                  </Box>
-                </DialogContentText>
+              <Grid
+                container
+                direction="row"
+                spacing={COLUMN_SPACING}
+                justify="space-evenly"
+              >
+                <Grid item xs={7} align="center">
+                  <TextField
+                    variant="outlined"
+                    label="Decision reason"
+                    placeholder="Provide a reason for your decision"
+                    multiline
+                    rows={3}
+                    autoFocus
+                    fullWidth
+                    error={!decisionReason}
+                    onChange={(event) => {
+                      setDecisionReason(event.target.value)
+                    }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
 
-            <Grid
-              container
-              direction="row"
-              spacing={COLUMN_SPACING}
-              justify="space-evenly"
-            >
-              <Grid item xs={LEFT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="right" fontWeight="fontWeightBold">
-                    Name:
-                  </Box>
-                </DialogContentText>
+              <Grid item xs={12}></Grid>
+
+              <Grid
+                container
+                direction="row"
+                spacing={COLUMN_SPACING}
+                justify="space-evenly"
+              >
+                <Grid item xs={7} align="right">
+                  <Grid container xs={12} justify="flex-end">
+                    <Grid item xs={3}>
+                      <Button
+                        color="secondary"
+                        variant="contained"
+                        size="small"
+                        onClick={() => {
+                          if (!decisionReason) {
+                            return
+                          }
+
+                          let updated_application = {
+                            ...props.applicationDetails,
+                            ApplicationResponse: 'denied',
+                          }
+                          // console.log(updated_application)
+
+                          let SAVE_APPLICATION_RESPONSE =
+                            'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                          let requestOptions = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              applicant_email:
+                                updated_application.ApplicantEmail,
+                              // ApplicationStatus: 2,
+                              SponsorEmailID: updated_application.SponsorEmail,
+                              applicationStatus: 0,
+                              decision: updated_application.ApplicationResponse,
+                            }),
+                          }
+                          fetch(SAVE_APPLICATION_RESPONSE, requestOptions).then(
+                            () => {
+                              handleClose(true)
+                            },
+                          )
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </Grid>
+
+                    <Grid item xs={3}>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        size="small"
+                        onClick={() => {
+                          if (!decisionReason) {
+                            return
+                          }
+
+                          let updated_application = {
+                            ...props.applicationDetails,
+                            ApplicationResponse: 'accepted',
+                          }
+
+                          // console.log(updated_application)
+
+                          let SAVE_APPLICATION_RESPONSE =
+                            'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                          let requestOptions = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              applicant_email:
+                                updated_application.ApplicantEmail,
+                              SponsorEmailID: updated_application.SponsorEmail,
+                              applicationStatus: 2,
+                              decision: updated_application.ApplicationResponse,
+                            }),
+                          }
+                          fetch(SAVE_APPLICATION_RESPONSE, requestOptions).then(
+                            () => {
+                              handleClose(true)
+                            },
+                          )
+                        }}
+                      >
+                        Accept
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={RIGHT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="left">
-                    {props.applicationDetails.ApplicantFirstName +
-                      ' ' +
-                      props.applicationDetails.ApplicantLastName}
-                  </Box>
-                </DialogContentText>
+              <Grid item>
+                <br />
               </Grid>
-            </Grid>
-
-            <Grid
-              container
-              direction="row"
-              spacing={COLUMN_SPACING}
-              justify="space-evenly"
-            >
-              <Grid item xs={LEFT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="right" fontWeight="fontWeightBold">
-                    Bio:
-                  </Box>
-                </DialogContentText>
-              </Grid>
-              <Grid item xs={RIGHT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="left">
-                    {props.applicationDetails.ApplicantBio}
-                  </Box>
-                </DialogContentText>
-              </Grid>
-            </Grid>
-
-            <Grid
-              container
-              direction="row"
-              spacing={COLUMN_SPACING}
-              justify="space-evenly"
-            >
-              <Grid item xs={LEFT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="right" fontWeight="fontWeightBold">
-                    Comments:
-                  </Box>
-                </DialogContentText>
-              </Grid>
-              <Grid item xs={RIGHT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="left">
-                    {props.applicationDetails.ApplicantComments}
-                  </Box>
-                </DialogContentText>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12}>
-              <br />
-            </Grid>
-
-            <Grid
-              container
-              direction="row"
-              spacing={COLUMN_SPACING}
-              justify="space-evenly"
-            >
-              <Grid item xs={LEFT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="right" fontWeight="fontWeightBold">
-                    Submission date:
-                  </Box>
-                </DialogContentText>
-              </Grid>
-              <Grid item xs={RIGHT_COL_WIDTH}>
-                <DialogContentText>
-                  <Box textAlign="left">
-                    {props.applicationDetails.SubmissionDate}
-                  </Box>
-                </DialogContentText>
-              </Grid>
-            </Grid>
-
-            <Grid item>
-              <br />
-              <Divider />
-              <br />
-              <br />
-            </Grid>
-
-            <Grid
-              container
-              direction="row"
-              spacing={COLUMN_SPACING}
-              justify="space-evenly"
-            >
-              <Grid item xs={7} align="center">
-                <TextField
-                  variant="outlined"
-                  label="Decision reason"
-                  placeholder="Provide a reason for your decision"
-                  multiline
-                  rows={3}
-                  autoFocus
-                  fullWidth
-                  error={!decisionReason}
-                  onChange={(event) => {
-                    setDecisionReason(event.target.value)
-                  }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid
-              container
-              direction="row"
-              spacing={COLUMN_SPACING}
-              justify="space-evenly"
-            >
-              <Grid item xs={7} align="right">
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    if (!decisionReason) {
-                      return
-                    }
-
-                    let updated_application = {
-                      ...props.applicationDetails,
-                      ApplicationResponse: 'denied',
-                    }
-                    // console.log(updated_application)
-
-                    let SAVE_APPLICATION_RESPONSE =
-                      'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
-                    let requestOptions = {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        applicant_email: updated_application.ApplicantEmail,
-                        // ApplicationStatus: 2,
-                        SponsorEmailID: updated_application.SponsorEmail,
-                        applicationStatus: 0,
-                        decision: updated_application.ApplicationResponse,
-                      }),
-                    }
-                    fetch(SAVE_APPLICATION_RESPONSE, requestOptions).then(
-                      () => {
-                        handleClose(true)
-                      },
-                    )
-                  }}
-                >
-                  Reject
-                </Button>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  size="small"
-                  onClick={() => {
-                    if (!decisionReason) {
-                      return
-                    }
-
-                    let updated_application = {
-                      ...props.applicationDetails,
-                      ApplicationResponse: 'accepted',
-                    }
-
-                    // console.log(updated_application)
-
-                    let SAVE_APPLICATION_RESPONSE =
-                      'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
-                    let requestOptions = {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        applicant_email: updated_application.ApplicantEmail,
-                        SponsorEmailID: updated_application.SponsorEmail,
-                        applicationStatus: 2,
-                        decision: updated_application.ApplicationResponse,
-                      }),
-                    }
-                    fetch(SAVE_APPLICATION_RESPONSE, requestOptions).then(
-                      () => {
-                        handleClose(true)
-                      },
-                    )
-                    // handleClose(true)
-                  }}
-                >
-                  Accept
-                </Button>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <br />
             </Grid>
           </DialogContent>
         </Grid>
