@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import { Box } from '@material-ui/core'
 
 export default function PendingApplicantTable(props) {
   // console.log(props)
@@ -31,13 +32,24 @@ export default function PendingApplicantTable(props) {
   if (!isLoading) {
     return (
       <TableContainer component={Paper}>
-        <Table aria-label="simple table">
+        <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last name</TableCell>
-              <TableCell>Submission date</TableCell>
+              <TableCell>
+                <Box fontWeight="fontWeightBold">Email</Box>
+              </TableCell>
+              <TableCell>
+                {' '}
+                <Box fontWeight="fontWeightBold">First Name</Box>
+              </TableCell>
+              <TableCell>
+                {' '}
+                <Box fontWeight="fontWeightBold">Last name</Box>
+              </TableCell>
+              <TableCell>
+                {' '}
+                <Box fontWeight="fontWeightBold">Submission date</Box>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
