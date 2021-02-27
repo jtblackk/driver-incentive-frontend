@@ -21,6 +21,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import LocalShippingIcon from '@material-ui/icons/LocalShipping'
 import StorefrontIcon from '@material-ui/icons/Storefront'
 import StorageIcon from '@material-ui/icons/Storage'
+import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
 
 // pages to show on the upper part of the drawer
 const top_pages = [
@@ -47,6 +48,12 @@ const top_pages = [
     route: '/manage-catalog',
     icon: <StorefrontIcon />,
     reqAccTypes: ['Sponsor'],
+  },
+  {
+    name: 'Catalog',
+    route: '/browse-catalog',
+    icon: <LocalGroceryStoreIcon />,
+    reqAccTypes: ['Driver'],
   },
 
   {
