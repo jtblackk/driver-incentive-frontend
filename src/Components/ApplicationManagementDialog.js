@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+require('datejs')
 
 export default function ApplicationManagementDialog(props) {
   // console.log(props)
@@ -14,8 +15,6 @@ export default function ApplicationManagementDialog(props) {
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
   }
-
-  const [decisionReason, setDecisionReason] = useState(null)
 
   let applicationFields = [
     {
@@ -43,9 +42,104 @@ export default function ApplicationManagementDialog(props) {
     },
   ]
 
+  const [decisionReason, setDecisionReason] = useState(null)
+  let initial_response_fields = [
+    { name: 'Response', prop: props.applicationDetails.response },
+    {
+      name: 'Response date',
+      prop: props.applicationDetails.responseDate
+        ? props.applicationDetails.responseDate
+        : null,
+    },
+    { name: 'Response reason', prop: props.applicationDetails.responseReason },
+  ]
+
   let LEFT_COL_WIDTH = 5
   let RIGHT_COL_WIDTH = 6
   let COLUMN_SPACING = 1
+
+  function ResponseForm() {
+    return (
+      <Grid
+        container
+        direction="row"
+        spacing={COLUMN_SPACING}
+        justify="space-evenly"
+      >
+        <Grid item xs={7} align="right">
+          <Grid container item xs={12} justify="flex-end">
+            <Grid item xs={3}>
+              <Button
+                style={{ backgroundColor: '#ED4337', color: 'white' }}
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  if (!decisionReason) {
+                    return
+                  }
+
+                  let SAVE_APPLICATION_RESPONSE_URL =
+                    'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                  let requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      applicant_email: props.applicationDetails.applicantEmail,
+                      SponsorEmailID: props.applicationDetails.sponsorEmail,
+                      decision: 'denied',
+                      decisionReason: decisionReason,
+                      applicationStatus: 0,
+                    }),
+                  }
+                  fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
+                    () => {
+                      handleClose(true)
+                    },
+                  )
+                }}
+              >
+                Reject
+              </Button>
+            </Grid>
+
+            <Grid item xs={3}>
+              <Button
+                style={{ backgroundColor: '#46CB18', color: 'white' }}
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  if (!decisionReason) {
+                    return
+                  }
+
+                  let SAVE_APPLICATION_RESPONSE_URL =
+                    'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                  let requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      applicant_email: props.applicationDetails.applicantEmail,
+                      SponsorEmailID: props.applicationDetails.sponsorEmail,
+                      decision: 'accepted',
+                      decisionReason: decisionReason,
+                      applicationStatus: 2,
+                    }),
+                  }
+                  fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
+                    () => {
+                      handleClose(true)
+                    },
+                  )
+                }}
+              >
+                Accept
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    )
+  }
 
   return (
     <div>
@@ -115,6 +209,7 @@ export default function ApplicationManagementDialog(props) {
                 )
               })}
 
+              {/* divider */}
               <Grid item xs={12}>
                 <br />
                 <Divider />
@@ -122,117 +217,63 @@ export default function ApplicationManagementDialog(props) {
                 <br />
                 <br />
               </Grid>
+              {/* bottom half */}
 
-              <Grid
-                container
-                direction="row"
-                spacing={COLUMN_SPACING}
-                justify="space-evenly"
-              >
-                <Grid item xs={7} align="center">
-                  <TextField
-                    variant="outlined"
-                    label="Decision reason"
-                    placeholder="Provide a reason for your decision"
-                    multiline
-                    rows={3}
-                    autoFocus
-                    fullWidth
-                    error={!decisionReason}
-                    onChange={(event) => {
-                      setDecisionReason(event.target.value)
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12}></Grid>
-
-              <Grid
-                container
-                direction="row"
-                spacing={COLUMN_SPACING}
-                justify="space-evenly"
-              >
-                <Grid item xs={7} align="right">
-                  <Grid container item xs={12} justify="flex-end">
-                    <Grid item xs={3}>
-                      <Button
-                        color="secondary"
-                        variant="contained"
-                        size="small"
-                        onClick={() => {
-                          if (!decisionReason) {
-                            return
-                          }
-
-                          let SAVE_APPLICATION_RESPONSE_URL =
-                            'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
-                          let requestOptions = {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              applicant_email:
-                                props.applicationDetails.applicantEmail,
-                              SponsorEmailID:
-                                props.applicationDetails.sponsorEmail,
-                              decision: 'denied',
-                              decisionReason: decisionReason,
-                              applicationStatus: 0,
-                            }),
-                          }
-                          fetch(
-                            SAVE_APPLICATION_RESPONSE_URL,
-                            requestOptions,
-                          ).then(() => {
-                            handleClose(true)
-                          })
-                        }}
-                      >
-                        Reject
-                      </Button>
+              {initial_response_fields[0].prop ? (
+                initial_response_fields.map((field) => {
+                  return (
+                    <Grid
+                      container
+                      direction="row"
+                      spacing={COLUMN_SPACING}
+                      justify="space-evenly"
+                    >
+                      <Grid item xs={LEFT_COL_WIDTH}>
+                        <DialogContentText>
+                          <Box textAlign="right" fontWeight="fontWeightBold">
+                            {field.name}:
+                          </Box>
+                        </DialogContentText>
+                      </Grid>
+                      <Grid item xs={RIGHT_COL_WIDTH}>
+                        <DialogContentText>
+                          <Box textAlign="left">{field.prop}</Box>
+                        </DialogContentText>
+                      </Grid>
                     </Grid>
-
-                    <Grid item xs={3}>
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        size="small"
-                        onClick={() => {
-                          if (!decisionReason) {
-                            return
-                          }
-
-                          let SAVE_APPLICATION_RESPONSE_URL =
-                            'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
-                          let requestOptions = {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              applicant_email:
-                                props.applicationDetails.applicantEmail,
-                              SponsorEmailID:
-                                props.applicationDetails.sponsorEmail,
-                              decision: 'accepted',
-                              decisionReason: decisionReason,
-                              applicationStatus: 2,
-                            }),
-                          }
-                          fetch(
-                            SAVE_APPLICATION_RESPONSE_URL,
-                            requestOptions,
-                          ).then(() => {
-                            handleClose(true)
-                          })
-                        }}
-                      >
-                        Accept
-                      </Button>
-                    </Grid>
+                  )
+                })
+              ) : (
+                <Grid
+                  container
+                  direction="row"
+                  spacing={COLUMN_SPACING}
+                  justify="space-evenly"
+                >
+                  <Grid item xs={7} align="center">
+                    <TextField
+                      variant="outlined"
+                      label="Decision reason"
+                      placeholder="Provide a reason for your decision"
+                      multiline
+                      rows={3}
+                      autoFocus
+                      fullWidth
+                      error={!decisionReason}
+                      onChange={(event) => {
+                        setDecisionReason(event.target.value)
+                      }}
+                    />
                   </Grid>
+
+                  <Grid xs={12} item></Grid>
+
+                  <ResponseForm />
                 </Grid>
-              </Grid>
-              <Grid item>
+              )}
+
+              <Grid item xs={12}>
+                {' '}
                 <br />
               </Grid>
             </Grid>
