@@ -7,12 +7,66 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import { Box } from '@material-ui/core'
+import { Box, TableSortLabel } from '@material-ui/core'
+
+import orderBy from 'lodash/orderBy'
+
+require('datejs')
+
+const headCells = [
+  {
+    id: 'email',
+    numeric: false,
+    disablePadding: true,
+    label: 'Email',
+    width: 125,
+  },
+  {
+    id: 'firstName',
+    numeric: false,
+    disablePadding: false,
+    label: 'First name',
+    width: 100,
+  },
+  {
+    id: 'lastName',
+    numeric: false,
+    disablePadding: false,
+    label: 'Last name',
+    width: 100,
+  },
+  {
+    id: 'submissionDate',
+    numeric: true,
+    disablePadding: false,
+    label: 'Submitted on',
+    width: 225,
+  },
+]
 
 export default function PendingApplicantTable(props) {
   // console.log(props)
 
   const [rows, setRows] = useState(null)
+
+  const [columnToSort, setColumnToSort] = useState('submissionDate')
+  const [sortDirection, setSortDirection] = useState('desc')
+  function handleSort(columnName) {
+    console.log(
+      'handleSort: columnName - ' +
+        columnName +
+        ' orig sort direction - ' +
+        sortDirection,
+    )
+    if (columnName === columnToSort) {
+      setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
+    } else {
+      console.log('clicked on a new column')
+      setSortDirection('desc')
+    }
+
+    setColumnToSort(columnName)
+  }
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -22,7 +76,9 @@ export default function PendingApplicantTable(props) {
         firstName: applicant.applicantFirstName,
         lastName: applicant.applicantLastName,
         email: applicant.applicantEmail,
-        submissionDate: applicant.submissionDate,
+        submissionDate: Date.parse(
+          applicant.submissionDate.replace(' ', 'T'),
+        ).toUTCString(),
       }
     })
     setRows(applicationList)
@@ -38,25 +94,33 @@ export default function PendingApplicantTable(props) {
         <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>
-                <Box fontWeight="fontWeightBold">Email</Box>
-              </TableCell>
-              <TableCell>
-                {' '}
-                <Box fontWeight="fontWeightBold">First Name</Box>
-              </TableCell>
-              <TableCell>
-                {' '}
-                <Box fontWeight="fontWeightBold">Last name</Box>
-              </TableCell>
-              <TableCell>
-                {' '}
-                <Box fontWeight="fontWeightBold">Submission date</Box>
-              </TableCell>
+              {headCells.map((headCell) => (
+                <TableCell
+                  width={headCell.width}
+                  key={headCell.id}
+                  sortDirection={
+                    columnToSort === headCell.id ? sortDirection : false
+                  }
+                  // align={headCell.disablePadding ? 'left' : 'right'}
+                >
+                  <TableSortLabel
+                    active={columnToSort === headCell.id}
+                    direction={
+                      columnToSort === headCell.id ? sortDirection : 'asc'
+                    }
+                    hideSortIcon={columnToSort === headCell.id ? false : true}
+                    onClick={() => {
+                      handleSort(headCell.id)
+                    }}
+                  >
+                    <Box fontWeight="fontWeightBold">{headCell.label}</Box>
+                  </TableSortLabel>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {orderBy(rows, columnToSort, sortDirection).map((row) => (
               <TableRow
                 hover={true}
                 key={row.email}
