@@ -3,11 +3,14 @@ import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { Grid, Paper } from '@material-ui/core'
+import { Box, Grid, Paper, Typography } from '@material-ui/core'
 import PendingApplicantTable from '../Components/PendingApplicantTable'
 import { Auth } from 'aws-amplify'
 import LoadingIcon from '../Components/LoadingIcon'
 import ApplicationManagementDialog from '../Components/ApplicationManagementDialog'
+import ProcessedApplicantTable from '../Components/ProcessedApplicantTable'
+require('datejs')
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -68,24 +71,28 @@ const ApplicantManagementPage = () => {
           applicantBio: val.UserBio.S,
           applicantEmail: val.applicant_email.S,
           applicantComments: val.comments.S,
-          submissionDate: val.dateTime.S.split('.')[0],
+          submissionDate: val.dateTime
+            ? Date.parse(
+                val.dateTime.S.split('.')[0].replace(' ', 'T'),
+              ).toISOString()
+            : null,
           sponsorEmail: val.sponsor_email.S,
-          isApplicationAccepted: val.decision ? val.decision.S : null,
+          response: val.decision ? val.decision.S : null,
+          responseDate: val.decisionDateTime
+            ? Date.parse(
+                val.decisionDateTime.S.split('.')[0].replace(' ', 'T'),
+              ).toISOString()
+            : null,
+          responseReason: val.decisionReason ? val.decisionReason.S : null,
         }
       })
 
       let pendingApplicants = allApplicants.filter((item) => {
-        return (
-          item.isApplicationAccepted !== 'accepted' &&
-          item.isApplicationAccepted !== 'denied'
-        )
+        return item.response !== 'accepted' && item.response !== 'denied'
       })
 
       let processedApplicants = allApplicants.filter((item) => {
-        return (
-          item.isApplicationAccepted === 'accepted' ||
-          item.isApplicationAccepted === 'denied'
-        )
+        return item.response === 'accepted' || item.response === 'denied'
       })
 
       setApplicants(pendingApplicants)
@@ -116,29 +123,51 @@ const ApplicantManagementPage = () => {
           <Grid
             container
             justify="center"
-            direction="column"
-            component={Paper}
+            alignContent="center"
+            direction="row"
+            // component={Paper}
             spacing={4}
           >
-            <Grid item>
-              <PendingApplicantTable
-                applicants={applicants}
-                setApplicantState={setApplicantState}
-                selectedApplicant={selectedApplicant}
-                setSelectedApplicantState={setSelectedApplicantState}
-                dialogIsOpen={dialogIsOpen}
-                setDialogIsOpenState={setDialogIsOpenState}
-              />
+            <Grid item xs={10} xl={6}>
+              <Paper>
+                <div style={{ padding: 20 }}>
+                  <Typography variant="h6">Pending applications</Typography>
+                  <Typography>
+                    Click on an applicant to view and respond to their
+                    application.
+                  </Typography>
+                  <br></br>
+                  <PendingApplicantTable
+                    applicants={applicants}
+                    setApplicantState={setApplicantState}
+                    selectedApplicant={selectedApplicant}
+                    setSelectedApplicantState={setSelectedApplicantState}
+                    dialogIsOpen={dialogIsOpen}
+                    setDialogIsOpenState={setDialogIsOpenState}
+                  />
+                </div>
+              </Paper>
             </Grid>
-            <Grid item>
-              <PendingApplicantTable
-                applicants={oldApplicants}
-                setApplicantState={setApplicantState}
-                selectedApplicant={selectedApplicant}
-                setSelectedApplicantState={setSelectedApplicantState}
-                dialogIsOpen={dialogIsOpen}
-                setDialogIsOpenState={setDialogIsOpenState}
-              />
+
+            <Grid item xs={10} xl={6}>
+              <Paper>
+                <div style={{ padding: 20 }}>
+                  <Typography variant="h6">Applicant history</Typography>
+                  <Typography>
+                    Click on a previous applicant to view their application and
+                    your decision.
+                  </Typography>
+                  <br></br>
+                  <ProcessedApplicantTable
+                    applicants={oldApplicants}
+                    setApplicantState={setApplicantState}
+                    selectedApplicant={selectedApplicant}
+                    setSelectedApplicantState={setSelectedApplicantState}
+                    dialogIsOpen={dialogIsOpen}
+                    setDialogIsOpenState={setDialogIsOpenState}
+                  />
+                </div>
+              </Paper>
             </Grid>
           </Grid>
         </main>

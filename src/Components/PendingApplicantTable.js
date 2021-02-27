@@ -61,7 +61,7 @@ export default function PendingApplicantTable(props) {
     if (columnName === columnToSort) {
       setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
     } else {
-      console.log('clicked on a new column')
+      // console.log('clicked on a new column')
       setSortDirection('desc')
     }
 
@@ -76,9 +76,7 @@ export default function PendingApplicantTable(props) {
         firstName: applicant.applicantFirstName,
         lastName: applicant.applicantLastName,
         email: applicant.applicantEmail,
-        submissionDate: Date.parse(
-          applicant.submissionDate.replace(' ', 'T'),
-        ).toUTCString(),
+        submissionDate: applicant.submissionDate,
       }
     })
     setRows(applicationList)
@@ -137,7 +135,9 @@ export default function PendingApplicantTable(props) {
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.firstName}</TableCell>
                 <TableCell>{row.lastName}</TableCell>
-                <TableCell>{row.submissionDate}</TableCell>
+                <TableCell>
+                  {Date.parse(row.submissionDate).toUTCString()}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
