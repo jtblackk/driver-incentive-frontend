@@ -10,8 +10,6 @@ import {
 } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 
-import { escape } from 'sqlstring'
-
 const DriverApplicationCard = (props) => {
   let history = useHistory()
   const [applicationDetails, setApplicationDetails] = useState({
