@@ -135,14 +135,16 @@ const DriverApplicationCard = (props) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   applicant_email: applicationDetails.Email_ID,
-                  FirstName: applicationDetails.FirstName,
-                  LastName: applicationDetails.LastName,
-                  UserBio: applicationDetails.UserBio,
                   sponsor_email: applicationDetails.Sponsor,
-                  comments: applicationDetails.Comments,
+                  FirstName: applicationDetails.FirstName.replaceAll("'", "''"),
+                  LastName: applicationDetails.LastName.replaceAll("'", "''"),
+                  comments: applicationDetails.Comments.replaceAll("'", "''"),
+                  UserBio: applicationDetails.UserBio.replaceAll("'", "''"),
                 }),
               }
               fetch(SEND_APPLICATION_URL, requestOptions)
+
+              // applicationDetails.UserBio.replace("'", "''")
 
               // console.log({
               //   applicant_email: applicationDetails.Email_ID,

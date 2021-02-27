@@ -17,9 +17,14 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount'
+import PersonAddIcon from '@material-ui/icons/PersonAdd'
+import LocalShippingIcon from '@material-ui/icons/LocalShipping'
+import StorefrontIcon from '@material-ui/icons/Storefront'
+import StorageIcon from '@material-ui/icons/Storage'
+import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
 
 // pages to show on the upper part of the drawer
-const pages = [
+const top_pages = [
   {
     name: 'Home',
     route: '/',
@@ -27,15 +32,58 @@ const pages = [
     reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
   },
   {
+    name: 'My drivers',
+    route: '/drivers',
+    icon: <LocalShippingIcon />,
+    reqAccTypes: ['Sponsor'],
+  },
+  {
     name: 'My applicants',
     route: '/applicants',
-    icon: <SupervisorAccountIcon />,
+    icon: <PersonAddIcon />,
     reqAccTypes: ['Sponsor'],
+  },
+  {
+    name: 'My catalog',
+    route: '/manage-catalog',
+    icon: <StorefrontIcon />,
+    reqAccTypes: ['Sponsor'],
+  },
+  {
+    name: 'Catalog',
+    route: '/browse-catalog',
+    icon: <LocalGroceryStoreIcon />,
+    reqAccTypes: ['Driver'],
+  },
+
+  {
+    name: 'My logs',
+    route: '/logs',
+    icon: <StorageIcon />,
+    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+  },
+]
+
+let bottom_pages = [
+  {
+    name: 'Sign out',
+    route: null,
+    icon: <MeetingRoomIcon />,
+    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    onClick: () => {
+      Auth.signOut()
+    },
   },
   {
     name: 'My profile',
     route: '/profile',
     icon: <PersonIcon />,
+    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+  },
+  {
+    name: 'Settings',
+    route: '/settings',
+    icon: <SettingsIcon />,
     reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
   },
 ]
@@ -72,7 +120,7 @@ const LeftDrawer = (props) => {
 
       {/* top pages */}
       <List>
-        {pages.map((page, index) => {
+        {top_pages.map((page, index) => {
           if (page.reqAccTypes.includes(props.AccountType)) {
             return (
               <ListItem
@@ -103,33 +151,29 @@ const LeftDrawer = (props) => {
         }}
       >
         <Divider />
-
-        {/* sign out */}
-        <ListItem button key={'Sign out'}>
-          <ListItemIcon>
-            <MeetingRoomIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={'Sign out'}
-            onClick={() => {
-              Auth.signOut()
-            }}
-          />
-        </ListItem>
-
-        {/* settings */}
         <List>
-          <ListItem button key={'Settings'}>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={'Settings'}
-              onClick={() => {
-                // history.push('/settings')
-              }}
-            />
-          </ListItem>
+          {bottom_pages.map((page, index) => {
+            if (page.reqAccTypes.includes(props.AccountType)) {
+              return (
+                <ListItem
+                  button
+                  key={page.name}
+                  onClick={() => {
+                    if (!page.onClick) {
+                      history.push(page.route)
+                    } else {
+                      page.onClick()
+                    }
+                  }}
+                >
+                  <ListItemIcon>{page.icon}</ListItemIcon>
+                  <ListItemText primary={page.name} />
+                </ListItem>
+              )
+            } else {
+              return null
+            }
+          })}
         </List>
       </div>
     </Drawer>
