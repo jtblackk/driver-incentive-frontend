@@ -60,6 +60,7 @@ export default function ApplicationManagementDialog(props) {
       >
         <Grid
           container
+          item
           xs={12}
           justify="space-between"
           alignItems="center"
@@ -81,7 +82,7 @@ export default function ApplicationManagementDialog(props) {
           </Grid>
         </Grid>
 
-        <Grid container component={Paper} xs={12}>
+        <Grid container item component={Paper} xs={12}>
           <DialogContent>
             <Grid
               item
@@ -154,7 +155,7 @@ export default function ApplicationManagementDialog(props) {
                 justify="space-evenly"
               >
                 <Grid item xs={7} align="right">
-                  <Grid container xs={12} justify="flex-end">
+                  <Grid container item xs={12} justify="flex-end">
                     <Grid item xs={3}>
                       <Button
                         color="secondary"
