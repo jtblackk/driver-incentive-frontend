@@ -11,6 +11,7 @@ import LeftDrawer from '../Components/LeftDrawer'
 import { Auth } from 'aws-amplify'
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import EditAccountCard from '../Components/EditAccountCard'
+import LoadingIcon from '../Components/LoadingIcon'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -198,7 +199,7 @@ function ProfilePage() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {isLoading ? (
-          <div></div>
+          <LoadingIcon />
         ) : (
           <ProfilePageContent
             userProfile={userProfileDetails}
