@@ -10,35 +10,30 @@ import Paper from '@material-ui/core/Paper'
 
 export default function PendingApplicantTable(props) {
   // console.log(props)
+
   const [rows, setRows] = useState(null)
-  const [selectedRow, setSelectedRow] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
-    let application_list = props.applicants.map((applicant) => {
+    let applicationList = props.applicants.map((applicant) => {
       return {
-        // ApplicationID: applicant.ApplicationID,
-        FirstName: applicant.ApplicantFirstName,
-        LastName: applicant.ApplicantLastName,
-        Email: applicant.ApplicantEmail,
-        SubmissionDate: applicant.SubmissionDate,
+        firstName: applicant.applicantFirstName,
+        lastName: applicant.applicantLastName,
+        email: applicant.applicantEmail,
+        submissionDate: applicant.submissionDate,
       }
     })
-    setRows(application_list)
-
+    setRows(applicationList)
     setIsLoading(false)
   }, [])
 
   if (!isLoading) {
     return (
-      // set selected row state
-
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              {/* <TableCell>Application ID</TableCell> */}
               <TableCell>Email</TableCell>
               <TableCell>First Name</TableCell>
               <TableCell>Last name</TableCell>
@@ -49,25 +44,20 @@ export default function PendingApplicantTable(props) {
             {rows.map((row) => (
               <TableRow
                 hover={true}
-                key={row.Email}
+                key={row.email}
                 onClick={() => {
-                  // console.log(row.Email)
-
-                  let selected_user_data = props.applicants.find((element) => {
-                    return element.ApplicantEmail === row.Email
+                  let selectedUserData = props.applicants.find((element) => {
+                    return element.applicantEmail === row.email
                   })
 
-                  props.setSelectedApplicantState(selected_user_data)
+                  props.setSelectedApplicantState(selectedUserData)
                   props.setDialogIsOpenState(true)
                 }}
               >
-                {/* <TableCell component="th" scope="row">
-                  {row.ApplicationID}
-                </TableCell> */}
-                <TableCell>{row.Email}</TableCell>
-                <TableCell>{row.FirstName}</TableCell>
-                <TableCell>{row.LastName}</TableCell>
-                <TableCell>{row.SubmissionDate}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.firstName}</TableCell>
+                <TableCell>{row.lastName}</TableCell>
+                <TableCell>{row.submissionDate}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -76,6 +66,6 @@ export default function PendingApplicantTable(props) {
     )
   } else {
     // todo: handle this loading case
-    return <p>boo</p>
+    return <div></div>
   }
 }

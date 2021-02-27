@@ -2,61 +2,50 @@ import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import {
-  Box,
-  Divider,
-  Grid,
-  IconButton,
-  Paper,
-  Typography,
-} from '@material-ui/core'
+import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 
 export default function ApplicationManagementDialog(props) {
   // console.log(props)
-  // const [open, setOpen] = useState(false)
-  const handleClickOpen = () => {
-    // setOpen(true)
-  }
+
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
   }
 
   const [decisionReason, setDecisionReason] = useState(null)
 
-  let LEFT_COL_WIDTH = 5
-  let RIGHT_COL_WIDTH = 6
-  let COLUMN_SPACING = 1
-
   let applicationFields = [
     {
       name: 'Email',
-      prop: props.applicationDetails.ApplicantEmail,
+      prop: props.applicationDetails.applicantEmail,
     },
     {
       name: 'Name',
       prop:
-        props.applicationDetails.ApplicantFirstName +
+        props.applicationDetails.applicantFirstName +
         ' ' +
-        props.applicationDetails.ApplicantLastName,
+        props.applicationDetails.applicantLastName,
     },
     {
       name: 'Bio',
-      prop: props.applicationDetails.ApplicantBio,
+      prop: props.applicationDetails.applicantBio,
     },
     {
       name: 'Comments',
-      prop: props.applicationDetails.ApplicantComments,
+      prop: props.applicationDetails.applicantComments,
     },
     {
       name: 'Submission date',
-      prop: props.applicationDetails.SubmissionDate,
+      prop: props.applicationDetails.submissionDate,
     },
   ]
+
+  let LEFT_COL_WIDTH = 5
+  let RIGHT_COL_WIDTH = 6
+  let COLUMN_SPACING = 1
 
   return (
     <div>
@@ -176,31 +165,27 @@ export default function ApplicationManagementDialog(props) {
                             return
                           }
 
-                          let updated_application = {
-                            ...props.applicationDetails,
-                            ApplicationResponse: 'denied',
-                          }
-                          // console.log(updated_application)
-
-                          let SAVE_APPLICATION_RESPONSE =
+                          let SAVE_APPLICATION_RESPONSE_URL =
                             'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
                           let requestOptions = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                               applicant_email:
-                                updated_application.ApplicantEmail,
-                              // ApplicationStatus: 2,
-                              SponsorEmailID: updated_application.SponsorEmail,
+                                props.applicationDetails.applicantEmail,
+                              SponsorEmailID:
+                                props.applicationDetails.sponsorEmail,
+                              decision: 'denied',
+                              decisionReason: decisionReason,
                               applicationStatus: 0,
-                              decision: updated_application.ApplicationResponse,
                             }),
                           }
-                          fetch(SAVE_APPLICATION_RESPONSE, requestOptions).then(
-                            () => {
-                              handleClose(true)
-                            },
-                          )
+                          fetch(
+                            SAVE_APPLICATION_RESPONSE_URL,
+                            requestOptions,
+                          ).then(() => {
+                            handleClose(true)
+                          })
                         }}
                       >
                         Reject
@@ -217,31 +202,27 @@ export default function ApplicationManagementDialog(props) {
                             return
                           }
 
-                          let updated_application = {
-                            ...props.applicationDetails,
-                            ApplicationResponse: 'accepted',
-                          }
-
-                          // console.log(updated_application)
-
-                          let SAVE_APPLICATION_RESPONSE =
+                          let SAVE_APPLICATION_RESPONSE_URL =
                             'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
                           let requestOptions = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                               applicant_email:
-                                updated_application.ApplicantEmail,
-                              SponsorEmailID: updated_application.SponsorEmail,
+                                props.applicationDetails.applicantEmail,
+                              SponsorEmailID:
+                                props.applicationDetails.sponsorEmail,
+                              decision: 'accepted',
+                              decisionReason: decisionReason,
                               applicationStatus: 2,
-                              decision: updated_application.ApplicationResponse,
                             }),
                           }
-                          fetch(SAVE_APPLICATION_RESPONSE, requestOptions).then(
-                            () => {
-                              handleClose(true)
-                            },
-                          )
+                          fetch(
+                            SAVE_APPLICATION_RESPONSE_URL,
+                            requestOptions,
+                          ).then(() => {
+                            handleClose(true)
+                          })
                         }}
                       >
                         Accept

@@ -3,7 +3,7 @@ import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { Grid, Paper, Typography } from '@material-ui/core'
+import { Grid, Paper } from '@material-ui/core'
 import PendingApplicantTable from '../Components/PendingApplicantTable'
 import { Auth } from 'aws-amplify'
 import LoadingIcon from '../Components/LoadingIcon'
@@ -60,42 +60,37 @@ const ApplicantManagementPage = () => {
       const response = await fetch(GET_APPLICANT_LIST)
       const data = await response.json()
 
-      let all_applicants_json = JSON.parse(data.body.toString()).Items
-      let all_applicants = all_applicants_json.map((val) => {
+      let allApplicants_ugly = JSON.parse(data.body.toString()).Items
+      let allApplicants = allApplicants_ugly.map((val) => {
         return {
-          ApplicantFirstName: val.FirstName.S,
-          ApplicantLastName: val.LastName.S,
-          ApplicantBio: val.UserBio.S,
-          ApplicantEmail: val.applicant_email.S,
-          // ApplicationID: val.application_id.S,
-          ApplicantComments: val.comments.S,
-          SubmissionDate: val.dateTime.S,
-          // SubmissionTime: val.dateTime.S.split(' ')[1],
-          SponsorEmail: val.sponsor_email.S,
+          applicantFirstName: val.FirstName.S,
+          applicantLastName: val.LastName.S,
+          applicantBio: val.UserBio.S,
+          applicantEmail: val.applicant_email.S,
+          applicantComments: val.comments.S,
+          submissionDate: val.dateTime.S,
+          sponsorEmail: val.sponsor_email.S,
           isApplicationAccepted: val.decision ? val.decision.S : null,
         }
       })
 
-      let pending_applicants = all_applicants.filter((item) => {
+      let pendingApplicants = allApplicants.filter((item) => {
         return (
           item.isApplicationAccepted !== 'accepted' &&
           item.isApplicationAccepted !== 'denied'
         )
       })
 
-      let processed_applicants = all_applicants.filter((item) => {
+      let processedApplicants = allApplicants.filter((item) => {
         return (
           item.isApplicationAccepted === 'accepted' ||
           item.isApplicationAccepted === 'denied'
         )
       })
 
-      // console.log(filtered_application_list)
-
-      setApplicants(pending_applicants)
-      setOldApplicants(processed_applicants)
+      setApplicants(pendingApplicants)
+      setOldApplicants(processedApplicants)
       setIsLoading(false)
-      console.log(processed_applicants)
     })()
   }, [pageUpdate])
 
