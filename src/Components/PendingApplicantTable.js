@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -8,53 +8,74 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-})
+export default function PendingApplicantTable(props) {
+  // console.log(props)
+  const [rows, setRows] = useState(null)
+  const [selectedRow, setSelectedRow] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein }
-}
+  useEffect(() => {
+    setIsLoading(true)
+    let application_list = props.applicants.map((applicant) => {
+      return {
+        // ApplicationID: applicant.ApplicationID,
+        FirstName: applicant.ApplicantFirstName,
+        LastName: applicant.ApplicantLastName,
+        Email: applicant.ApplicantEmail,
+        SubmissionDate: applicant.SubmissionDate,
+      }
+    })
+    setRows(application_list)
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-]
+    setIsLoading(false)
+  }, [])
 
-export default function PendingApplicantTable() {
-  const classes = useStyles()
+  if (!isLoading) {
+    return (
+      // set selected row state
 
-  return (
-    <TableContainer component={Paper} xs={12}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              {/* <TableCell>Application ID</TableCell> */}
+              <TableCell>Email</TableCell>
+              <TableCell>First Name</TableCell>
+              <TableCell>Last name</TableCell>
+              <TableCell>Submission date</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  )
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                hover={true}
+                key={row.Email}
+                onClick={() => {
+                  // console.log(row.Email)
+
+                  let selected_user_data = props.applicants.find((element) => {
+                    return element.ApplicantEmail === row.Email
+                  })
+
+                  props.setSelectedApplicantState(selected_user_data)
+                  props.setDialogIsOpenState(true)
+                }}
+              >
+                {/* <TableCell component="th" scope="row">
+                  {row.ApplicationID}
+                </TableCell> */}
+                <TableCell>{row.Email}</TableCell>
+                <TableCell>{row.FirstName}</TableCell>
+                <TableCell>{row.LastName}</TableCell>
+                <TableCell>{row.SubmissionDate}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  } else {
+    // todo: handle this loading case
+    return <p>boo</p>
+  }
 }
