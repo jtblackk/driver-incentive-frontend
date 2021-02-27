@@ -31,7 +31,10 @@ export default function PendingApplicantTable(props) {
 
   if (!isLoading) {
     return (
-      <TableContainer component={Paper}>
+      <TableContainer
+        style={{ maxHeight: 370, minHeight: 370 }}
+        component={Paper}
+      >
         <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -57,6 +60,7 @@ export default function PendingApplicantTable(props) {
               <TableRow
                 hover={true}
                 key={row.email}
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   let selectedUserData = props.applicants.find((element) => {
                     return element.applicantEmail === row.email
