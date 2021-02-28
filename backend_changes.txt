@@ -1,0 +1,5 @@
+MMM: added api call for getting list of applicants that has applied to an sponsor
+MMM: added api call for getting list of sponsors an applicant can apply to.
+MMM: added field to db UserDetails with value of boolean named AccountStatus
+MMM: added api for retrieving user application details 
+MMM: added api for rejection or acceptance of an applicaiton 
