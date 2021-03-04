@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { UserContext } from '../Helpers/UserContext'
 import { useHistory } from 'react-router-dom'
 import {
   Button,
@@ -12,11 +13,12 @@ import LoadingIcon from './LoadingIcon'
 
 const DriverApplicationCard = (props) => {
   let history = useHistory()
+  const userData = useContext(UserContext).user
   const [applicationDetails, setApplicationDetails] = useState({
-    Email_ID: props.accountEmail,
-    FirstName: '',
-    LastName: '',
-    UserBio: '',
+    Email_ID: userData.Email_ID,
+    FirstName: userData.FirstName,
+    LastName: userData.LastName,
+    UserBio: userData.UserBio,
     Sponsor: '',
     Comments: '',
   })
@@ -25,17 +27,6 @@ const DriverApplicationCard = (props) => {
 
   useEffect(() => {
     setIsLoading(true)
-    // retrieve user data
-    let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${props.accountEmail}`
-    fetch(GET_USERDATA_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        let newApplicationDetails = applicationDetails
-        newApplicationDetails.FirstName = data.Item.FirstName
-        newApplicationDetails.LastName = data.Item.LastName
-        newApplicationDetails.UserBio = data.Item.UserBio
-        setApplicationDetails(newApplicationDetails)
-      })
 
     let GET_SPONSORDATA_URL =
       'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
@@ -55,7 +46,6 @@ const DriverApplicationCard = (props) => {
         })
 
         setSponsorList(clean_sonsor_list)
-        // console.log(clean_sonsor_list)
       })
       .then(() => {
         setIsLoading(false)
@@ -144,16 +134,7 @@ const DriverApplicationCard = (props) => {
               }
               fetch(SEND_APPLICATION_URL, requestOptions)
 
-              // applicationDetails.UserBio.replace("'", "''")
-
-              // console.log({
-              //   applicant_email: applicationDetails.Email_ID,
-              //   FirstName: applicationDetails.FirstName,
-              //   LastName: applicationDetails.LastName,
-              //   UserBio: applicationDetails.UserBio,
-              //   sponsor_email: applicationDetails.Sponsor,
-              //   comments: applicationDetails.Comments,
-              // })
+              // TODO: ask if the user wants to apply to another sponsor (if there are more to apply to)
               history.push('/')
             }}
           >
