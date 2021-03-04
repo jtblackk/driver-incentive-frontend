@@ -136,27 +136,28 @@ function ProfilePageContent(props) {
                       //     `${props.userProfile.Email_ID}-profile-pic`,
                       //   ),
                       // )
-                      console.log(newData)
+
                       // TODO: set up this api call to update the image url in UserDetails
                       let SAVE_USER_PROFILE_URL =
                         'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
 
-                      // todo: set up this to use newData
                       let requestOptions = {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          Email_id: props.userProfile.Email_ID,
-                          FirstName: props.userProfile.FirstName,
-                          LastName: props.userProfile.LastName,
-                          AccountType: props.userProfile.AccountType,
-                          UserBio: props.userProfile.UserBio,
+                          Email_id: newData.Email_ID,
+                          FirstName: newData.FirstName,
+                          LastName: newData.LastName,
+                          AccountType: newData.AccountType,
+                          UserBio: newData.UserBio,
                         }),
                       }
                       const result = await fetch(
                         SAVE_USER_PROFILE_URL,
                         requestOptions,
                       )
+
+                      props.setProfileState(newData)
 
                       setIsEditing(!isEditing)
                       setIsLoading(false)
