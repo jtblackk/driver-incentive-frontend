@@ -24,69 +24,6 @@ import StorageIcon from '@material-ui/icons/Storage'
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
 
 // pages to show on the upper part of the drawer
-const top_pages = [
-  {
-    name: 'Home',
-    route: '/',
-    icon: <HomeIcon />,
-    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-  },
-  {
-    name: 'My drivers',
-    route: '/drivers',
-    icon: <LocalShippingIcon />,
-    reqAccTypes: ['Sponsor'],
-  },
-  {
-    name: 'My applicants',
-    route: '/applicants',
-    icon: <PersonAddIcon />,
-    reqAccTypes: ['Sponsor'],
-  },
-  {
-    name: 'My catalog',
-    route: '/manage-catalog',
-    icon: <StorefrontIcon />,
-    reqAccTypes: ['Sponsor'],
-  },
-  {
-    name: 'Catalog',
-    route: '/browse-catalog',
-    icon: <LocalGroceryStoreIcon />,
-    reqAccTypes: ['Driver'],
-  },
-
-  {
-    name: 'My logs',
-    route: '/logs',
-    icon: <StorageIcon />,
-    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-  },
-]
-
-let bottom_pages = [
-  {
-    name: 'Sign out',
-    route: null,
-    icon: <MeetingRoomIcon />,
-    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-    onClick: () => {
-      Auth.signOut()
-    },
-  },
-  {
-    name: 'My profile',
-    route: '/profile',
-    icon: <PersonIcon />,
-    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-  },
-  {
-    name: 'Settings',
-    route: '/settings',
-    icon: <SettingsIcon />,
-    reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-  },
-]
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -104,6 +41,71 @@ const useStyles = makeStyles((theme) => ({
 const LeftDrawer = (props) => {
   let history = useHistory()
   const classes = useStyles()
+
+  const top_pages = [
+    {
+      name: 'Home',
+      route: '/',
+      icon: <HomeIcon />,
+      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    },
+    {
+      name: 'My drivers',
+      route: '/drivers',
+      icon: <LocalShippingIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
+    {
+      name: 'My applicants',
+      route: '/applicants',
+      icon: <PersonAddIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
+    {
+      name: 'My catalog',
+      route: '/manage-catalog',
+      icon: <StorefrontIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
+    {
+      name: 'Catalog',
+      route: '/browse-catalog',
+      icon: <LocalGroceryStoreIcon />,
+      reqAccTypes: ['Driver'],
+    },
+
+    {
+      name: 'My logs',
+      route: '/logs',
+      icon: <StorageIcon />,
+      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    },
+  ]
+
+  let bottom_pages = [
+    {
+      name: 'Sign out',
+      route: null,
+      icon: <MeetingRoomIcon />,
+      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+      onClick: () => {
+        history.push('/')
+        Auth.signOut()
+      },
+    },
+    {
+      name: 'My profile',
+      route: '/profile',
+      icon: <PersonIcon />,
+      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    },
+    {
+      name: 'Settings',
+      route: '/settings',
+      icon: <SettingsIcon />,
+      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    },
+  ]
 
   return (
     <Drawer
