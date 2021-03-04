@@ -1,11 +1,12 @@
-import { Grid, TextField } from '@material-ui/core'
+import { Avatar, Grid, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 
 const EditAccountCard = (props) => {
-  const setProfileState = props.userProfile.setProfileState
-  const userDetails = props.userProfile.userProfile
-
+  const setProfileState = props.setNewDataState
+  const userDetails = props.userProfile
   const [isLoading, setIsLoading] = useState(false)
+
+  // console.log(props)
 
   if (isLoading) {
     return <div></div>
@@ -18,6 +19,14 @@ const EditAccountCard = (props) => {
         alignItems="center"
         spacing={2}
       >
+        <Grid item align="center">
+          <Avatar
+            style={{ cursor: 'pointer' }}
+            src={userDetails.ProfilePicture}
+          />
+          <br></br>
+        </Grid>
+
         {/* name row */}
         <Grid container spacing={1} justify="center" direction="row">
           {/* first name */}
