@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
 import Typography from '@material-ui/core/Typography'
@@ -8,6 +8,7 @@ import WaitingForApplicationApprovalScreen from '../Components/WaitingForApplica
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
+import { UserContext } from '../Helpers/UserContext'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -28,30 +29,23 @@ function IndexPage() {
   const classes = useStyles()
   let history = useHistory()
   const [isLoading, setIsLoading] = useState(true)
-  const [userProfileDetails, setUserProfileDetails] = useState({
-    Email_ID: '',
-    AccountType: '',
-    SponsorID: null,
-    ApplicationStatus: null,
-  })
+  const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
 
   async function getUserData() {
     setIsLoading(true)
-    const user = await Auth.currentAuthenticatedUser()
-
-    let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user.attributes.email}`
+    let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userData.Email_ID}`
     let response = await fetch(GET_USERDATA_URL)
     let data = await response.json()
 
     // load the user's account type into state
-    let newUserProfileDetails = userProfileDetails
-    userProfileDetails.Email_ID = data.Item.Email_id
-    userProfileDetails.AccountType = data.Item.AccountType
-    userProfileDetails.SponsorID = data.Item.SponsorEmailID
-    userProfileDetails.ApplicationStatus = data.Item.ApplicationStatus
-    setUserProfileDetails(newUserProfileDetails)
+    let newUserProfileDetails = userData
+    newUserProfileDetails.Email_ID = data.Item.Email_id
+    newUserProfileDetails.AccountType = data.Item.AccountType
+    newUserProfileDetails.SponsorID = data.Item.SponsorEmailID
+    newUserProfileDetails.ApplicationStatus = data.Item.ApplicationStatus
+    setUserData(newUserProfileDetails)
 
-    // console.log(newUserProfileDetails)
     setIsLoading(false)
   }
 
@@ -61,14 +55,14 @@ function IndexPage() {
     ;(async () => {
       await getUserData()
       if (
-        userProfileDetails.ApplicationStatus <= 1 &&
-        userProfileDetails.AccountType === 'Driver'
+        userData.ApplicationStatus <= 1 &&
+        userData.AccountType === 'Driver'
       ) {
         setInterval(getUserData, 10000)
       }
 
       // if the user has no specified account type, force them to set up an account
-      if (!userProfileDetails.AccountType) {
+      if (userData.AccountType === 'na') {
         history.push('/account-setup')
       }
       setIsLoading(false)
@@ -86,17 +80,14 @@ function IndexPage() {
       </div>
     )
   } else {
-    if (
-      userProfileDetails.AccountType === 'Driver' &&
-      userProfileDetails.ApplicationStatus <= 1
-    ) {
+    if (userData.AccountType === 'Driver' && userData.ApplicationStatus <= 1) {
       return <WaitingForApplicationApprovalScreen />
     } else {
       return (
         <div className={classes.root}>
           {/* layout stuff */}
           <TopAppBar pageTitle="Home"></TopAppBar>
-          <LeftDrawer AccountType={userProfileDetails.AccountType} />
+          <LeftDrawer AccountType={userData.AccountType} />
 
           {/* page content (starts after first div) */}
           <main className={classes.content}>

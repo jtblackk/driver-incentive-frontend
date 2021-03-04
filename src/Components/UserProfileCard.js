@@ -5,7 +5,7 @@ import LoadingIcon from './LoadingIcon'
 const UserProfileCard = (props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [sponsorName, setSponsorName] = useState('')
-  let userDetails = props.userProfile.userProfile
+  let userDetails = props.userProfile
 
   useEffect(() => {
     if (userDetails.AccountType === 'Driver') {
@@ -42,7 +42,7 @@ const UserProfileCard = (props) => {
     return (
       <Grid container spacing={1} justify="center" direction="column">
         <Grid item align="center">
-          <Avatar src="https://graphicriver.img.customer.envatousercontent.com/files/196773956/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=7a31538609c92f7c6311fda597948a84" />
+          <Avatar src={userDetails.ProfilePicture} />
         </Grid>
 
         <Grid item align="center">
