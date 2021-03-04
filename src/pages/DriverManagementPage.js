@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import { Typography } from '@material-ui/core'
+import { UserContext } from '../Helpers/UserContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,11 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 const DriverManagementPage = () => {
   const classes = useStyles()
+  const userData = useContext(UserContext).user
+
   return (
     <div className={classes.root}>
       {/* layout stuff */}
       <TopAppBar pageTitle="Home"></TopAppBar>
-      <LeftDrawer AccountType={'Sponsor'} />
+      <LeftDrawer AccountType={userData.AccountType} />
 
       {/* page content (starts after first div) */}
       <main className={classes.content}>
