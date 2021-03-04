@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
@@ -9,6 +9,7 @@ import { Auth } from 'aws-amplify'
 import LoadingIcon from '../Components/LoadingIcon'
 import ApplicationManagementDialog from '../Components/ApplicationManagementDialog'
 import ProcessedApplicantTable from '../Components/ProcessedApplicantTable'
+import { UserContext } from '../Helpers/UserContext'
 require('datejs')
 
 const useStyles = makeStyles((theme) => ({
@@ -51,18 +52,19 @@ const ApplicantManagementPage = () => {
     setSelectedApplicant(state)
   }
 
+  const userData = useContext(UserContext).user
+
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // fetch data
-      const user = await Auth.currentAuthenticatedUser()
-
-      let GET_APPLICANT_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Email_id=${user.attributes.email}`
+      //  fetch applicant list
+      let GET_APPLICANT_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Email_id=${userData.Email_ID}`
       const response = await fetch(GET_APPLICANT_LIST)
       const data = await response.json()
 
+      // parse the applicant data
       let allApplicants_ugly = JSON.parse(data.body.toString()).Items
       let allApplicants = allApplicants_ugly.map((val) => {
         return {
@@ -108,7 +110,7 @@ const ApplicantManagementPage = () => {
       <div className={classes.root}>
         {/* layout stuff */}
         <TopAppBar pageTitle="Your applicants"></TopAppBar>
-        <LeftDrawer AccountType="Sponsor" />
+        <LeftDrawer AccountType={userData.AccountType} />
 
         {/* page content (starts after first div) */}
         <main className={classes.content}>
