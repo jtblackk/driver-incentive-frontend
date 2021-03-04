@@ -125,7 +125,7 @@ const AccountSetupCard = (props) => {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                Email_id: userDetails.Email_ID,
+                Username: userDetails.Email_ID,
                 FirstName: userDetails.FirstName,
                 LastName: userDetails.LastName,
                 AccountType: userDetails.AccountType,
@@ -137,6 +137,8 @@ const AccountSetupCard = (props) => {
               if (userDetails.AccountType === 'Driver') {
                 history.push('/application')
               } else {
+                // TODO: create a 'sponsor setup' page where the sponsor enters a name for their organization.
+                // doing this should add the name to a column labeled "OrganizationName" for the super sponsor
                 history.push('/')
               }
             })

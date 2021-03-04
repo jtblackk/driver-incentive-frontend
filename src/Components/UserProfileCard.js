@@ -29,6 +29,7 @@ const UserProfileCard = (props) => {
   }, [])
 
   // component that shows how many points the user has and with what sponsor
+  // TODO: need to support having multiple sponsors
   function PointsTypography() {
     return (
       <Typography>

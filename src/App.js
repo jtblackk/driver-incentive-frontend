@@ -36,15 +36,16 @@ function App() {
       const response = await fetch(GET_USERDATA_URL)
       const data = await response.json()
       let profile_details = {
-        Email_ID: data.Item.Email_id,
+        Email_ID: data.Item.Username,
         FirstName: data.Item.FirstName,
         LastName: data.Item.LastName,
-        UserBio: data.Item.UserBio,
+        UserBio: data.Item.Bio,
         AccountType: data.Item.AccountType,
-        SponsorEmailID: data.Item.SponsorEmailID,
-        TotalPoints: data.Item.TotalPoints,
-        ProfilePicture: data.Item.ProfilePicture,
+        // TODO: make sure that any component that needs these three pulls them on their own
+        // SponsorEmailID: data.Item.SponsorEmailID,
+        // TotalPoints: data.Item.TotalPoints,
       }
+
       setUser(profile_details)
     })().then(() => {
       setIsLoading(false)
