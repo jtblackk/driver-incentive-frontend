@@ -27,7 +27,7 @@ const DriverManagementPage = () => {
   return (
     <div className={classes.root}>
       {/* layout stuff */}
-      <TopAppBar pageTitle="Home"></TopAppBar>
+      <TopAppBar pageTitle="Drivers"></TopAppBar>
       <LeftDrawer AccountType={userData.AccountType} />
 
       {/* page content (starts after first div) */}

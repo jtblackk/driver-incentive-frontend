@@ -109,7 +109,7 @@ const ApplicantManagementPage = () => {
     return (
       <div className={classes.root}>
         {/* layout stuff */}
-        <TopAppBar pageTitle="Your applicants"></TopAppBar>
+        <TopAppBar pageTitle="Applicants"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
 
         {/* page content (starts after first div) */}
