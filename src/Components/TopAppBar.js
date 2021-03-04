@@ -22,7 +22,7 @@ function TopAppBar(props) {
     <div>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Grid container justify="space-evenly" spacing={10}>
+          <Grid container justify="flex-start" spacing={10}>
             <Grid item>
               <Typography variant="h6">{props.pageTitle}</Typography>
             </Grid>
