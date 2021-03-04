@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import DriverApplicationCard from '../Components/DriverApplicationCard'
-import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import LoadingIcon from '../Components/LoadingIcon'
+import { UserContext } from '../Helpers/UserContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,14 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ApplicationPage() {
   const classes = useStyles()
-  const [currentUser, setCurrentUser] = useState(null)
-
-  useEffect(() => {
-    // fetch the current user's email address
-    Auth.currentAuthenticatedUser().then((user) => {
-      setCurrentUser(user.attributes.email)
-    })
-  }, [])
+  const userData = useContext(UserContext).user
 
   return (
     <div className={classes.root}>
@@ -49,11 +41,7 @@ function ApplicationPage() {
         <div className={classes.toolbar} />
         <Grid container justify="space-evenly">
           <Grid item>
-            {currentUser ? (
-              <DriverApplicationCard accountEmail={currentUser} />
-            ) : (
-              <LoadingIcon />
-            )}
+            <DriverApplicationCard accountEmail={userData.Email_ID} />
           </Grid>
         </Grid>
       </main>
