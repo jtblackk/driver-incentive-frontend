@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
+import ApplyAgainDialog from './ApplyAgainDialog'
 
 const DriverApplicationCard = (props) => {
   let history = useHistory()
@@ -24,6 +25,16 @@ const DriverApplicationCard = (props) => {
   })
   const [sponsorList, setSponsorList] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
+  function setDialogIsOpenState(state) {
+    setDialogIsOpen(state)
+  }
+
+  const [dialogResponse, setDialogResponse] = useState(false)
+  function setDialogResponseState(state) {
+    setDialogResponse(state)
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -62,6 +73,12 @@ const DriverApplicationCard = (props) => {
         alignItems="center"
         spacing={2}
       >
+        <ApplyAgainDialog
+          dialogIsOpen={dialogIsOpen}
+          setDialogIsOpen={setDialogIsOpenState}
+          setDialogResponse={setDialogResponseState}
+        />
+
         {/* sponsor */}
         <Grid item xs={12} align="center">
           <InputLabel id="Sponsor">Sponsor</InputLabel>
@@ -132,10 +149,13 @@ const DriverApplicationCard = (props) => {
                   UserBio: applicationDetails.UserBio.replaceAll("'", "''"),
                 }),
               }
-              fetch(SEND_APPLICATION_URL, requestOptions)
+              fetch(SEND_APPLICATION_URL, requestOptions).then(() => {
+                setDialogIsOpen(true)
+              })
 
               // TODO: ask if the user wants to apply to another sponsor (if there are more to apply to)
-              history.push('/')
+
+              // history.push('/')
             }}
           >
             Apply
