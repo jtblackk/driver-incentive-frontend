@@ -45,8 +45,10 @@ export default function GenericTable(props) {
         component={Paper}
       >
         <Table stickyHeader aria-label="simple table">
+          {/* Table header */}
           <TableHead>
             <TableRow>
+              {/* map the head cells to the table header */}
               {props.headCells.map((headCell) => (
                 <TableCell
                   width={headCell.width}
@@ -71,16 +73,17 @@ export default function GenericTable(props) {
               ))}
             </TableRow>
           </TableHead>
+
+          {/* Table content */}
           <TableBody>
+            {/* map the data to the table rows */}
             {orderBy(rows, columnToSort, sortDirection).map((row) => (
               <TableRow
                 hover={true}
                 key={props.tableKey}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  console.log(props.tableKey)
                   let selectedRow = rows.find((element) => {
-                    console.log(element[props.tableKey])
                     return element[props.tableKey] === row[props.tableKey]
                   })
 
@@ -89,10 +92,12 @@ export default function GenericTable(props) {
                   props.setDialogIsOpenState(true)
                 }}
               >
+                {/* display the row key if requested */}
                 {props.showKey ? (
                   <TableCell>{row[props.tableKey]}</TableCell>
                 ) : null}
 
+                {/* display the row cells */}
                 {Object.entries(row).map((cell) => {
                   if (cell[0].toUpperCase().includes('DATE')) {
                     return (
