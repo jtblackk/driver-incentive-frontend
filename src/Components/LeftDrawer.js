@@ -21,6 +21,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import LocalShippingIcon from '@material-ui/icons/LocalShipping'
 import StorefrontIcon from '@material-ui/icons/Storefront'
 import StorageIcon from '@material-ui/icons/Storage'
+
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
 
 // pages to show on the upper part of the drawer
@@ -62,11 +63,18 @@ const LeftDrawer = (props) => {
       reqAccTypes: ['Sponsor'],
     },
     {
+      name: 'My sponsors',
+      route: '/sponsors',
+      icon: <SupervisorAccountIcon />,
+      reqAccTypes: ['Driver'],
+    },
+    {
       name: 'My catalog',
       route: '/manage-catalog',
       icon: <StorefrontIcon />,
       reqAccTypes: ['Sponsor'],
     },
+
     {
       name: 'Catalog',
       route: '/browse-catalog',
