@@ -17,6 +17,8 @@ import AuditLogPage from './pages/AuditLogPage'
 import { UserContext } from './Helpers/UserContext'
 import { useEffect, useState } from 'react'
 import LoadingIcon from './Components/LoadingIcon'
+import getUserDetails from './Helpers/CommonFunctions'
+import ViewSponsorsPage from './pages/ViewSponsorsPage'
 
 Amplify.configure(awsconfig)
 
@@ -28,24 +30,8 @@ function App() {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      const user = await Auth.currentAuthenticatedUser()
-      let user_email = user.attributes.email
-
-      // get user's data
-      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user_email}`
-      const response = await fetch(GET_USERDATA_URL)
-      const data = await response.json()
-      let profile_details = {
-        Email_ID: data.Item.Username,
-        FirstName: data.Item.FirstName,
-        LastName: data.Item.LastName,
-        UserBio: data.Item.Bio,
-        AccountType: data.Item.AccountType,
-        // TODO: make sure that any component that needs these three pulls them on their own
-        // SponsorEmailID: data.Item.SponsorEmailID,
-        // TotalPoints: data.Item.TotalPoints,
-      }
-
+      let profile_details = await getUserDetails()
+      // console.log(profile_details)
       setUser(profile_details)
     })().then(() => {
       setIsLoading(false)
@@ -78,6 +64,7 @@ function App() {
                 component={ProductCatalogBrowsingPage}
               />
               <Route exact path="/drivers" component={DriverManagementPage} />
+              <Route exact path="/sponsors" component={ViewSponsorsPage} />
               <Route exact path="/logs" component={AuditLogPage} />
 
               <Route component={PageNotFoundPage} />
