@@ -36,7 +36,7 @@ function AccountSetupPage() {
       {/* app bar */}
       <AppBar position="fixed">
         <Toolbar>
-          <Grid container justify="space-evenly" spacing={24}>
+          <Grid container justify="space-evenly" spacing={10}>
             <Grid item>
               <Typography variant="h6">Set up your account</Typography>
             </Grid>
