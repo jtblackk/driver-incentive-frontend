@@ -19,13 +19,13 @@ const EditAccountCard = (props) => {
         alignItems="center"
         spacing={2}
       >
-        <Grid item align="center">
+        {/* <Grid item align="center">
           <Avatar
             style={{ cursor: 'pointer' }}
             src={userDetails.ProfilePicture}
           />
           <br></br>
-        </Grid>
+        </Grid> */}
 
         {/* name row */}
         <Grid container spacing={1} justify="center" direction="row">
@@ -68,7 +68,7 @@ const EditAccountCard = (props) => {
             label="Bio"
             type="text"
             placeholder="Write a short bio"
-            defaultValue={userDetails.UserBio}
+            defaultValue={userDetails.Bio}
             variant="outlined"
             multiline
             fullWidth
@@ -76,7 +76,7 @@ const EditAccountCard = (props) => {
             onChange={(event) => {
               // update UserBio in state
               let newUserDetails = userDetails
-              newUserDetails.UserBio = event.target.value
+              newUserDetails.Bio = event.target.value
               setProfileState(newUserDetails)
             }}
           />

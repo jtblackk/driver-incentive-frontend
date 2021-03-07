@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
+import getUserDetails from '../Helpers/CommonFunctions'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -26,43 +27,37 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function IndexPage() {
+  const [isLoading, setIsLoading] = useState(true)
   const classes = useStyles()
   let history = useHistory()
-  const [isLoading, setIsLoading] = useState(true)
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
   async function getUserData() {
     setIsLoading(true)
-    let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${userData.Email_ID}`
-    let response = await fetch(GET_USERDATA_URL)
-    let data = await response.json()
-
-    // load the user's account type into state
-    let newUserProfileDetails = userData
-    newUserProfileDetails.Email_ID = data.Item.Email_id
-    newUserProfileDetails.AccountType = data.Item.AccountType
-    newUserProfileDetails.SponsorID = data.Item.SponsorEmailID
-    newUserProfileDetails.ApplicationStatus = data.Item.ApplicationStatus
-    setUserData(newUserProfileDetails)
-
-    setIsLoading(false)
+    getUserDetails().then((newUserProfileDetails) => {
+      setUserData(newUserProfileDetails)
+      console.log(newUserProfileDetails)
+      setIsLoading(false)
+    })
   }
 
   useEffect(() => {
     // start loading animation
     setIsLoading(true)
+    getUserData()
     ;(async () => {
-      await getUserData()
+      // await getUserData()
+      // TODO: change false to sponsorship status?
       if (
-        userData.ApplicationStatus <= 1 &&
+        /*userData.AccountStatus <= 1 */ false &&
         userData.AccountType === 'Driver'
       ) {
         setInterval(getUserData, 10000)
       }
 
       // if the user has no specified account type, force them to set up an account
-      if (userData.AccountType === 'na') {
+      if (userData.AccountStatus === 0) {
         history.push('/account-setup')
       }
       setIsLoading(false)
@@ -80,7 +75,8 @@ function IndexPage() {
       </div>
     )
   } else {
-    if (userData.AccountType === 'Driver' && userData.ApplicationStatus <= 1) {
+    // TODO: change false to sponsorship status?
+    if (userData.AccountType === 'Driver' && false) {
       return <WaitingForApplicationApprovalScreen />
     } else {
       return (

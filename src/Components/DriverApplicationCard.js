@@ -8,20 +8,20 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 import ApplyAgainDialog from './ApplyAgainDialog'
+import { sortBy } from 'lodash'
 
 const DriverApplicationCard = (props) => {
   let history = useHistory()
   const userData = useContext(UserContext).user
   const [applicationDetails, setApplicationDetails] = useState({
-    Email_ID: userData.Email_ID,
+    Username: userData.Username,
     FirstName: userData.FirstName,
     LastName: userData.LastName,
-    UserBio: userData.UserBio,
-    Sponsor: '',
-    Comments: '',
+    Bio: userData.Bio,
   })
   const [sponsorList, setSponsorList] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -45,14 +45,13 @@ const DriverApplicationCard = (props) => {
       .then((response) => response.json())
       .then((data) => {
         let clean_sonsor_list = []
-
         let sponsor_array = JSON.parse(data.body.toString()).Items
         sponsor_array.forEach((val) => {
           clean_sonsor_list.push({
-            Email_id: val.Email_id.S,
+            Username: val.Username.S,
             FirstName: val.FirstName.S,
             LastName: val.LastName.S,
-            // TODO: add a sponsor nick name (e.g., Statefarm)
+            Organization: val.Organization.S,
           })
         })
 
@@ -64,7 +63,6 @@ const DriverApplicationCard = (props) => {
   }, [])
 
   if (!isLoading) {
-    console.log(sponsorList)
     return (
       <Grid
         container
@@ -80,29 +78,42 @@ const DriverApplicationCard = (props) => {
         />
 
         {/* sponsor */}
-        <Grid item xs={12} align="center">
-          <InputLabel id="Sponsor">Sponsor</InputLabel>
-          <Select
-            labelId="SponsorLabel"
-            id="Sponsor"
-            onChange={(event) => {
-              // update sponsor
-              let newApplicationDetails = applicationDetails
-              newApplicationDetails.Sponsor = event.target.value
-              setApplicationDetails(newApplicationDetails)
-            }}
-          >
-            {sponsorList.map((sponsor) => (
-              <MenuItem value={sponsor.Email_id}>
-                {' '}
-                {sponsor.Email_id.toString().split('@')[0]}
-              </MenuItem>
-            ))}
-          </Select>
+        <Grid item container xs={7} align="left">
+          <Grid container item xs={12}>
+            <Grid item xs={12} align="left">
+              <InputLabel id="Sponsor">Sponsor</InputLabel>
+            </Grid>
+            <Grid item xs={12}>
+              <Select
+                fullWidth
+                labelId="SponsorLabel"
+                id="Sponsor"
+                onChange={(event) => {
+                  // update sponsor
+                  let newApplicationDetails = applicationDetails
+                  newApplicationDetails.Sponsor = event.target.value
+                  setApplicationDetails(newApplicationDetails)
+                }}
+              >
+                {sortBy(sponsorList, ['Organization', 'FirstName']).map(
+                  (sponsor) => (
+                    <MenuItem value={sponsor.Username}>
+                      {' '}
+                      {sponsor.Organization +
+                        ': ' +
+                        sponsor.FirstName +
+                        ' ' +
+                        sponsor.LastName}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+            </Grid>
+          </Grid>
         </Grid>
 
         {/* additional comments */}
-        <Grid item xs={6} align="center">
+        <Grid item xs={7} align="center">
           <br></br>
           <TextField
             id="additional-comments"
@@ -123,39 +134,50 @@ const DriverApplicationCard = (props) => {
         </Grid>
 
         {/* submit button */}
-        <Grid item xs={12} align="center">
+        <Grid item xs={7} align="center">
           <br></br>
           <Button
+            fullWidth
             variant="outlined"
             onClick={() => {
               // validate input
-              if (applicationDetails.Sponsor === '') {
+              if (
+                !applicationDetails.Sponsor ||
+                applicationDetails.Sponsor === ''
+              ) {
                 alert('Please choose a sponsor company')
+                return
+              } else if (
+                !applicationDetails.Comments ||
+                applicationDetails.Comments === ''
+              ) {
+                alert('Please provide some comments')
                 return
               }
 
               // fetch -> save application in application table
+              // TODO: replace this with a new api call that uses the new sponsorships table
               let SEND_APPLICATION_URL =
                 'https://z8yu8acjwj.execute-api.us-east-1.amazonaws.com/dev/submitapplication'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  applicant_email: applicationDetails.Email_ID,
-                  sponsor_email: applicationDetails.Sponsor,
-                  FirstName: applicationDetails.FirstName.replaceAll("'", "''"),
-                  LastName: applicationDetails.LastName.replaceAll("'", "''"),
-                  comments: applicationDetails.Comments.replaceAll("'", "''"),
-                  UserBio: applicationDetails.UserBio.replaceAll("'", "''"),
+                  DriverID: applicationDetails.Username,
+                  SponsorID: applicationDetails.Sponsor,
+                  AppComments: applicationDetails.Comments.replaceAll(
+                    "'",
+                    "''",
+                  ),
+                  // FirstName: applicationDetails.FirstName.replaceAll("'", "''"),
+                  // LastName: applicationDetails.LastName.replaceAll("'", "''"),
+                  // comments: applicationDetails.Comments.replaceAll("'", "''"),
+                  // Bio: applicationDetails.Bio.replaceAll("'", "''"),
                 }),
               }
               fetch(SEND_APPLICATION_URL, requestOptions).then(() => {
                 setDialogIsOpen(true)
               })
-
-              // TODO: ask if the user wants to apply to another sponsor (if there are more to apply to)
-
-              // history.push('/')
             }}
           >
             Apply

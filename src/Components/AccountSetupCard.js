@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
+
+import { UserContext } from '../Helpers/UserContext'
+
 import {
   Button,
   Grid,
@@ -10,15 +13,19 @@ import {
 } from '@material-ui/core'
 
 const AccountSetupCard = (props) => {
+  const userData = useContext(UserContext).user
+
   let history = useHistory()
   const [userDetails, setUserDetails] = useState({
-    Email_ID: props.accountEmail,
+    Username: userData.Username,
     FirstName: '',
     LastName: '',
     AccountType: '',
-    UserBio: '',
+    AccountStatus: '',
+    Bio: '',
   })
-
+  // console.log(userDetails)
+  // console.log(userData)
   return (
     <Grid
       container
@@ -46,7 +53,7 @@ const AccountSetupCard = (props) => {
       </Grid>
 
       {/* name row */}
-      <Grid container xs={12} spacing={1} justify="center" direction="row">
+      <Grid item container xs={12} spacing={1} justify="center" direction="row">
         {/* first name */}
         <Grid item xs={2} align="center">
           <TextField
@@ -91,7 +98,7 @@ const AccountSetupCard = (props) => {
           onChange={(event) => {
             // update UserBio in state
             let newUserDetails = userDetails
-            newUserDetails.UserBio = event.target.value
+            newUserDetails.Bio = event.target.value
             setUserDetails(newUserDetails)
           }}
         />
@@ -120,16 +127,18 @@ const AccountSetupCard = (props) => {
 
             // save the profile information
             let SAVE_USER_PROFILE_URL =
-              'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
+              'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
             let requestOptions = {
-              method: 'PUT',
+              method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                Username: userDetails.Email_ID,
+                Username: userDetails.Username,
                 FirstName: userDetails.FirstName,
                 LastName: userDetails.LastName,
                 AccountType: userDetails.AccountType,
-                UserBio: userDetails.UserBio,
+                AccountStatus: 1,
+                Bio: userDetails.Bio,
+                IsInitialSignup: true,
               }),
             }
             fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {

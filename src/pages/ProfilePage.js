@@ -38,14 +38,14 @@ function ProfilePageContent(props) {
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [newData, setNewData] = useState({
-    Email_ID: props.userProfile.Email_ID,
+    Username: props.userProfile.Username,
     FirstName: props.userProfile.FirstName,
     LastName: props.userProfile.LastName,
-    UserBio: props.userProfile.UserBio,
+    Bio: props.userProfile.Bio,
     AccountType: props.userProfile.AccountType,
-    SponsorEmailID: props.userProfile.SponsorEmailID,
-    TotalPoints: props.userProfile.TotalPoints,
-    ProfilePicture: props.userProfile.ProfilePicture,
+    // SponsorEmailID: 'need to retrieve this',
+    // TotalPoints: 'need to retrieve this',
+    // ProfilePicture: 'need to retrieve this',
   })
   function setNewDataState(state) {
     setNewData(state)
@@ -102,17 +102,14 @@ function ProfilePageContent(props) {
                   size="small"
                   onClick={() => {
                     ;(async () => {
-                      setIsEditing(!isEditing)
                       setNewData({
-                        Email_ID: props.userProfile.Email_ID,
+                        Username: props.userProfile.Username,
                         FirstName: props.userProfile.FirstName,
                         LastName: props.userProfile.LastName,
-                        UserBio: props.userProfile.UserBio,
+                        Bio: props.userProfile.Bio,
                         AccountType: props.userProfile.AccountType,
-                        SponsorEmailID: props.userProfile.SponsorEmailID,
-                        TotalPoints: props.userProfile.TotalPoints,
-                        ProfilePicture: props.userProfile.ProfilePicture,
                       })
+                      setIsEditing(!isEditing)
                     })()
                   }}
                 >
@@ -125,8 +122,8 @@ function ProfilePageContent(props) {
                   size="small"
                   color="primary"
                   onClick={() => {
+                    setIsLoading(true)
                     ;(async () => {
-                      setIsLoading(true)
                       // const s3Key = await Storage.put(
                       //   `${props.userProfile.Email_ID}-profile-pic`,
                       //   'howdy!',
@@ -137,30 +134,32 @@ function ProfilePageContent(props) {
                       //   ),
                       // )
 
-                      // TODO: set up this api call to update the image url in UserDetails
-                      let SAVE_USER_PROFILE_URL =
-                        'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
+                      // save the profile information
+                      props.setProfileState({
+                        Username: newData.Username,
+                        FirstName: newData.FirstName,
+                        LastName: newData.LastName,
+                        Bio: newData.Bio,
+                        AccountType: newData.AccountType,
+                      })
 
+                      let SAVE_USER_PROFILE_URL =
+                        'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
                       let requestOptions = {
-                        method: 'PUT',
+                        method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          Email_id: newData.Email_ID,
+                          Username: newData.Username,
                           FirstName: newData.FirstName,
                           LastName: newData.LastName,
+                          Bio: newData.Bio,
                           AccountType: newData.AccountType,
-                          UserBio: newData.UserBio,
                         }),
                       }
-                      const result = await fetch(
-                        SAVE_USER_PROFILE_URL,
-                        requestOptions,
-                      )
-
-                      props.setProfileState(newData)
-
-                      setIsEditing(!isEditing)
-                      setIsLoading(false)
+                      fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                        setIsLoading(false)
+                        setIsEditing(!isEditing)
+                      })
                     })()
                   }}
                 >
@@ -210,7 +209,7 @@ function ProfilePage() {
         ) : (
           <ProfilePageContent
             userProfile={userData}
-            setProfileState={setUserData}
+            setProfileState={setProfileState}
           />
         )}
       </main>
