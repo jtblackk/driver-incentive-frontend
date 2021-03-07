@@ -80,18 +80,20 @@ export default function GenericTable(props) {
             {orderBy(rows, columnToSort, sortDirection).map((row) => (
               <TableRow
                 hover={true}
-                key={props.tableKey}
+                key={row[props.tableKey]}
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   let selectedRow = rows.find((element) => {
                     return element[props.tableKey] === row[props.tableKey]
                   })
 
+                  //   console.log(selectedRow)
                   props.setSelectedRow(selectedRow)
 
                   props.setDialogIsOpenState(true)
                 }}
               >
+                {/* {console.log(row[props.tableKey])} */}
                 {/* display the row key if requested */}
                 {props.showKey ? (
                   <TableCell>{row[props.tableKey]}</TableCell>
