@@ -37,7 +37,6 @@ function IndexPage() {
     setIsLoading(true)
     getUserDetails().then((newUserProfileDetails) => {
       setUserData(newUserProfileDetails)
-      console.log(newUserProfileDetails)
       setIsLoading(false)
     })
   }

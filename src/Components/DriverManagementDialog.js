@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -14,6 +14,8 @@ import {
   Typography,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+import GenericTable from './GenericTable'
+import { UserContext } from '../Helpers/UserContext'
 require('datejs')
 
 export default function DriverManagementDialog(props) {
@@ -36,29 +38,81 @@ export default function DriverManagementDialog(props) {
       name: 'Driving since',
       prop: '<sponsorship start date',
     },
-    // {
-    //   name: 'Bio',
-    //   prop: 'filler',
-    // },
-    // {
-    //   name: 'Comments',
-    //   prop: 'filler',
-    // },
-    // {
-    //   name: 'Submission date',
-    //   prop: 'filler',
-    // },
   ]
 
-  const [decisionReason, setDecisionReason] = useState(null)
-  let initial_response_fields = [
-    { name: 'Response', prop: 'filler' },
-    { name: 'Response reason', prop: 'filler' },
-    {
-      name: 'Response date',
-      prop: 'filler',
-    },
-  ]
+  const userData = useContext(UserContext).user
+  const [isLoading, setIsLoading] = useState(true)
+
+  // dialog control
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function setDialogIsOpenState(state, refresh) {
+    setDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
+  const [table1HeadCells, setTable1HeadCells] = useState(null)
+
+  const [table1Data, setTable1Data] = useState(null)
+  function setTable1DataState(state) {
+    setTable1Data(state)
+  }
+
+  const [selectedEntry, setSelectedEntry] = useState(null)
+  function setSelectedEntryState(state) {
+    setSelectedEntry(state)
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    // todo: pull sponsorship data, clean it up into needed format
+
+    setTable1Data([
+      {
+        Date: '2010-01-01T08:00:00.000',
+        Reason: 'Jeff',
+        TotalPoints: 1500,
+        PointsChange: 150,
+      },
+      {
+        Username: 'm2@gmail.com',
+        FirstName: 'm',
+        LastName: '2',
+        TotalPoints: 200,
+      },
+    ])
+    setTable1HeadCells([
+      {
+        id: 'Date',
+        label: 'Date',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'Reason',
+        label: 'Reason',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'TotalPoints',
+        label: 'Total points',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'PointsChange',
+        label: 'Difference',
+        isDate: false,
+        width: 100,
+      },
+    ])
+    setIsLoading(false)
+  }, [pageUpdate])
 
   let LEFT_COL_WIDTH = 5
   let RIGHT_COL_WIDTH = 6
@@ -88,7 +142,7 @@ export default function DriverManagementDialog(props) {
         }}
         aria-labelledby="form-dialog-title"
         fullWidth
-        maxWidth="sm"
+        maxWidth="md"
       >
         <Grid
           container
@@ -157,11 +211,24 @@ export default function DriverManagementDialog(props) {
               {/* bottom half */}
               <Grid item container xs={7} spacing={2}>
                 <Grid item>
-                  <Typography>
+                  <GenericTable
+                    headCells={table1HeadCells}
+                    data={table1Data}
+                    setDataState={setTable1DataState}
+                    tableKey="Username"
+                    showKey={false}
+                    initialSortedColumn="LastName"
+                    initialSortedDirection="asc"
+                    selectedRow={selectedEntry}
+                    setSelectedRow={setSelectedEntryState}
+                    dialogIsOpen={dialogIsOpen}
+                    setDialogIsOpenState={setDialogIsOpenState}
+                  ></GenericTable>
+                  {/* <Typography>
                     {
                       'put a table of reward history here. The table should have buttons to add/remove points'
                     }
-                  </Typography>
+                  </Typography> */}
                 </Grid>
                 <Grid item>
                   <Typography>

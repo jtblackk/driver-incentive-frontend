@@ -60,6 +60,7 @@ const ApplicantManagementPage = () => {
     setIsLoading(true)
     ;(async () => {
       //  fetch applicant list
+      // TODO: fit this to use new tables/apis
       let GET_APPLICANT_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Email_id=${userData.Email_ID}`
       const response = await fetch(GET_APPLICANT_LIST)
       const data = await response.json()

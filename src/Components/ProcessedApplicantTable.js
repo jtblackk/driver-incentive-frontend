@@ -102,7 +102,7 @@ export default function ProcessedApplicantTable(props) {
   }, [])
 
   if (!isLoading) {
-    console.log(orderBy(rows, columnToSort, sortDirection))
+    // console.log(orderBy(rows, columnToSort, sortDirection))
 
     return (
       <TableContainer

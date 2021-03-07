@@ -52,16 +52,9 @@ export default function PendingApplicantTable(props) {
   const [columnToSort, setColumnToSort] = useState('submissionDate')
   const [sortDirection, setSortDirection] = useState('desc')
   function handleSort(columnName) {
-    console.log(
-      'handleSort: columnName - ' +
-        columnName +
-        ' orig sort direction - ' +
-        sortDirection,
-    )
     if (columnName === columnToSort) {
       setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
     } else {
-      // console.log('clicked on a new column')
       setSortDirection('desc')
     }
 
@@ -99,7 +92,6 @@ export default function PendingApplicantTable(props) {
                   sortDirection={
                     columnToSort === headCell.id ? sortDirection : false
                   }
-                  // align={headCell.disablePadding ? 'left' : 'right'}
                 >
                   <TableSortLabel
                     active={columnToSort === headCell.id}
