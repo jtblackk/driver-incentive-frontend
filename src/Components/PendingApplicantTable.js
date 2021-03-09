@@ -45,8 +45,6 @@ const headCells = [
 ]
 
 export default function PendingApplicantTable(props) {
-  // console.log(props)
-
   const [rows, setRows] = useState(null)
 
   const [columnToSort, setColumnToSort] = useState('submissionDate')

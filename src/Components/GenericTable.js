@@ -87,13 +87,11 @@ export default function GenericTable(props) {
                     return element[props.tableKey] === row[props.tableKey]
                   })
 
-                  //   console.log(selectedRow)
                   props.setSelectedRow(selectedRow)
 
                   props.setDialogIsOpenState(true)
                 }}
               >
-                {/* {console.log(row[props.tableKey])} */}
                 {/* display the row key if requested */}
                 {props.showKey ? (
                   <TableCell>{row[props.tableKey]}</TableCell>
@@ -101,7 +99,7 @@ export default function GenericTable(props) {
 
                 {/* display the row cells */}
                 {Object.entries(row).map((cell) => {
-                  if (cell[0].toUpperCase().includes('DATE')) {
+                  if (cell[0].toUpperCase().includes('DATE') && cell[1]) {
                     return (
                       <TableCell>{Date.parse(cell[1]).toUTCString()}</TableCell>
                     )

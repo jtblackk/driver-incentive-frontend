@@ -10,46 +10,60 @@ import CloseIcon from '@material-ui/icons/Close'
 require('datejs')
 
 export default function ApplicationManagementDialog(props) {
-  // console.log(props)
-
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
   }
 
+  console.log(props)
+
+  let applicantProfile = props.driverDetails.find((val) => {
+    return val.Username === props.applicationDetails.DriverID
+  })
+
   let applicationFields = [
     {
-      name: 'Email',
-      prop: props.applicationDetails.applicantEmail,
+      name: 'Username',
+      prop: applicantProfile.Username,
     },
     {
       name: 'Name',
-      prop:
-        props.applicationDetails.applicantFirstName +
-        ' ' +
-        props.applicationDetails.applicantLastName,
+      prop: applicantProfile.FirstName + ' ' + applicantProfile.LastName,
     },
     {
       name: 'Bio',
-      prop: props.applicationDetails.applicantBio,
+      prop: applicantProfile.Bio,
     },
     {
       name: 'Comments',
-      prop: props.applicationDetails.applicantComments,
+      prop: props.applicationDetails.AppComments,
     },
     {
       name: 'Submission date',
-      prop: Date.parse(props.applicationDetails.submissionDate).toUTCString(),
+      prop: Date.parse(
+        props.applicationDetails.AppSubmissionDate,
+      ).toUTCString(),
     },
   ]
 
   const [decisionReason, setDecisionReason] = useState(null)
   let initial_response_fields = [
-    { name: 'Response', prop: props.applicationDetails.response },
-    { name: 'Response reason', prop: props.applicationDetails.responseReason },
+    {
+      name: 'Response',
+      prop:
+        props.applicationDetails.Status === 1
+          ? 'Denied'
+          : props.applicationDetails.Status === 2
+          ? 'Accepted'
+          : null,
+    },
+    {
+      name: 'Response reason',
+      prop: props.applicationDetails.AppDecisionReason,
+    },
     {
       name: 'Response date',
-      prop: props.applicationDetails.responseDate
-        ? Date.parse(props.applicationDetails.responseDate).toUTCString()
+      prop: props.applicationDetails.AppDecisionDate
+        ? Date.parse(props.applicationDetails.AppDecisionDate).toUTCString()
         : null,
     },
   ]
