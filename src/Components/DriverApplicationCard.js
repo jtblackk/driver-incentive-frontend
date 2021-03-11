@@ -97,6 +97,7 @@ const DriverApplicationCard = (props) => {
               >
                 {sortBy(sponsorList, ['Organization', 'FirstName']).map(
                   (sponsor) => (
+                    // TODO: filter out the sponsors that the driver has already applied to
                     <MenuItem value={sponsor.Username}>
                       {' '}
                       {sponsor.Organization +
@@ -138,7 +139,8 @@ const DriverApplicationCard = (props) => {
           <br></br>
           <Button
             fullWidth
-            variant="outlined"
+            variant="contained"
+            color="primary"
             onClick={() => {
               // validate input
               if (
@@ -169,10 +171,6 @@ const DriverApplicationCard = (props) => {
                     "'",
                     "''",
                   ),
-                  // FirstName: applicationDetails.FirstName.replaceAll("'", "''"),
-                  // LastName: applicationDetails.LastName.replaceAll("'", "''"),
-                  // comments: applicationDetails.Comments.replaceAll("'", "''"),
-                  // Bio: applicationDetails.Bio.replaceAll("'", "''"),
                 }),
               }
               fetch(SEND_APPLICATION_URL, requestOptions).then(() => {
