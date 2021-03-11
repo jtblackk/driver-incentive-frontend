@@ -108,29 +108,23 @@ const ApplicantManagementPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // todo: fetch sponsor's driver's details
-      let requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          SponsorUsername: userData.Username,
-        }),
-      }
+      // fetch and parse sponsor's driver's profiles
       let GET_DRIVERDATA_LIST = `https://rb6nqfuvvg.execute-api.us-east-1.amazonaws.com/dev/driverdatabysponsor?SponsorUsername=${userData.Username}`
       const driverdata_response = await fetch(GET_DRIVERDATA_LIST)
       const driverdata_json = await driverdata_response.json()
       const driverdata_parsed = JSON.parse(driverdata_json.body.toString())
       const driverdata_reformatted = driverdata_parsed.map((val) => {
-        return {
-          Username: val.Items[0].Username.S,
-          FirstName: val.Items[0].FirstName.S,
-          LastName: val.Items[0].LastName.S,
-          AccountType: val.Items[0].AccountType.S,
-          AccountStatus: parseInt(val.Items[0].AccountStatus.N),
-          Bio: val.Items[0].Bio.S,
+        if (val.Items[0]) {
+          return {
+            Username: val.Items[0].Username.S,
+            FirstName: val.Items[0].FirstName.S,
+            LastName: val.Items[0].LastName.S,
+            AccountType: val.Items[0].AccountType.S,
+            AccountStatus: parseInt(val.Items[0].AccountStatus.N),
+            Bio: val.Items[0].Bio.S,
+          }
         }
       })
-      // console.log(driverdata_reformatted)
 
       //  fetch applicant list
       let GET_SPONSORSHIP_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
@@ -146,9 +140,9 @@ const ApplicantManagementPage = () => {
           SponsorID: val.SponsorID ? val.SponsorID.S : null,
           DriverID: val.DriverID ? val.DriverID.S : null,
           Status: val.Status ? parseInt(val.Status.N) : null,
-          Points: val.Points ? val.Points.N : null,
+          Points: val.Points ? parseInt(val.Points.N) : null,
           PointDollarRatio: val.PointDollarRatio
-            ? val.PointDollarRatio.N
+            ? parseFloat(val.PointDollarRatio.N)
             : null,
 
           AppSubmissionDate: val.AppSubmissionDate
@@ -181,9 +175,13 @@ const ApplicantManagementPage = () => {
             ResponseDate: val.AppDecisionDate,
           }
         } else {
+          let user_profile = driverdata_reformatted.find((val2) => {
+            return val2.Username === val.DriverID
+          })
+
           return {
             Username: val.DriverID,
-            Name: '<first name>' + ' ' + '<last name>',
+            Name: user_profile.FirstName + ' ' + user_profile.LastName,
             SubmissionDate: val.AppSubmissionDate,
           }
         }

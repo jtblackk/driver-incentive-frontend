@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -13,8 +13,6 @@ export default function ApplicationManagementDialog(props) {
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
   }
-
-  console.log(props)
 
   let applicantProfile = props.driverDetails.find((val) => {
     return val.Username === props.applicationDetails.DriverID
@@ -94,18 +92,21 @@ export default function ApplicationManagementDialog(props) {
 
                   // TODO: replace this api call with new sponsorship-based api call
                   let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      applicant_email: props.applicationDetails.applicantEmail,
-                      SponsorEmailID: props.applicationDetails.sponsorEmail,
-                      decision: 'denied',
-                      decisionReason: decisionReason,
-                      applicationStatus: 0,
+                      SponsorID: props.applicationDetails.SponsorID,
+                      DriverID: props.applicationDetails.DriverID,
+                      AppDecisionReason: decisionReason,
+                      Status: 1,
+                      PointDollarRatio: 0.01,
+                      Points: 0,
                     }),
                   }
+
                   fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
                     () => {
                       handleClose(true)
@@ -128,16 +129,17 @@ export default function ApplicationManagementDialog(props) {
                   }
 
                   let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      applicant_email: props.applicationDetails.applicantEmail,
-                      SponsorEmailID: props.applicationDetails.sponsorEmail,
-                      decision: 'accepted',
-                      decisionReason: decisionReason,
-                      applicationStatus: 2,
+                      SponsorID: props.applicationDetails.SponsorID,
+                      DriverID: props.applicationDetails.DriverID,
+                      AppDecisionReason: decisionReason,
+                      Status: 2,
+                      PointDollarRatio: 0.01,
+                      Points: 0,
                     }),
                   }
                   fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
