@@ -19,8 +19,6 @@ import { UserContext } from '../Helpers/UserContext'
 require('datejs')
 
 export default function DriverManagementDialog(props) {
-  // console.log(props)
-
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
   }
@@ -54,7 +52,32 @@ export default function DriverManagementDialog(props) {
     }
   }
 
-  const [table1HeadCells, setTable1HeadCells] = useState(null)
+  const table1HeadCells = [
+    {
+      id: 'Date',
+      label: 'Date',
+      isDate: false,
+      width: 100,
+    },
+    {
+      id: 'Reason',
+      label: 'Reason',
+      isDate: false,
+      width: 100,
+    },
+    {
+      id: 'TotalPoints',
+      label: 'Total points',
+      isDate: false,
+      width: 100,
+    },
+    {
+      id: 'PointsChange',
+      label: 'Difference',
+      isDate: false,
+      width: 100,
+    },
+  ]
 
   const [table1Data, setTable1Data] = useState(null)
   function setTable1DataState(state) {
@@ -70,11 +93,46 @@ export default function DriverManagementDialog(props) {
     setIsLoading(true)
 
     // todo: pull sponsorship data, clean it up into needed format
+    ;(async () => {
+      let GET_SPONSORSHIP_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
+      const response = await fetch(GET_SPONSORSHIP_LIST)
+      const data = await response.json()
+      let my_sponsorships = JSON.parse(data.body.toString()).Items
+      let my_drivers = my_sponsorships.map((val) => {
+        if (parseInt(val.Status.N) === 1) {
+          return {
+            SponsorshipID: val.SponsorshipID ? val.SponsorshipID.S : null,
+            SponsorID: val.SponsorID ? val.SponsorID.S : null,
+            DriverID: val.DriverID ? val.DriverID.S : null,
+            Status: val.Status ? parseInt(val.Status.N) : null,
+            Points: val.Points ? val.Points.N : null,
+            PointDollarRatio: val.PointDollarRatio
+              ? val.PointDollarRatio.N
+              : null,
 
+            AppSubmissionDate: val.AppSubmissionDate
+              ? val.AppSubmissionDate.S.split('.')[0].replace(' ', 'T')
+              : null,
+            AppComments: val.AppComments ? val.AppComments.S : null,
+            AppDecisionDate:
+              parseInt(val.Status.N) > 0 && val.AppDecisionDate
+                ? val.AppDecisionDate.S.split('.')[0].replace(' ', 'T')
+                : null,
+            AppDecisionReason:
+              val.Status > 0 && val.AppDecisionReason
+                ? val.AppDecisionReason.S
+                : null,
+          }
+        } else {
+          return null
+        }
+      })
+    })()
     setTable1Data([
       {
-        Date: '2010-01-01T08:00:00.000',
-        Reason: 'Jeff',
+        Username: 'jtblack@gmail.com',
+        FirstName: 'Jeff',
+        LastName: 'Black',
         TotalPoints: 1500,
         PointsChange: 150,
       },
@@ -85,32 +143,7 @@ export default function DriverManagementDialog(props) {
         TotalPoints: 200,
       },
     ])
-    setTable1HeadCells([
-      {
-        id: 'Date',
-        label: 'Date',
-        isDate: false,
-        width: 100,
-      },
-      {
-        id: 'Reason',
-        label: 'Reason',
-        isDate: false,
-        width: 100,
-      },
-      {
-        id: 'TotalPoints',
-        label: 'Total points',
-        isDate: false,
-        width: 100,
-      },
-      {
-        id: 'PointsChange',
-        label: 'Difference',
-        isDate: false,
-        width: 100,
-      },
-    ])
+
     setIsLoading(false)
   }, [pageUpdate])
 
