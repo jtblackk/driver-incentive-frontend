@@ -124,16 +124,6 @@ function ProfilePageContent(props) {
                   onClick={() => {
                     setIsLoading(true)
                     ;(async () => {
-                      // const s3Key = await Storage.put(
-                      //   `${props.userProfile.Email_ID}-profile-pic`,
-                      //   'howdy!',
-                      // )
-                      // console.log(
-                      //   Storage.get(
-                      //     `${props.userProfile.Email_ID}-profile-pic`,
-                      //   ),
-                      // )
-
                       // save the profile information
                       props.setProfileState({
                         Username: newData.Username,

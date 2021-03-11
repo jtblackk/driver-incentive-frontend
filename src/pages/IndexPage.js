@@ -46,14 +46,13 @@ function IndexPage() {
     setIsLoading(true)
     getUserData()
     ;(async () => {
-      // await getUserData()
-      // TODO: change false to sponsorship status?
-      if (
-        /*userData.AccountStatus <= 1 */ false &&
-        userData.AccountType === 'Driver'
-      ) {
-        setInterval(getUserData, 10000)
-      }
+      // TODO:  do we even need this conditional any more? drivers can use the app without a sponsor...
+      // if (
+      //   /*userData.AccountStatus <= 1 */ false &&
+      //   userData.AccountType === 'Driver'
+      // ) {
+      //   setInterval(getUserData, 10000)
+      // }
 
       // if the user has no specified account type, force them to set up an account
       if (userData.AccountStatus === 0) {

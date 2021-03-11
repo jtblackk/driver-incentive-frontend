@@ -9,7 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { useHistory } from 'react-router-dom'
 
 export default function ApplyAgainDialog(props) {
-  //   const [open, setOpen] = React.useState(false)
   let history = useHistory()
 
   const handleClose = (resp) => {
@@ -24,12 +23,8 @@ export default function ApplyAgainDialog(props) {
 
   return (
     <div>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
       <Dialog
         open={props.dialogIsOpen}
-        // onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >

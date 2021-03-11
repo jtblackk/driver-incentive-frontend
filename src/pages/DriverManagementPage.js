@@ -129,6 +129,7 @@ const DriverManagementPage = () => {
             direction="row"
             spacing={4}
           >
+            {/* active drivers */}
             <Grid item xs={10} xl={6}>
               <Paper>
                 <div style={{ padding: 20 }}>
@@ -138,17 +139,6 @@ const DriverManagementPage = () => {
                       <Typography>
                         A list of the drivers you're sponsoring
                       </Typography>
-                    </Grid>
-                    <Grid item>
-                      {/* <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          history.push('/application')
-                        }}
-                      >
-                        Apply to more
-                      </Button> */}
                     </Grid>
                   </Grid>
                   <br></br>

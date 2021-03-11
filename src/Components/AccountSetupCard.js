@@ -24,8 +24,7 @@ const AccountSetupCard = (props) => {
     AccountStatus: '',
     Bio: '',
   })
-  // console.log(userDetails)
-  // console.log(userData)
+
   return (
     <Grid
       container

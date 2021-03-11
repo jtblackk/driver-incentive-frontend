@@ -31,7 +31,6 @@ function App() {
     setIsLoading(true)
     ;(async () => {
       let profile_details = await getUserDetails()
-      // console.log(profile_details)
       setUser(profile_details)
     })().then(() => {
       setIsLoading(false)
