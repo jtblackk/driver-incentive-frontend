@@ -5,25 +5,24 @@ import Button from '@material-ui/core/Button'
 import { ListItem } from '@material-ui/core'
 import React, { useEffect } from 'react'
 import '../App.css'
-import addEntryData from './User_List'
-import withListLoading from './with_List_Loading'
+import addEntryData from './AdminSponsorTable'
+import withListLoading1 from './sposor_loading'
 
-function AdminUserModPage(props) {
-  const ListLoading = withListLoading(addEntryData)
+function SponsortableMod(props) {
+  const ListLoading1 = withListLoading1(addEntryData)
   const [appState, setAppState] = useState({
     loading: false,
     repos: null,
   })
 
   var tableinfo = {
-    title: 'All Users',
+    title: 'Sponsors',
     column1: 'Email',
     column2: 'Account Type',
-    column3: 'Fist Name',
-    column4: 'Last Name',
-    column5: 'Total Points',
-    column6: 'Last Login',
-    column7: 'Last Login',
+    column3: 'Application Status',
+    column4: 'Fist Name',
+    column5: 'Last Name',
+    column6: 'IsSuspended',
   }
 
   useEffect(() => {
@@ -43,7 +42,7 @@ function AdminUserModPage(props) {
     <div className="App">
       <div className="container"></div>
       <div className="repo-container">
-        <ListLoading
+        <ListLoading1
           isLoading={appState.loading}
           repos={appState.repos}
           tableinfo={tableinfo}
@@ -53,4 +52,4 @@ function AdminUserModPage(props) {
   )
 }
 
-export default AdminUserModPage
+export default SponsortableMod

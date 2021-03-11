@@ -24,25 +24,23 @@ import FilterListIcon from '@material-ui/icons/FilterList'
 function createData(
   Email_id,
   AccountType,
+  ApplicationStatus,
   FirstName,
   LastName,
-  TotalPoints,
-  LastLogin,
   IsSuspended,
 ) {
   return {
     Email_id,
     AccountType,
+    ApplicationStatus,
     FirstName,
     LastName,
-    TotalPoints,
-    LastLogin,
     IsSuspended,
   }
 }
-var tablestruct = { title: 'All Users', column1: 'Email', column2: 'Fist Name' }
+var tablestruct = { title: 'Sponsors', column1: 'Email', column2: 'Fist Name' }
 
-var title = 'Users'
+var title = 'Sponsors'
 
 const rows = [
   // createData('hardcode@gmail.com',	'Admin',	'hardcode',	'Admin', 0	),
@@ -92,6 +90,12 @@ const headCells = [
     label: 'Account Type',
   },
   {
+    id: 'ApplicationStatus',
+    numeric: true,
+    disablePadding: false,
+    label: 'Application Status',
+  },
+  {
     id: 'FirstName',
     numeric: false,
     disablePadding: true,
@@ -99,22 +103,10 @@ const headCells = [
   },
   { id: 'LastName', numeric: false, disablePadding: true, label: 'Last Name' },
   {
-    id: 'TotalPoints',
-    numeric: true,
-    disablePadding: false,
-    label: 'Total Points',
-  },
-  {
-    id: 'LastLogin',
+    id: 'IsSuspended',
     numeric: false,
     disablePadding: false,
-    label: 'Last Login',
-  },
-  {
-    id: 'IsSuspended',
-    boolean: true,
-    disablePadding: false,
-    label: 'Is Suspended',
+    label: 'Account Suspended',
   },
 ]
 
@@ -267,14 +259,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const List = (props) => {
-  // const { tableinfo } = props
-  // console.log(props.tableinfo)
-  // console.log(props)
   title = props.tableinfo.title
 
   tablestruct = props.tableinfo
-  // title = {props.tableinfo.title}
-  console.log(props.repos)
 
   const classes = useStyles()
   const [order, setOrder] = React.useState('asc')
@@ -345,28 +332,30 @@ const List = (props) => {
   var x = 0
   for (x in repos) {
     // data.push(repos[x])
-    if (!rows.includes(repos[x])) {
-      if (repos[x].IsSuspended) {
-        repos[x].IsSuspended = 'true'
-        // console.log(repos[x].Email_id)
-      }
+    if (repos[x].AccountType == 'Sponsor') {
+      console.log(repos[x])
+
       if (!repos[x].IsSuspended) {
-        repos[x].IsSuspended = 'false'
+        // repos[x].push({IsSuspended: "false"})
         // console.log(repos[x].Email_id)
       }
-      repos[x].Email_id.toString()
-      repos[x].Email_id = repos[x].Email_id.toLowerCase()
-      // repos[x].FirstName = repos[x].FirstName.toLowerCase();
-      // repos[x].LastName = repos[x].LastName.toLowerCase();
-      // repos[x].AccountType = repos[x].AccountType.toLowerCase();
-      // console.log(repos[x].Email_id.length)
 
-      // repos[x].LastLogin = repos[x].LastLogin.toLowerCase();
+      if (!rows.includes(repos[x])) {
+        repos[x].Email_id.toString()
+        repos[x].Email_id = repos[x].Email_id.toLowerCase()
+        repos[x].FirstName = repos[x].FirstName.toLowerCase()
+        repos[x].LastName = repos[x].LastName.toLowerCase()
+        repos[x].AccountType = repos[x].AccountType.toLowerCase()
+        // console.log(repos[x].Email_id.length)
 
-      rows.push(repos[x])
-      // repos[x].LastLogin.toString();
-      // console.log(rows[x])
+        // repos[x].LastLogin = repos[x].LastLogin.toLowerCase();
+
+        rows.push(repos[x])
+        // repos[x].LastLogin.toString();
+        // console.log(rows[x])
+      }
     }
+
     // console.log(data)
   }
   // console.log(rows[5])
@@ -423,10 +412,11 @@ const List = (props) => {
                         {row.Email_id}
                       </TableCell>
                       <TableCell align="right">{row.AccountType}</TableCell>
+                      <TableCell align="right">
+                        {row.ApplicationStatus}
+                      </TableCell>
                       <TableCell align="right">{row.FirstName}</TableCell>
                       <TableCell align="right">{row.LastName}</TableCell>
-                      <TableCell align="right">{row.TotalPoints}</TableCell>
-                      <TableCell align="right">{row.LastLogin}</TableCell>
                       <TableCell align="right">{row.IsSuspended}</TableCell>
                     </TableRow>
                   )

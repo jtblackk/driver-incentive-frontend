@@ -1,10 +1,8 @@
 import React from 'react'
 
-function WithListLoading(Component) {
-  return function WihLoadingComponent({ isLoading, ...props }) {
+function WithListLoading1(Component) {
+  return function WihLoadingComponent1({ isLoading, ...props }) {
     if (!isLoading) return <Component {...props} />
-
-    // console.log(props)
 
     return (
       <p style={{ textAlign: 'center', fontSize: '30px' }}>
@@ -13,4 +11,4 @@ function WithListLoading(Component) {
     )
   }
 }
-export default WithListLoading
+export default WithListLoading1

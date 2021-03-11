@@ -1,103 +1,89 @@
-import React from 'react'
-import clsx from 'clsx'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import ListItemText from '@material-ui/core/ListItemText'
-import Select from '@material-ui/core/Select'
-import Checkbox from '@material-ui/core/Checkbox'
-import Chip from '@material-ui/core/Chip'
-import { Button } from '@material-ui/core'
+import email_validator from 'email-validator'
+//import { Auth } from "aws-amplify";
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    maxWidth: 300,
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
-  },
-  noLabel: {
-    marginTop: theme.spacing(3),
-  },
-}))
+import {
+  Button,
+  TextField,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core'
+import { useState } from 'react'
 
-const ITEM_HEIGHT = 48
-const ITEM_PADDING_TOP = 8
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-}
+import { useHistory } from 'react-router-dom'
 
-const names = ['email1', 'email2', 'email3', 'email4']
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+function AdminDelUser() {
+  let userDetailObj = {
+    Email_ID: '',
+    IsSuspended: '',
+    AdminNotes: '',
   }
-}
+  const [userDetails, setUserDetails] = useState(userDetailObj)
 
-export default function MultipleSelect() {
-  const classes = useStyles()
-  const theme = useTheme()
-  const [personName, setPersonName] = React.useState([])
-
-  const handleChange = (event) => {
-    setPersonName(event.target.value)
-  }
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target
-    const value = []
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value)
-      }
-    }
-    setPersonName(value)
-  }
+  let history = useHistory()
 
   return (
     <div>
-      <Button variant="contained" color="primary">
-        Delete
-      </Button>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-name-label">Email</InputLabel>
-        <Select
-          labelId="demo-mutiple-name-label"
-          id="demo-mutiple-name"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          MenuProps={MenuProps}
+      <form>
+        <TextField
+          id="Email_ID"
+          label="Email"
+          onChange={(event) => {
+            // update first name in state
+            let newUserDetails = userDetails
+            newUserDetails.Email_ID = event.target.value
+            setUserDetails(newUserDetails)
+          }}
+        />
+        <br />
+        <TextField
+          id="IsSuspended"
+          label="true or false"
+          onChange={(event) => {
+            // update last name in state
+            let newUserDetails = userDetails
+            newUserDetails.IsSuspended = event.target.value
+            setUserDetails(newUserDetails)
+          }}
+        />
+        <br />
+        <TextField
+          id="AdminNotes"
+          label="AdminNotes"
+          onChange={(event) => {
+            // update email in state
+            let newUserDetails = userDetails
+            newUserDetails.AdminNotes = event.target.value
+            setUserDetails(newUserDetails)
+          }}
+        />
+
+        <br />
+        <br />
+        <Button
+          variant="outlined"
+          onClick={() => {
+            // set up fetch request -> create new user entry in driver detail database
+            let CREATE_USER_URL =
+              'https://70z2mvkobk.execute-api.us-east-1.amazonaws.com/dev/savechanges'
+            let requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                Email_id: userDetails.Email_ID,
+                IsSuspended: userDetails.IsSuspended,
+                AdminNotes: userDetails.AdminNotes,
+              }),
+            }
+            console.log(userDetails)
+          }}
         >
-          {names.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          Submit
+        </Button>
+      </form>
+      <br />
     </div>
   )
 }
+
+export default AdminDelUser
