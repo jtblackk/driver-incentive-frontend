@@ -175,8 +175,6 @@ const DriverManagementPage = () => {
         width: 100,
       },
     ])
-
-    console.log(table1Data)
   }, [pageUpdate])
 
   if (!isLoading) {

@@ -24,12 +24,6 @@ import LoadingIcon from './LoadingIcon'
 import UserProfileCard from './UserProfileCard'
 require('datejs')
 
-function DriverEditingTab() {
-  /* AREA 1:  user profile info */
-  /* AREA 2: user profile controls */
-  /* AREA 3: account controls */
-}
-
 function DriverManagementTab(props) {
   console.log(props.selectedDriverData)
 
@@ -42,8 +36,6 @@ function DriverManagementTab(props) {
         <br />
       </Grid>
 
-      {/* AREA 2: Sponsorship controls */}
-
       {/* AREA 1: sponsorship info */}
       {/* Labels */}
       <Grid
@@ -54,6 +46,22 @@ function DriverManagementTab(props) {
         justify="center"
         align="center"
       >
+        <Grid item xs={12}>
+          <br />
+        </Grid>
+
+        {/* driver username */}
+        <Grid item container xs={12} justify="center" spacing={2}>
+          <Grid item xs={left_col_width} align="right">
+            <Typography>
+              <Box fontWeight="bold">Username: </Box>
+            </Typography>
+          </Grid>
+          <Grid item xs={right_col_width} align="left">
+            <Typography>{props.selectedDriverData.Username}</Typography>
+          </Grid>
+        </Grid>
+
         {/* driver name */}
         <Grid item container xs={12} justify="center" spacing={2}>
           <Grid item xs={left_col_width} align="right">
@@ -78,7 +86,7 @@ function DriverManagementTab(props) {
             </Typography>
           </Grid>
           <Grid item xs={right_col_width} align="left">
-            <Typography>{props.selectedDriverData.Username}</Typography>
+            <Typography>{props.selectedDriverData.Bio}</Typography>
           </Grid>
         </Grid>
 
@@ -128,18 +136,27 @@ function DriverManagementTab(props) {
             <Typography>{props.selectedDriverData.Points}</Typography>
           </Grid>
         </Grid>
+
+        <Grid item xs={12}>
+          <br />
+        </Grid>
       </Grid>
 
       <Grid item xs={12}>
         <br />
       </Grid>
 
+      {/* AREA 2: Sponsorship controls */}
       <Grid item xs={7} container justify="flex-end" align="center" spacing={1}>
         {/* end sponsorship button */}
         <Grid item>
           <Button
             variant="contained"
             style={{ backgroundColor: '#444444', color: 'white' }}
+            onClick={() => {
+              // TODO: present confirmation message
+              // TODO: integrate with api to set sponsorship status to terminated
+            }}
           >
             End sponsorship
           </Button>
@@ -147,7 +164,13 @@ function DriverManagementTab(props) {
 
         {/* edit driver's account button */}
         <Grid item>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              // TODO: render a view to edit the driver's profile information
+            }}
+          >
             Edit profile
           </Button>
         </Grid>
