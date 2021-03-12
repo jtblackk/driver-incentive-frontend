@@ -147,6 +147,7 @@ const DriverManagementPage = () => {
           FirstName: val.FirstName,
           LastName: val.LastName,
           TotalPoints: val.Points,
+          PointValue: '$' + val.PointDollarRatio + ' / point',
         }
       })
 
@@ -158,7 +159,7 @@ const DriverManagementPage = () => {
     setTable1HeadCells([
       {
         id: 'Username',
-        label: 'Driver email',
+        label: 'Username',
         isDate: false,
         width: 100,
       },
@@ -172,11 +173,17 @@ const DriverManagementPage = () => {
         id: 'LastName',
         label: 'Last name',
         isDate: false,
-        width: 100,
+        width: 115,
       },
       {
         id: 'TotalPoints',
         label: 'Total points',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'PointValue',
+        label: 'Point value',
         isDate: false,
         width: 100,
       },
@@ -219,12 +226,31 @@ const DriverManagementPage = () => {
             <Grid item xs={10} xl={6}>
               <Paper>
                 <div style={{ padding: 20 }}>
-                  <Grid container justify="space-between" alignItems="center">
-                    <Grid item>
+                  <Grid
+                    container
+                    justify="space-between"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <Grid item xs={8}>
                       <Typography variant="h6">Your drivers</Typography>
                       <Typography>
-                        A list of the drivers you're sponsoring
+                        A list of the drivers you're sponsoring. Click on an
+                        entry for more information.
                       </Typography>
+                    </Grid>
+                    <Grid item xs={4} align="right">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          // TODO: bring up dialog to set all point ratios
+                          // TODO: make api call to set all point ratios
+                          // TODO: trigger data rerender
+                        }}
+                      >
+                        SET POINT VALUE
+                      </Button>
                     </Grid>
                   </Grid>
                   <br></br>

@@ -58,6 +58,10 @@ const DriverApplicationCard = (props) => {
       .then(() => {
         setIsLoading(false)
       })
+
+    // TODO: get all the sponsorships
+    // TODO: filter out all sponsorships without DriverID={current account's username}
+    // TODO: filter already-applied-to sponsors out of clean_sponsor_list
   }, [])
 
   if (!isLoading) {
