@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
 import { UserContext } from '../Helpers/UserContext'
-import { useHistory } from 'react-router-dom'
 import {
   Button,
   Grid,
@@ -15,7 +14,6 @@ import ApplyAgainDialog from './ApplyAgainDialog'
 import { sortBy } from 'lodash'
 
 const DriverApplicationCard = (props) => {
-  let history = useHistory()
   const userData = useContext(UserContext).user
   const [applicationDetails, setApplicationDetails] = useState({
     Username: userData.Username,
