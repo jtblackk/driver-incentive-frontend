@@ -13,6 +13,7 @@ const OrganizationSetupCard = () => {
 
   let history = useHistory()
   const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
 
   useEffect(() => {
     setIsLoading(true)
@@ -28,7 +29,7 @@ const OrganizationSetupCard = () => {
           clean_sonsor_list.push(toLower(val.Organization.S))
         })
 
-        console.log(clean_sonsor_list)
+        // console.log(clean_sonsor_list)
         setOrganizationList(clean_sonsor_list)
       })
       .then(() => {
@@ -84,22 +85,27 @@ const OrganizationSetupCard = () => {
               } else if (organizationList.includes(toLower(organizationName))) {
                 setHelperText('Must choose a unique organization name')
               } else {
-                // save organization name
-                console.log(organizationName)
-                setIsLoading(true)
-                let SAVE_USER_PROFILE_URL =
-                  'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
-                let requestOptions = {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    Username: userData.Username,
+                ;(async () => {
+                  setIsLoading(true)
+                  let SAVE_USER_PROFILE_URL =
+                    'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                  let requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      Username: userData.Username,
+                      Organization: organizationName,
+                    }),
+                  }
+                  let response = await fetch(
+                    SAVE_USER_PROFILE_URL,
+                    requestOptions,
+                  )
+                  setUserData({
+                    ...userData,
                     Organization: organizationName,
-                  }),
-                }
-                fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
-                  // reroute the user to index page
-                  setIsLoading(false)
+                  })
+                })().then(() => {
                   history.push('/')
                 })
               }

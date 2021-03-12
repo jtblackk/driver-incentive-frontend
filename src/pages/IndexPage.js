@@ -45,21 +45,15 @@ function IndexPage() {
     // start loading animation
     setIsLoading(true)
     getUserData()
-    ;(async () => {
-      // TODO:  do we even need this conditional any more? drivers can use the app without a sponsor...
-      // if (
-      //   /*userData.AccountStatus <= 1 */ false &&
-      //   userData.AccountType === 'Driver'
-      // ) {
-      //   setInterval(getUserData, 10000)
-      // }
+    console.log(userData)
 
-      // if the user has no specified account type, force them to set up an account
-      if (userData.AccountStatus === 0) {
-        history.push('/account-setup')
-      }
-      setIsLoading(false)
-    })()
+    // if the user has no specified account type, force them to set up an account
+    if (userData.AccountStatus === 0) {
+      history.push('/account-setup')
+    } else if (userData.AccountType === 'Sponsor' && !userData.Organization) {
+      history.push('/organization-setup')
+    }
+    setIsLoading(false)
   }, [])
 
   // show loading screen if data is still being fetched
@@ -68,6 +62,7 @@ function IndexPage() {
       <div className={classes.root}>
         <main className={classes.content}>
           <div className={classes.toolbar} />
+
           <LoadingIcon />
         </main>
       </div>
