@@ -33,6 +33,9 @@ function DriverManagementTab(props) {
       <Grid item xs={12}>
         <br />
       </Grid>
+      <Grid item xs={12}>
+        <br />
+      </Grid>
 
       {/* AREA 1: sponsorship info */}
       {/* Labels */}
@@ -138,75 +141,73 @@ function DriverManagementTab(props) {
         <Grid item xs={12}>
           <br />
         </Grid>
-      </Grid>
 
+        {/* end sponsorship button */}
+        <Grid
+          item
+          xs={11}
+          container
+          justify="flex-end"
+          align="center"
+          spacing={1}
+        >
+          <Grid item>
+            <Button
+              variant="contained"
+              style={{ backgroundColor: '#444444', color: 'white' }}
+              onClick={() => {
+                // TODO: confirmation message before ending sponsorship. How to handle this in a dialog screen?
+
+                let SAVE_APPLICATION_RESPONSE_URL =
+                  'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+                let requestOptions = {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    SponsorID: props.selectedDriverData.SponsorID,
+                    DriverID: props.selectedDriverData.DriverID,
+                    Status: 3,
+                  }),
+                }
+                fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions)
+                  .then(() => {
+                    let newDriverDataState = props.allDriverData.map(
+                      (element) => {
+                        if (
+                          element.Username === props.selectedDriverData.DriverID
+                        ) {
+                          return {
+                            ...element,
+                            Status: 3,
+                          }
+                        } else {
+                          return element
+                        }
+                      },
+                    )
+                    props.setAllDriverDataState(newDriverDataState)
+                  })
+                  .then(() => {
+                    props.setDialogIsOpenState(false, true)
+                  })
+              }}
+            >
+              End sponsorship
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <br />
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <br />
+      </Grid>
       <Grid item xs={12}>
         <br />
       </Grid>
 
       {/* AREA 2: Sponsorship controls */}
-      <Grid item xs={7} container justify="flex-end" align="center" spacing={1}>
-        {/* end sponsorship button */}
-        <Grid item>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#444444', color: 'white' }}
-            onClick={() => {
-              // TODO: confirmation message before ending sponsorship
-
-              let SAVE_APPLICATION_RESPONSE_URL =
-                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-              let requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  SponsorID: props.selectedDriverData.SponsorID,
-                  DriverID: props.selectedDriverData.DriverID,
-                  Status: 3,
-                }),
-              }
-              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions)
-                .then(() => {
-                  let newDriverDataState = props.allDriverData.map(
-                    (element) => {
-                      if (
-                        element.Username === props.selectedDriverData.DriverID
-                      ) {
-                        return {
-                          ...element,
-                          Status: 3,
-                        }
-                      } else {
-                        return element
-                      }
-                    },
-                  )
-                  props.setAllDriverDataState(newDriverDataState)
-                })
-                .then(() => {
-                  props.setDialogIsOpenState(false, true)
-                })
-            }}
-          >
-            End sponsorship
-          </Button>
-        </Grid>
-        // TODO: render a view to edit the driver's profile information
-        {/* edit driver's account button */}
-        {/* <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-            }}
-          >
-            Edit profile
-          </Button>
-        </Grid> */}
-        <Grid item xs={12}>
-          <br />
-        </Grid>
-      </Grid>
     </Grid>
   )
 }
@@ -399,7 +400,7 @@ function EditDriverPointsMenu(props) {
               })
 
               props.triggerPageUpdate()
-              // TODO: make sure that the point history table reflects points changes
+              // TODO: make sure that the point history table reflects points changes. Waiting on api for point history.
             }}
           >
             Deduct
@@ -458,7 +459,7 @@ function EditDriverPointsMenu(props) {
               })
 
               props.triggerPageUpdate()
-              // TODO: make sure that the point history table reflects points changes
+              // TODO: make sure that the point history table reflects points changes. if it doesn't, fix it. waiting on api.
             }}
           >
             Add
@@ -553,6 +554,9 @@ function DriverPointsTab(props) {
               spacing={COLUMN_SPACING}
               justify="center"
             >
+              <Grid item xs={12}>
+                <br />
+              </Grid>
               <Grid
                 item
                 container
