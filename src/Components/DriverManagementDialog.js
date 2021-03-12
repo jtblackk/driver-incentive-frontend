@@ -152,8 +152,40 @@ function DriverManagementTab(props) {
             variant="contained"
             style={{ backgroundColor: '#444444', color: 'white' }}
             onClick={() => {
-              // TODO: present confirmation message
-              // TODO: integrate with api to set sponsorship status to terminated
+              // TODO: confirmation message before ending sponsorship
+
+              let SAVE_APPLICATION_RESPONSE_URL =
+                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+              let requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  SponsorID: props.selectedDriverData.SponsorID,
+                  DriverID: props.selectedDriverData.DriverID,
+                  Status: 3,
+                }),
+              }
+              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions)
+                .then(() => {
+                  let newDriverDataState = props.allDriverData.map(
+                    (element) => {
+                      if (
+                        element.Username === props.selectedDriverData.DriverID
+                      ) {
+                        return {
+                          ...element,
+                          Status: 3,
+                        }
+                      } else {
+                        return element
+                      }
+                    },
+                  )
+                  props.setAllDriverDataState(newDriverDataState)
+                })
+                .then(() => {
+                  props.setDialogIsOpenState(false, true)
+                })
             }}
           >
             End sponsorship
@@ -348,7 +380,6 @@ function EditDriverPointsMenu(props) {
                   Points:
                     parseInt(props.selectedDriverData.Points) -
                     parseInt(pointQuantity),
-                  // TODO: provide reason for point change
                 }),
               }
 
@@ -695,7 +726,14 @@ export default function DriverManagementDialog(props) {
             setAllDriverDataState={props.setAllDriverDataState}
           />
         ) : currentTab === 1 ? (
-          <DriverManagementTab selectedDriverData={props.selectedDriverData} />
+          <DriverManagementTab
+            selectedDriverData={props.selectedDriverData}
+            allDriverData={props.allDriverData}
+            setAllDriverDataState={props.setAllDriverDataState}
+            handleClose={handleClose}
+            fullPageUpdate={props.fullPageUpdate}
+            setDialogIsOpenState={props.setDialogIsOpenState}
+          />
         ) : null}
       </Dialog>
     </div>

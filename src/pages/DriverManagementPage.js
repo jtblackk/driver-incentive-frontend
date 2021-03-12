@@ -35,6 +35,9 @@ const DriverManagementPage = () => {
   // dialog control
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const [pageUpdate, setPageUpdate] = useState(0)
+  function fullPageUpdateState() {
+    setPageUpdate(pageUpdate + 1)
+  }
   function setDialogIsOpenState(state, refresh) {
     setDialogIsOpen(state)
 
@@ -201,6 +204,7 @@ const DriverManagementPage = () => {
               selectedDriverData={allDriverData.find(
                 (entry) => entry.Username === selectedEntry.Username,
               )}
+              fullPageUpdate={fullPageUpdateState}
             />
           ) : null}
 
