@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import { Box, TableSortLabel } from '@material-ui/core'
 
 import orderBy from 'lodash/orderBy'
+import LoadingIcon from './LoadingIcon'
 
 require('datejs')
 
@@ -116,7 +117,6 @@ export default function GenericTable(props) {
       </TableContainer>
     )
   } else {
-    // TODO: handle this loading case
-    return <div></div>
+    return <LoadingIcon />
   }
 }
