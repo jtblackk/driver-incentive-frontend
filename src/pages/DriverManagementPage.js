@@ -56,6 +56,9 @@ const DriverManagementPage = () => {
   }
 
   const [allDriverData, setAllDriverData] = useState(null)
+  const setAllDriverDataState = (state) => {
+    setAllDriverData(state)
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -193,6 +196,8 @@ const DriverManagementPage = () => {
               // selectedEntry={selectedEntry}
               dialogIsOpen={dialogIsOpen}
               setDialogIsOpenState={setDialogIsOpenState}
+              setAllDriverDataState={setAllDriverDataState}
+              allDriverData={allDriverData}
               selectedDriverData={allDriverData.find(
                 (entry) => entry.Username === selectedEntry.Username,
               )}

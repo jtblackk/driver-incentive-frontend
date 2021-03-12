@@ -25,8 +25,6 @@ import UserProfileCard from './UserProfileCard'
 require('datejs')
 
 function DriverManagementTab(props) {
-  console.log(props.selectedDriverData)
-
   const left_col_width = 4
   const right_col_width = 6
 
@@ -183,7 +181,16 @@ function DriverManagementTab(props) {
   )
 }
 
-function EditPointDollarRatioMenu() {
+function EditPointDollarRatioMenu(props) {
+  const [pointDollarRatio, setPointDollarRatio] = useState(
+    props.selectedDriverData.PointDollarRatio,
+  )
+  const [newPointDollarRatio, setNewPointDollarRatio] = useState(
+    props.selectedDriverData.PointDollarRatio,
+  )
+
+  const [helperText, setHelperText] = useState(null)
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -198,12 +205,16 @@ function EditPointDollarRatioMenu() {
 
       <Grid item container spacing={2} justify="flex-start" alignItems="center">
         <Grid item>
-          {/* TODO: get this field to display the current dollar value by default */}
-          {/* TODO: set up form validation support */}
           <TextField
             fullWidth
             label="Point value (USD)"
             variant="filled"
+            defaultValue={pointDollarRatio}
+            helperText={helperText}
+            error={helperText}
+            onChange={(event) => {
+              setNewPointDollarRatio(event.target.value)
+            }}
             size="small"
           ></TextField>
         </Grid>
@@ -213,10 +224,41 @@ function EditPointDollarRatioMenu() {
             color="primary"
             size="large"
             onClick={() => {
-              // TODO: validate form input
-              // * points not empty
-              // * 0 < points
-              // TODO: save PointDollarRatio change to database
+              if (!newPointDollarRatio) {
+                setHelperText('Need to provide a value')
+                return
+              } else if (newPointDollarRatio <= 0) {
+                setHelperText('Must be greater than 0')
+                return
+              }
+
+              let SAVE_APPLICATION_RESPONSE_URL =
+                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+
+              let requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  SponsorID: props.selectedDriverData.SponsorID,
+                  DriverID: props.selectedDriverData.DriverID,
+                  PointDollarRatio: parseFloat(newPointDollarRatio),
+                }),
+              }
+
+              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(() => {
+                let newDriverDataState = props.allDriverData.map((element) => {
+                  if (element.Username === props.selectedDriverData.DriverID) {
+                    return {
+                      ...element,
+                      PointDollarRatio: parseFloat(newPointDollarRatio),
+                    }
+                  } else {
+                    return element
+                  }
+                })
+
+                props.setAllDriverDataState(newDriverDataState)
+              })
             }}
           >
             Save
@@ -227,20 +269,33 @@ function EditPointDollarRatioMenu() {
   )
 }
 
-function EditDriverPointsMenu() {
+function EditDriverPointsMenu(props) {
+  const [reason, setReason] = useState(null)
+  const [reasonHelperText, setReasonHelperText] = useState(null)
+
+  const [pointQuantity, setPointQuantity] = useState(null)
+  const [pointHelperText, setPointHelperText] = useState(null)
+
+  useEffect(() => {}, [props.pageUpdate])
+
   return (
     <Grid item container spacing={2} justify="flex-end" alignItems="center">
       <Grid item xs={3}>
-        {/* TODO: set up form validation support */}
         <TextField
           fullWidth
           label="Points"
           variant="filled"
           size="small"
           type="number"
+          error={pointHelperText}
+          helperText={pointHelperText}
+          value={pointQuantity}
+          onChange={(event) => {
+            setPointQuantity(event.target.value)
+          }}
         ></TextField>
       </Grid>
-      {/* TODO: set up form validation support */}
+
       <Grid item xs={5}>
         <TextField
           fullWidth
@@ -248,6 +303,11 @@ function EditDriverPointsMenu() {
           variant="filled"
           size="small"
           type="text"
+          error={reasonHelperText}
+          helperText={reasonHelperText}
+          onChange={(event) => {
+            setReason(event.target.value)
+          }}
         ></TextField>
       </Grid>
       <Grid item>
@@ -255,11 +315,62 @@ function EditDriverPointsMenu() {
           <Button
             style={{ backgroundColor: 'red' }}
             onClick={() => {
-              // TODO: validate form input
-              // * 0 < points < driver's total points
-              // * Reason not empty
-              // TODO: save point change to database
-              // TODO: rerender point history table
+              // validate input
+              let exit = false
+              if (!pointQuantity) {
+                setPointHelperText('Must provide a quantity')
+                exit = true
+              }
+              if (pointQuantity <= 0) {
+                setPointHelperText('Must be >0')
+                exit = true
+              } else if (pointQuantity > props.selectedDriverData.Points) {
+                setPointHelperText('Deducting too much')
+                exit = true
+              } else {
+              }
+
+              if (!reason) {
+                setReasonHelperText('Must provide a reason')
+                exit = true
+              }
+              if (exit) return
+
+              let SAVE_APPLICATION_RESPONSE_URL =
+                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+
+              let requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  SponsorID: props.selectedDriverData.SponsorID,
+                  DriverID: props.selectedDriverData.DriverID,
+                  Points:
+                    parseInt(props.selectedDriverData.Points) -
+                    parseInt(pointQuantity),
+                  // TODO: provide reason for point change
+                }),
+              }
+
+              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(() => {
+                let newDriverDataState = props.allDriverData.map((element) => {
+                  if (element.Username === props.selectedDriverData.DriverID) {
+                    return {
+                      ...element,
+                      Points:
+                        parseInt(props.selectedDriverData.Points) -
+                        parseInt(pointQuantity),
+                    }
+                  } else {
+                    return element
+                  }
+                })
+
+                props.setAllDriverDataState(newDriverDataState)
+              })
+
+              props.triggerPageUpdate()
+              // TODO: make sure that the point history table reflects points changes
             }}
           >
             Deduct
@@ -267,11 +378,58 @@ function EditDriverPointsMenu() {
           <Button
             style={{ backgroundColor: 'green' }}
             onClick={() => {
-              // TODO: validate form input
-              // * 0 < points < driver's total points
-              // * Reason not empty
-              // TODO: save point change to database
-              // TODO: rerender point history table
+              // validate input
+              let exit = false
+              if (!pointQuantity) {
+                setPointHelperText('Must provide a quantity')
+                exit = true
+              }
+              if (pointQuantity <= 0) {
+                setPointHelperText('Must be >0')
+                exit = true
+              }
+
+              if (!reason) {
+                setReasonHelperText('Must provide a reason')
+                exit = true
+              }
+              if (exit) return
+
+              let SAVE_APPLICATION_RESPONSE_URL =
+                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+
+              let requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  SponsorID: props.selectedDriverData.SponsorID,
+                  DriverID: props.selectedDriverData.DriverID,
+                  Points:
+                    parseInt(props.selectedDriverData.Points) +
+                    parseInt(pointQuantity),
+                  // TODO: provide reason for point change
+                }),
+              }
+
+              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(() => {
+                let newDriverDataState = props.allDriverData.map((element) => {
+                  if (element.Username === props.selectedDriverData.DriverID) {
+                    return {
+                      ...element,
+                      Points:
+                        parseInt(props.selectedDriverData.Points) +
+                        parseInt(pointQuantity),
+                    }
+                  } else {
+                    return element
+                  }
+                })
+
+                props.setAllDriverDataState(newDriverDataState)
+              })
+
+              props.triggerPageUpdate()
+              // TODO: make sure that the point history table reflects points changes
             }}
           >
             Add
@@ -283,7 +441,6 @@ function EditDriverPointsMenu() {
 }
 
 function DriverPointsTab(props) {
-  // console.log(props)
   const [isLoading, setIsLoading] = useState(true)
 
   // point history table
@@ -324,6 +481,11 @@ function DriverPointsTab(props) {
     setSelectedEntry(state)
   }
 
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function triggerPageUpdate() {
+    setPageUpdate(pageUpdate + 1)
+  }
+
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
@@ -344,7 +506,7 @@ function DriverPointsTab(props) {
     })().then(() => {
       setIsLoading(false)
     })
-  }, [props.pageUpdate])
+  }, [pageUpdate])
 
   let LEFT_COL_WIDTH = 5
   let RIGHT_COL_WIDTH = 6
@@ -373,7 +535,12 @@ function DriverPointsTab(props) {
               >
                 <Grid item>
                   <Typography>
-                    <EditPointDollarRatioMenu />
+                    <EditPointDollarRatioMenu
+                      selectedDriverData={props.selectedDriverData}
+                      triggerPageUpdate={triggerPageUpdate}
+                      allDriverData={props.allDriverData}
+                      setAllDriverDataState={props.setAllDriverDataState}
+                    />
                   </Typography>
                 </Grid>
               </Grid>
@@ -392,13 +559,27 @@ function DriverPointsTab(props) {
                 component={Paper}
                 style={{ padding: 20 }}
               >
-                <Grid item xs={12}>
-                  <Typography variant="h6">Points</Typography>
-                  <Typography>View and edit the driver's points</Typography>
-                  <br />
+                <Grid item container xs={12} alignItems="center">
+                  <Grid item xs={6} align="left">
+                    <Typography variant="h6">Points</Typography>
+                    <Typography>View and edit the driver's points</Typography>
+                  </Grid>
+
+                  <Grid item xs={6} align="right">
+                    <Typography variant="h6">
+                      {props.selectedDriverData.Points} points total
+                    </Typography>
+                  </Grid>
+
                   {/* point management */}
                   <Grid item xs={12} align="center">
-                    <EditDriverPointsMenu />
+                    <EditDriverPointsMenu
+                      selectedDriverData={props.selectedDriverData}
+                      allDriverData={props.allDriverData}
+                      setAllDriverDataState={props.setAllDriverDataState}
+                      pageUpdate={pageUpdate}
+                      triggerPageUpdate={triggerPageUpdate}
+                    />
                     <br />
                   </Grid>
                   <GenericTable
@@ -431,10 +612,12 @@ function DriverPointsTab(props) {
 }
 
 export default function DriverManagementDialog(props) {
-  // console.log(props)
   // dialog control
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const [pageUpdate, setPageUpdate] = useState(0)
+  function triggerPageUpdate() {
+    setPageUpdate(pageUpdate + 1)
+  }
 
   const [currentTab, setCurrentTab] = useState(0)
   const handleTabChange = (event, newTab) => {
@@ -503,11 +686,13 @@ export default function DriverManagementDialog(props) {
 
         {currentTab === 0 ? (
           <DriverPointsTab
-            pageUpdate={pageUpdate}
+            pageUpdate={triggerPageUpdate}
             selectedDriverData={props.selectedDriverData}
             dialogIsOpen={props.dialogIsOpen}
             setDialogIsOpenState={setDialogIsOpenState}
             handleClose={handleClose}
+            allDriverData={props.allDriverData}
+            setAllDriverDataState={props.setAllDriverDataState}
           />
         ) : currentTab === 1 ? (
           <DriverManagementTab selectedDriverData={props.selectedDriverData} />
