@@ -203,16 +203,16 @@ function DriverPointsTab(props) {
                   {/* point management */}
                   <Grid item xs={12} align="center">
                     <EditDriverPointsMenu />
-                    {/* <br /> */}
+                    <br />
                   </Grid>
                   <GenericTable
                     headCells={table1HeadCells}
                     data={table1Data}
                     setDataState={setTable1DataState}
-                    tableKey="Username"
+                    tableKey="Date"
                     showKey={false}
-                    initialSortedColumn="LastName"
-                    initialSortedDirection="asc"
+                    initialSortedColumn="Date"
+                    initialSortedDirection="desc"
                     selectedRow={selectedEntry}
                     setSelectedRow={setSelectedEntryState}
                     dialogIsOpen={props.dialogIsOpen}
