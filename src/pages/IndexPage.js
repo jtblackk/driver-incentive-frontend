@@ -45,7 +45,6 @@ function IndexPage() {
     // start loading animation
     setIsLoading(true)
     getUserData()
-    console.log(userData)
 
     // if the user has no specified account type, force them to set up an account
     if (userData.AccountStatus === 0) {

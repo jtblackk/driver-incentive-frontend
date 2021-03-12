@@ -28,8 +28,6 @@ const OrganizationSetupCard = () => {
         sponsor_array.forEach((val) => {
           clean_sonsor_list.push(toLower(val.Organization.S))
         })
-
-        // console.log(clean_sonsor_list)
         setOrganizationList(clean_sonsor_list)
       })
       .then(() => {
