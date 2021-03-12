@@ -191,20 +191,18 @@ function DriverManagementTab(props) {
             End sponsorship
           </Button>
         </Grid>
-
+        // TODO: render a view to edit the driver's profile information
         {/* edit driver's account button */}
-        <Grid item>
+        {/* <Grid item>
           <Button
             variant="contained"
             color="primary"
             onClick={() => {
-              // TODO: render a view to edit the driver's profile information
             }}
           >
             Edit profile
           </Button>
-        </Grid>
-
+        </Grid> */}
         <Grid item xs={12}>
           <br />
         </Grid>
