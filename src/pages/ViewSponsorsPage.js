@@ -57,7 +57,7 @@ const ViewSponsorsPage = () => {
   useEffect(() => {
     setIsLoading(true)
 
-    // todo: pull sponsorship data, clean it up into needed format
+    // TODO: pull sponsorship data, clean it up into needed format
 
     setTable1Data([
       {

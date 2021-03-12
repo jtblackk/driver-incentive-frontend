@@ -20,13 +20,13 @@ import { UserContext } from '../Helpers/UserContext'
 require('datejs')
 
 function EditDriverPointsMenu() {
-  // todo: validate form input
+  // TODO: validate form input
   // * 0 < points < driver's total points
   // * Reason not empty
 
-  // todo: save point change to database
+  // TODO: save point change to database
 
-  // todo: rerender point history table
+  // TODO: rerender point history table
 
   return (
     <Grid item container spacing={2} justify="flex-end" alignItems="center">

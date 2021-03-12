@@ -158,7 +158,7 @@ export default function ProcessedApplicantTable(props) {
       </TableContainer>
     )
   } else {
-    // todo: handle this loading case
+    // TODO: handle this loading case
     return <div></div>
   }
 }
