@@ -55,25 +55,100 @@ const DriverManagementPage = () => {
     setSelectedEntry(state)
   }
 
+  const [allDriverData, setAllDriverData] = useState(null)
+
   useEffect(() => {
     setIsLoading(true)
+    ;(async () => {
+      // fetch and parse sponsor's driver's profiles
+      const driver_profile_data_endpoint = `https://rb6nqfuvvg.execute-api.us-east-1.amazonaws.com/dev/driverdatabysponsor?SponsorUsername=${userData.Username}`
+      const driver_profile_data_response = await fetch(
+        driver_profile_data_endpoint,
+      )
+      const driver_profile_data_json = await driver_profile_data_response.json()
+      const driver_profile_data_parsed = JSON.parse(
+        driver_profile_data_json.body.toString(),
+      )
+      const driver_profile_data_formatted = driver_profile_data_parsed.map(
+        (val) => {
+          if (val.Items[0]) {
+            return {
+              Username: val.Items[0].Username.S,
+              FirstName: val.Items[0].FirstName.S,
+              LastName: val.Items[0].LastName.S,
+              AccountType: val.Items[0].AccountType.S,
+              AccountStatus: parseInt(val.Items[0].AccountStatus.N),
+              Bio: val.Items[0].Bio.S,
+            }
+          } else {
+            return null
+          }
+        },
+      )
 
-    // todo: pull sponsorship data, clean it up into needed format
+      //  fetch applicant list
+      let sponsorship_list_api = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
+      const sponsorship_list_response = await fetch(sponsorship_list_api)
+      const sponsorship_list_json = await sponsorship_list_response.json()
 
-    setTable1Data([
-      {
-        Username: 'jtblack@g.clemson.edu',
-        FirstName: 'Jeff',
-        LastName: 'Black',
-        TotalPoints: 150,
-      },
-      {
-        Username: 'm2@gmail.com',
-        FirstName: 'm',
-        LastName: '2',
-        TotalPoints: 200,
-      },
-    ])
+      // parse the applicant data
+      let sponsorship_list_parsed = JSON.parse(
+        sponsorship_list_json.body.toString(),
+      ).Items
+      let sponsorship_list_formatted = sponsorship_list_parsed.map((val) => {
+        return {
+          SponsorshipID: val.SponsorshipID ? val.SponsorshipID.S : null,
+          SponsorID: val.SponsorID ? val.SponsorID.S : null,
+          DriverID: val.DriverID ? val.DriverID.S : null,
+          Status: val.Status ? parseInt(val.Status.N) : null,
+          Points: val.Points ? parseInt(val.Points.N) : null,
+          PointDollarRatio: val.PointDollarRatio
+            ? parseFloat(val.PointDollarRatio.N)
+            : null,
+
+          AppSubmissionDate: val.AppSubmissionDate
+            ? val.AppSubmissionDate.S.split('.')[0].replace(' ', 'T')
+            : null,
+          AppComments: val.AppComments ? val.AppComments.S : null,
+          AppDecisionDate:
+            parseInt(val.Status.N) > 0 && val.AppDecisionDate
+              ? val.AppDecisionDate.S.split('.')[0].replace(' ', 'T')
+              : null,
+          AppDecisionReason:
+            parseInt(val.Status.N) && val.AppDecisionReason
+              ? val.AppDecisionReason.S
+              : null,
+        }
+      })
+
+      let current_drivers = sponsorship_list_formatted.filter((val) => {
+        return val.Status === 2
+      })
+
+      let current_drivers_data = current_drivers.map((val) => {
+        return {
+          ...val,
+          ...driver_profile_data_formatted.find(
+            (element) => element.Username === val.DriverID,
+          ),
+        }
+      })
+      setAllDriverData(current_drivers_data)
+
+      let current_drivers_table_data = current_drivers_data.map((val) => {
+        return {
+          Username: val.Username,
+          FirstName: val.FirstName,
+          LastName: val.LastName,
+          TotalPoints: val.Points,
+        }
+      })
+
+      setTable1Data([...current_drivers_table_data])
+    })().then(() => {
+      setIsLoading(false)
+    })
+
     setTable1HeadCells([
       {
         id: 'Username',
@@ -100,7 +175,8 @@ const DriverManagementPage = () => {
         width: 100,
       },
     ])
-    setIsLoading(false)
+
+    console.log(table1Data)
   }, [pageUpdate])
 
   if (!isLoading) {
@@ -116,9 +192,12 @@ const DriverManagementPage = () => {
 
           {dialogIsOpen ? (
             <DriverManagementDialog
-              selectedEntry={selectedEntry}
+              // selectedEntry={selectedEntry}
               dialogIsOpen={dialogIsOpen}
               setDialogIsOpenState={setDialogIsOpenState}
+              selectedDriverData={allDriverData.find(
+                (entry) => entry.Username === selectedEntry.Username,
+              )}
             />
           ) : null}
 

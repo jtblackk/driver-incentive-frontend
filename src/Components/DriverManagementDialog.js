@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {
   Box,
+  ButtonGroup,
   Divider,
   Grid,
   IconButton,
@@ -18,64 +19,74 @@ import GenericTable from './GenericTable'
 import { UserContext } from '../Helpers/UserContext'
 require('datejs')
 
-export default function DriverManagementDialog(props) {
-  const handleClose = (refresh) => {
-    props.setDialogIsOpenState(false, refresh)
-  }
+function EditDriverPointsMenu() {
+  // todo: validate form input
+  // * 0 < points < driver's total points
+  // * Reason not empty
 
-  let driverProfile = [
-    {
-      name: 'Username',
-      prop: props.selectedEntry.Username,
-    },
-    {
-      name: 'Name',
-      prop: props.selectedEntry.FirstName + ' ' + props.selectedEntry.LastName,
-    },
-    {
-      name: 'Driving since',
-      prop: '<sponsorship start date',
-    },
-  ]
+  // todo: save point change to database
 
-  const userData = useContext(UserContext).user
+  // todo: rerender point history table
+
+  return (
+    <Grid item container spacing={2} justify="flex-end" alignItems="center">
+      <Grid item xs={3}>
+        <TextField
+          fullWidth
+          label="Points"
+          variant="filled"
+          size="small"
+          type="number"
+        ></TextField>
+      </Grid>
+      <Grid item xs={5}>
+        <TextField
+          fullWidth
+          label="Reason"
+          variant="filled"
+          size="small"
+          type="text"
+        ></TextField>
+      </Grid>
+      <Grid item>
+        <ButtonGroup size="large" color="primary" variant="contained">
+          <Button style={{ backgroundColor: 'red' }}>Deduct</Button>
+          <Button style={{ backgroundColor: 'green' }}>Add</Button>
+        </ButtonGroup>
+      </Grid>
+    </Grid>
+  )
+}
+
+function DriverPointsTab(props) {
+  // console.log(props)
   const [isLoading, setIsLoading] = useState(true)
 
-  // dialog control
-  const [dialogIsOpen, setDialogIsOpen] = useState(false)
-  const [pageUpdate, setPageUpdate] = useState(0)
-  function setDialogIsOpenState(state, refresh) {
-    setDialogIsOpen(state)
-
-    if (refresh) {
-      setPageUpdate(pageUpdate + 1)
-    }
-  }
-
+  // point history table
   const table1HeadCells = [
     {
       id: 'Date',
       label: 'Date',
-      isDate: false,
-      width: 100,
+      isDate: true,
+      width: 200,
     },
     {
       id: 'Reason',
       label: 'Reason',
       isDate: false,
-      width: 100,
+      width: 150,
     },
     {
       id: 'TotalPoints',
       label: 'Total points',
       isDate: false,
-      width: 100,
+      width: 50,
     },
     {
       id: 'PointsChange',
       label: 'Difference',
       isDate: false,
-      width: 100,
+      width: 50,
     },
   ]
 
@@ -91,92 +102,33 @@ export default function DriverManagementDialog(props) {
 
   useEffect(() => {
     setIsLoading(true)
-
-    // TODO: pull sponsorship data, clean it up into needed format
     ;(async () => {
-      let GET_SPONSORSHIP_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
-      const response = await fetch(GET_SPONSORSHIP_LIST)
-      const data = await response.json()
-      let my_sponsorships = JSON.parse(data.body.toString()).Items
-      let my_drivers = my_sponsorships.map((val) => {
-        if (parseInt(val.Status.N) === 1) {
-          return {
-            SponsorshipID: val.SponsorshipID ? val.SponsorshipID.S : null,
-            SponsorID: val.SponsorID ? val.SponsorID.S : null,
-            DriverID: val.DriverID ? val.DriverID.S : null,
-            Status: val.Status ? parseInt(val.Status.N) : null,
-            Points: val.Points ? val.Points.N : null,
-            PointDollarRatio: val.PointDollarRatio
-              ? val.PointDollarRatio.N
-              : null,
-
-            AppSubmissionDate: val.AppSubmissionDate
-              ? val.AppSubmissionDate.S.split('.')[0].replace(' ', 'T')
-              : null,
-            AppComments: val.AppComments ? val.AppComments.S : null,
-            AppDecisionDate:
-              parseInt(val.Status.N) > 0 && val.AppDecisionDate
-                ? val.AppDecisionDate.S.split('.')[0].replace(' ', 'T')
-                : null,
-            AppDecisionReason:
-              val.Status > 0 && val.AppDecisionReason
-                ? val.AppDecisionReason.S
-                : null,
-          }
-        } else {
-          return null
-        }
-      })
-    })()
-    setTable1Data([
-      {
-        Username: 'jtblack@gmail.com',
-        FirstName: 'Jeff',
-        LastName: 'Black',
-        TotalPoints: 1500,
-        PointsChange: 150,
-      },
-      {
-        Username: 'm2@gmail.com',
-        FirstName: 'm',
-        LastName: '2',
-        TotalPoints: 200,
-      },
-    ])
-
-    setIsLoading(false)
-  }, [pageUpdate])
+      setTable1Data([
+        {
+          Date: '2021-03-11 23:08:19.748211',
+          Reason: '<a really good reason>',
+          TotalPoints: 1650,
+          PointsChange: (150 > 0 ? '+' : '-') + 150,
+        },
+        {
+          Date: '2021-03-11 23:08:50.891743',
+          Reason: '<please replace me with an actual api call please>',
+          TotalPoints: 1500,
+          PointsChange: (-150 > 0 ? '+' : null) + -150,
+        },
+      ])
+    })().then(() => {
+      setIsLoading(false)
+    })
+  }, [props.pageUpdate])
 
   let LEFT_COL_WIDTH = 5
   let RIGHT_COL_WIDTH = 6
   let COLUMN_SPACING = 1
 
-  function ResponseForm() {
+  if (!isLoading) {
     return (
-      <Grid
-        container
-        direction="row"
-        spacing={COLUMN_SPACING}
-        justify="space-evenly"
-      >
-        <Grid item xs={7} align="right">
-          <Grid container item xs={12} justify="flex-end"></Grid>
-        </Grid>
-      </Grid>
-    )
-  }
-
-  return (
-    <div>
-      <Dialog
-        open={props.dialogIsOpen}
-        onClose={() => {
-          handleClose(false)
-        }}
-        aria-labelledby="form-dialog-title"
-        fullWidth
-        maxWidth="md"
-      >
+      <div>
         <Grid
           container
           item
@@ -185,13 +137,20 @@ export default function DriverManagementDialog(props) {
           alignItems="center"
           direction="row"
         >
-          <Grid item>
-            <DialogTitle id="form-dialog-title">Driver details</DialogTitle>
+          {/* dialog header/title */}
+          <Grid item container xs={9} alignItems="center">
+            <Grid item>
+              <DialogTitle id="form-dialog-title">
+                Driver details: {props.selectedDriverData.FirstName}{' '}
+                {props.selectedDriverData.LastName} (
+                {props.selectedDriverData.Username})
+              </DialogTitle>
+            </Grid>
           </Grid>
           <Grid item>
             <IconButton
               onClick={() => {
-                handleClose(false)
+                props.handleClose(false)
               }}
             >
               <CloseIcon />
@@ -206,44 +165,46 @@ export default function DriverManagementDialog(props) {
               container
               direction="row"
               spacing={COLUMN_SPACING}
-              justify="space-evenly"
+              justify="center"
             >
-              {driverProfile.map((field) => {
-                return (
-                  <Grid
-                    container
-                    direction="row"
-                    spacing={COLUMN_SPACING}
-                    justify="space-evenly"
-                  >
-                    <Grid item xs={LEFT_COL_WIDTH}>
-                      <DialogContentText>
-                        <Box textAlign="right" fontWeight="fontWeightBold">
-                          {field.name}:
-                        </Box>
-                      </DialogContentText>
-                    </Grid>
-                    <Grid item xs={RIGHT_COL_WIDTH}>
-                      <DialogContentText>
-                        <Box textAlign="left">{field.prop}</Box>
-                      </DialogContentText>
-                    </Grid>
-                  </Grid>
-                )
-              })}
+              <Grid
+                item
+                container
+                xs={9}
+                spacing={2}
+                justify="center"
+                component={Paper}
+              >
+                <Grid item>
+                  <Typography>
+                    {'add a way to edit the point-to-dollar ratio'}
+                  </Typography>
+                </Grid>
+              </Grid>
 
-              {/* divider */}
               <Grid item xs={12}>
-                <br />
-                <Divider />
-
-                <br />
                 <br />
               </Grid>
 
-              {/* bottom half */}
-              <Grid item container xs={7} spacing={2}>
-                <Grid item>
+              {/* point history table */}
+              <Grid
+                item
+                container
+                xs={9}
+                spacing={2}
+                justify="center"
+                component={Paper}
+                style={{ padding: 20 }}
+              >
+                <Grid item xs={12}>
+                  <Typography variant="h6">Points</Typography>
+                  <Typography>View and edit the driver's points</Typography>
+                  <br />
+                  {/* point management */}
+                  <Grid item xs={12} align="center">
+                    <EditDriverPointsMenu />
+                    {/* <br /> */}
+                  </Grid>
                   <GenericTable
                     headCells={table1HeadCells}
                     data={table1Data}
@@ -254,29 +215,11 @@ export default function DriverManagementDialog(props) {
                     initialSortedDirection="asc"
                     selectedRow={selectedEntry}
                     setSelectedRow={setSelectedEntryState}
-                    dialogIsOpen={dialogIsOpen}
-                    setDialogIsOpenState={setDialogIsOpenState}
+                    dialogIsOpen={props.dialogIsOpen}
+                    setDialogIsOpenState={props.setDialogIsOpenState}
                   ></GenericTable>
-                  {/* <Typography>
-                    {
-                      'put a table of reward history here. The table should have buttons to add/remove points'
-                    }
-                  </Typography> */}
-                </Grid>
-                <Grid item>
-                  <Typography>
-                    {
-                      "add a button for removing the driver from the sponsor's organization"
-                    }
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography>
-                    {'add a way to edit the point-to-dollar ratio'}
-                  </Typography>
                 </Grid>
               </Grid>
-
               <Grid item xs={12}>
                 {' '}
                 <br />
@@ -284,6 +227,46 @@ export default function DriverManagementDialog(props) {
             </Grid>
           </DialogContent>
         </Grid>
+      </div>
+    )
+  } else {
+    return null
+  }
+}
+
+export default function DriverManagementDialog(props) {
+  // console.log(props)
+  // dialog control
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function setDialogIsOpenState(state, refresh) {
+    setDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+  const handleClose = (refresh) => {
+    props.setDialogIsOpenState(false, refresh)
+  }
+  return (
+    <div>
+      <Dialog
+        open={props.dialogIsOpen}
+        onClose={() => {
+          handleClose(false)
+        }}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="md"
+      >
+        <DriverPointsTab
+          pageUpdate={pageUpdate}
+          selectedDriverData={props.selectedDriverData}
+          dialogIsOpen={props.dialogIsOpen}
+          setDialogIsOpenState={setDialogIsOpenState}
+          handleClose={handleClose}
+        />
       </Dialog>
     </div>
   )
