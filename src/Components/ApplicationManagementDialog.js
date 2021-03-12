@@ -90,7 +90,6 @@ export default function ApplicationManagementDialog(props) {
                     return
                   }
 
-                  // TODO: replace this api call with new sponsorship-based api call
                   let SAVE_APPLICATION_RESPONSE_URL =
                     'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
 

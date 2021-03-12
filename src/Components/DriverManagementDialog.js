@@ -92,7 +92,7 @@ export default function DriverManagementDialog(props) {
   useEffect(() => {
     setIsLoading(true)
 
-    // todo: pull sponsorship data, clean it up into needed format
+    // TODO: pull sponsorship data, clean it up into needed format
     ;(async () => {
       let GET_SPONSORSHIP_LIST = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
       const response = await fetch(GET_SPONSORSHIP_LIST)

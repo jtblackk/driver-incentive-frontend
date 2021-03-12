@@ -158,7 +158,6 @@ const DriverApplicationCard = (props) => {
               }
 
               // fetch -> save application in application table
-              // TODO: replace this with a new api call that uses the new sponsorships table
               let SEND_APPLICATION_URL =
                 'https://z8yu8acjwj.execute-api.us-east-1.amazonaws.com/dev/submitapplication'
               let requestOptions = {
