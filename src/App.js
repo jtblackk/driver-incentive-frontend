@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react'
 import LoadingIcon from './Components/LoadingIcon'
 import getUserDetails from './Helpers/CommonFunctions'
 import ViewSponsorsPage from './pages/ViewSponsorsPage'
+import OrganizationSetupPage from './pages/OrganizationSetupPage'
 
 Amplify.configure(awsconfig)
 
@@ -65,6 +66,11 @@ function App() {
               <Route exact path="/drivers" component={DriverManagementPage} />
               <Route exact path="/sponsors" component={ViewSponsorsPage} />
               <Route exact path="/logs" component={AuditLogPage} />
+              <Route
+                exact
+                path="/organization-setup"
+                component={OrganizationSetupPage}
+              />
 
               <Route component={PageNotFoundPage} />
             </Switch>

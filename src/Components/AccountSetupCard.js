@@ -144,6 +144,8 @@ const AccountSetupCard = (props) => {
               // route user to appropriate page
               if (userDetails.AccountType === 'Driver') {
                 history.push('/application')
+              } else if (userDetails.AccountType === 'Sponsor') {
+                history.push('organization-setup')
               } else {
                 // TODO: create a 'sponsor setup' page where the sponsor enters a name for their organization.
                 // doing this should add the name to a column labeled "OrganizationName" for the super sponsor
