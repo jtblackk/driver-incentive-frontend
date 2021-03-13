@@ -119,7 +119,7 @@ export default function ApplicationManagementDialog(props) {
 
             <Grid item xs={3}>
               <Button
-                style={{ backgroundColor: '#46CB18', color: 'white' }}
+                style={{ backgroundColor: 'green', color: 'white' }}
                 variant="contained"
                 size="small"
                 onClick={() => {
