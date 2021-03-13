@@ -10,6 +10,7 @@ import ApplicationManagementDialog from '../Components/ApplicationManagementDial
 import GenericTable from '../Components/GenericTable'
 import { useHistory } from 'react-router'
 import DriverManagementDialog from '../Components/DriverManagementDialog'
+import SetAllPointRatiosDialog from '../Components/SetAllPointRatiosDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -190,9 +191,26 @@ const DriverManagementPage = () => {
     ])
   }, [pageUpdate])
 
+  const [pointRatioDialogIsOpen, setPointRatioDialogIsOpen] = useState(false)
+  function setPointRatioDialogIsOpenState(state) {
+    setPointRatioDialogIsOpen(state)
+  }
+
+  const [pointRatioDialogResponse, setPointRatioDialogResponse] = useState(
+    false,
+  )
+  function setPointRatioDialogResponseState(state) {
+    setPointRatioDialogResponse(state)
+  }
+
   if (!isLoading) {
     return (
       <div className={classes.root}>
+        <SetAllPointRatiosDialog
+          dialogIsOpen={pointRatioDialogIsOpen}
+          setDialogIsOpen={setPointRatioDialogIsOpen}
+          setDialogResponse={setPointRatioDialogIsOpenState}
+        />
         {/* layout stuff */}
         <TopAppBar pageTitle="Drivers"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
@@ -245,11 +263,12 @@ const DriverManagementPage = () => {
                         color="primary"
                         onClick={() => {
                           // TODO: bring up dialog to set all point ratios
+                          setPointRatioDialogIsOpen(true)
                           // TODO: make api call to set all point ratios
                           // TODO: trigger data rerender
                         }}
                       >
-                        SET POINT VALUE
+                        SET ALL POINT VALUES
                       </Button>
                     </Grid>
                   </Grid>
