@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
+
 import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import { Box, Grid, Paper, TextField, Typography } from '@material-ui/core'
-import { isNumber } from 'lodash'
+
+import { Grid, Paper, TextField, Typography } from '@material-ui/core'
 
 export default function SetAllPointRatiosDialog(props) {
   const [newPointDollarRatio, setNewPointDollarRatio] = useState(null)
@@ -98,24 +96,6 @@ export default function SetAllPointRatiosDialog(props) {
             </Grid>
           </Grid>
         </Grid>
-        {/* <DialogActions>
-          <Button
-            onClick={() => {
-              handleClose(false)
-            }}
-            color="primary"
-          >
-            No
-          </Button>
-          <Button
-            onClick={() => {
-              handleClose(true)
-            }}
-            color="primary"
-          >
-            Yes
-          </Button>
-        </DialogActions> */}
       </Dialog>
     </div>
   )

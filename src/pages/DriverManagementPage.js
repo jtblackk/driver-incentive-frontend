@@ -257,12 +257,14 @@ const DriverManagementPage = () => {
                         entry for more information.
                       </Typography>
                     </Grid>
+
+                    {/* set all point values button */}
                     <Grid item xs={4} align="right">
                       <Button
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                          // TODO: bring up dialog to set all point ratios
+                          // bring up dialog to set all point ratios
                           setPointRatioDialogIsOpen(true)
                           // TODO: make api call to set all point ratios
                           // TODO: trigger data rerender
