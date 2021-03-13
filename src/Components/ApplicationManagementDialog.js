@@ -12,6 +12,7 @@ require('datejs')
 export default function ApplicationManagementDialog(props) {
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
+    setHelperText(null)
   }
 
   let applicantProfile = props.driverDetails.find((val) => {
@@ -42,6 +43,8 @@ export default function ApplicationManagementDialog(props) {
       ).toUTCString(),
     },
   ]
+
+  const [helperText, setHelperText] = useState(null)
 
   const [decisionReason, setDecisionReason] = useState(null)
   let initial_response_fields = [
@@ -87,7 +90,10 @@ export default function ApplicationManagementDialog(props) {
                 size="small"
                 onClick={() => {
                   if (!decisionReason) {
+                    setHelperText('Must provide a decision reason')
                     return
+                  } else {
+                    setHelperText(null)
                   }
 
                   let SAVE_APPLICATION_RESPONSE_URL =
@@ -124,7 +130,10 @@ export default function ApplicationManagementDialog(props) {
                 size="small"
                 onClick={() => {
                   if (!decisionReason) {
+                    setHelperText('Must provide a decision reason')
                     return
+                  } else {
+                    setHelperText(null)
                   }
 
                   let SAVE_APPLICATION_RESPONSE_URL =
@@ -275,9 +284,11 @@ export default function ApplicationManagementDialog(props) {
                       rows={3}
                       autoFocus
                       fullWidth
-                      error={!decisionReason}
+                      helperText={helperText}
+                      error={helperText}
                       onChange={(event) => {
                         setDecisionReason(event.target.value)
+                        setHelperText(null)
                       }}
                     />
                   </Grid>
