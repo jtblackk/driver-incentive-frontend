@@ -314,7 +314,7 @@ function EditDriverPointsMenu(props) {
 
   return (
     <Grid item container spacing={2} justify="flex-end" alignItems="center">
-      <Grid item xs={3}>
+      <Grid item xs={8} sm={3}>
         <TextField
           fullWidth
           label="Points"
@@ -330,7 +330,7 @@ function EditDriverPointsMenu(props) {
         ></TextField>
       </Grid>
 
-      <Grid item xs={5}>
+      <Grid item xs={12} sm={5}>
         <TextField
           fullWidth
           label="Reason"
