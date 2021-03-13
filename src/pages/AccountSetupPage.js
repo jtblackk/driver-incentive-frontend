@@ -48,11 +48,18 @@ function AccountSetupPage() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container justify="space-evenly">
-          <Grid item>
+          <Grid item container xs={8}>
             {currentUser ? (
               <AccountSetupCard accountEmail={currentUser} />
             ) : (
-              <LoadingIcon />
+              <div>
+                <Grid item xs={12}>
+                  <br />
+                </Grid>
+                <Grid item xs={12}>
+                  <LoadingIcon />
+                </Grid>
+              </div>
             )}
           </Grid>
         </Grid>
