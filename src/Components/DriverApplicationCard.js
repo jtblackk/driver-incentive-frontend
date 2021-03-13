@@ -36,32 +36,33 @@ const DriverApplicationCard = (props) => {
 
   useEffect(() => {
     setIsLoading(true)
-
-    let GET_SPONSORDATA_URL =
-      'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
-    fetch(GET_SPONSORDATA_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        let clean_sonsor_list = []
-        let sponsor_array = JSON.parse(data.body.toString()).Items
-        sponsor_array.forEach((val) => {
-          clean_sonsor_list.push({
-            Username: val.Username.S,
-            FirstName: val.FirstName.S,
-            LastName: val.LastName.S,
-            Organization: val.Organization.S,
-          })
-        })
-
-        setSponsorList(clean_sonsor_list)
+    ;(async () => {
+      // get all the potential sponsors
+      let GET_SPONSORLIST_URL =
+        'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
+      let sponsorlist_response = await fetch(GET_SPONSORLIST_URL)
+      let sponsorlist_data = await sponsorlist_response.json()
+      let sponsorlist_array = JSON.parse(sponsorlist_data.body.toString()).Items
+      let sponsorlist_formatted = sponsorlist_array.map((element) => {
+        return {
+          Username: element.Username.S,
+          FirstName: element.FirstName.S,
+          LastName: element.LastName.S,
+          Organization: element.Organization.S,
+        }
       })
-      .then(() => {
-        setIsLoading(false)
-      })
+      console.log(sponsorlist_formatted)
 
-    // TODO: get all the sponsorships
-    // TODO: filter out all sponsorships without DriverID={current account's username}
-    // TODO: filter already-applied-to sponsors out of clean_sponsor_list
+      // TODO: get all the sponsors the user is partnered with. waiting on api to pull sponsorship data by driver
+      let GET_DRIVERS_SPONSORS_URL = ''
+
+      // TODO: filter out the sponsors that the driver is already partnered with
+
+      // TODO: set sponsor list
+      setSponsorList(sponsorlist_formatted)
+    })()
+
+    setIsLoading(false)
   }, [])
 
   if (!isLoading) {

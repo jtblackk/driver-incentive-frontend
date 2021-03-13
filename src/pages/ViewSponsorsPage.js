@@ -57,7 +57,7 @@ const ViewSponsorsPage = () => {
   useEffect(() => {
     setIsLoading(true)
 
-    // TODO: pull sponsorship data, clean it up into needed format
+    // TODO: pull sponsorship data, clean it up into needed format. waiting on api to pull sponsorship data by driver
 
     setTable1Data([
       {
