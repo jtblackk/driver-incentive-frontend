@@ -289,6 +289,9 @@ function EditPointDollarRatioMenu(props) {
                 })
 
                 props.setAllDriverDataState(newDriverDataState)
+                // Trigger reload
+
+                props.triggerPageUpdate()
               })
             }}
           >
@@ -397,10 +400,10 @@ function EditDriverPointsMenu(props) {
                 })
 
                 props.setAllDriverDataState(newDriverDataState)
+                props.triggerPageUpdate()
               })
 
-              props.triggerPageUpdate()
-              // TODO: make sure that the point history table reflects points changes. Waiting on api for point history.
+              // TODO: make sure that the point history table reflects points changes. Waiting on api for point history logs.
             }}
           >
             Deduct
@@ -456,9 +459,10 @@ function EditDriverPointsMenu(props) {
                 })
 
                 props.setAllDriverDataState(newDriverDataState)
+                props.triggerPageUpdate()
               })
 
-              props.triggerPageUpdate()
+              // props.triggerPageUpdate()
               // TODO: make sure that the point history table reflects points changes. if it doesn't, fix it. waiting on api.
             }}
           >
@@ -570,7 +574,7 @@ function DriverPointsTab(props) {
                   <Typography>
                     <EditPointDollarRatioMenu
                       selectedDriverData={props.selectedDriverData}
-                      triggerPageUpdate={triggerPageUpdate}
+                      triggerPageUpdate={props.pageUpdate}
                       allDriverData={props.allDriverData}
                       setAllDriverDataState={props.setAllDriverDataState}
                     />
@@ -611,7 +615,7 @@ function DriverPointsTab(props) {
                       allDriverData={props.allDriverData}
                       setAllDriverDataState={props.setAllDriverDataState}
                       pageUpdate={pageUpdate}
-                      triggerPageUpdate={triggerPageUpdate}
+                      triggerPageUpdate={props.pageUpdate}
                     />
                     <br />
                   </Grid>
@@ -719,7 +723,7 @@ export default function DriverManagementDialog(props) {
 
         {currentTab === 0 ? (
           <DriverPointsTab
-            pageUpdate={triggerPageUpdate}
+            pageUpdate={props.fullPageUpdate}
             selectedDriverData={props.selectedDriverData}
             dialogIsOpen={props.dialogIsOpen}
             setDialogIsOpenState={setDialogIsOpenState}
