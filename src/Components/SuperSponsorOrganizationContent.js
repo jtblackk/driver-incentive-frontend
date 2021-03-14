@@ -86,7 +86,7 @@ function RenameOrganizationPanel(props) {
                   }
                 })
 
-              //   TODO: make api call to save organization name. waiting on api from millon.
+              //   TODO: make api call to save organization name. waiting on api for this.
               // * for every user with Organization=<organization_name_x>, set Organization=<organization_name_y>
             }}
           >
