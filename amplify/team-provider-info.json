@@ -18,7 +18,7 @@
       "function": {
         "S3Trigger50194e0d": {
           "deploymentBucketName": "amplify-vanscoysboysamplify-dev-153230-deployment",
-          "s3Key": "amplify-builds/S3Trigger50194e0d-6369654f7457504f4d2b-build.zip"
+          "s3Key": "amplify-builds/S3Trigger50194e0d-4f616e46316862543653-build.zip"
         }
       }
     }
