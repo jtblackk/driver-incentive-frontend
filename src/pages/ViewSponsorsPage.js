@@ -123,30 +123,16 @@ const ViewSponsorsPage = () => {
               ' ' +
               element.LastName,
             TotalPoints: parseInt(element.Points),
+            // TODO: use appropriate title for the startdate field. right now it breaks if there's an incorrect date format
             StartDat: element.AppDecisionDate,
           }
         })
 
-      console.log(active_sponsors_table_data)
-      console.log(partnered_sponsors_formatted)
       setTable1Data(active_sponsors_table_data)
     })().then(() => {
       setIsLoading(false)
     })
-    // TODO: pull sponsorship data, clean it up into needed format. waiting on api to pull sponsorship data by driver
 
-    // setTable1Data([
-    //   {
-    //     SponsorshipID: 'jtblack@g.clemson.edu#themeantruckinteam@gmail.com',
-    //     Sponsor: 'Progressive: Flo',
-    //     TotalPoints: 150,
-    //   },
-    //   {
-    //     SponsorshipID: 'jtblack@g.clemson.edu#jtblack@g.clemson.edu',
-    //     Sponsor: 'Clemson: Jeff Black',
-    //     TotalPoints: 0,
-    //   },
-    // ])
     setTable1HeadCells([
       {
         id: 'Sponsor',

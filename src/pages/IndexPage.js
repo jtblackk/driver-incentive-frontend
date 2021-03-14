@@ -67,8 +67,6 @@ function IndexPage() {
       </div>
     )
   } else {
-    // TODO: change false to sponsorship status?
-
     return (
       <div className={classes.root}>
         {/* layout stuff */}

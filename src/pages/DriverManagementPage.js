@@ -267,8 +267,6 @@ const DriverManagementPage = () => {
                         onClick={() => {
                           // bring up dialog to set all point ratios
                           setPointRatioDialogIsOpen(true)
-                          // TODO: make api call to set all point ratios
-                          // TODO: trigger data rerender
                         }}
                       >
                         SET ALL POINT VALUES
