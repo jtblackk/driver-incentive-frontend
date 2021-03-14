@@ -139,7 +139,7 @@ export default function ChooseCatalogItemsPanel() {
         <Typography variant="h6">Catalog items</Typography>
       </Grid>
       <Grid item>
-        <Typography>manage your catalog from here</Typography>
+        <Typography>View, add, and remove your catalog items.</Typography>
       </Grid>
       <Grid item xs={12}>
         <br />
