@@ -22,7 +22,7 @@ function RenameOrganizationPanel(props) {
       justify="space-between"
       xs={12}
       component={Paper}
-      style={{ padding: 40 }}
+      style={{ padding: 20 }}
     >
       <Grid item xs={5}>
         <Typography variant="h6">Rename your organization</Typography>

@@ -31,7 +31,7 @@ export default function SetAllPointRatiosDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <Grid container style={{ padding: 40 }} component={Paper}>
+        <Grid container style={{ padding: 20 }} component={Paper}>
           <Grid item xs={12}>
             <Typography variant="h5" id="alert-dialog-title">
               Set all drivers' point to USD conversion

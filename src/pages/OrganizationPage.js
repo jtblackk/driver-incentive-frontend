@@ -60,7 +60,16 @@ function OrganizationPage() {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Grid container justify="center">
-            <Grid item xs={6} component={Paper}>
+            <Grid
+              item
+              xs={12}
+              sm={11}
+              md={8}
+              lg={6}
+              xl={4}
+              component={Paper}
+              style={{ padding: 20 }}
+            >
               <Typography paragraph>Put organization summary here</Typography>
             </Grid>
 
@@ -69,7 +78,7 @@ function OrganizationPage() {
             </Grid>
 
             {/* supersponsor content: only renders for super sponsors */}
-            <Grid item container xs={6}>
+            <Grid item container xs={12} sm={11} md={8} lg={6} xl={4}>
               {userData.Username.includes('@') ? <SuperSponsorContent /> : null}
             </Grid>
           </Grid>
