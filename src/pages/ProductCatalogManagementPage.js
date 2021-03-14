@@ -3,8 +3,9 @@ import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
+import ChooseCatalogItemsPanel from '../Components/ChooseCatalogItemsPanel'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,8 +34,11 @@ const ProductCatalogManagementPage = () => {
       {/* page content (starts after first div) */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
-
-        <Typography>you will manage your catalog from here</Typography>
+        <Grid container justify="center">
+          <Grid item sm={11} md={8} lg={6} xl={4}>
+            <ChooseCatalogItemsPanel />
+          </Grid>
+        </Grid>
       </main>
     </div>
   )
