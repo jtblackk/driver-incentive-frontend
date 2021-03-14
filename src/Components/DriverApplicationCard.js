@@ -64,7 +64,6 @@ const DriverApplicationCard = (props) => {
         },
       )
 
-      console.log(partnered_sponsors_formatted)
       let eligible_sponsor_list = sponsorlist_formatted.filter((element) => {
         return !partnered_sponsors_formatted.includes(element.Username)
       })
