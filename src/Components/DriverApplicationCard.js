@@ -51,15 +51,25 @@ const DriverApplicationCard = (props) => {
           Organization: element.Organization.S,
         }
       })
-      console.log(sponsorlist_formatted)
 
-      // TODO: get all the sponsors the user is partnered with. waiting on api to pull sponsorship data by driver
-      let GET_DRIVERS_SPONSORS_URL = ''
+      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
+      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_data = await partnered_sponsors_response.json()
+      let partnered_sponsors_array = JSON.parse(
+        partnered_sponsors_data.body.toString(),
+      ).Items
+      let partnered_sponsors_formatted = partnered_sponsors_array.map(
+        (element) => {
+          return element.SponsorID.S
+        },
+      )
 
-      // TODO: filter out the sponsors that the driver is already partnered with
+      console.log(partnered_sponsors_formatted)
+      let eligible_sponsor_list = sponsorlist_formatted.filter((element) => {
+        return !partnered_sponsors_formatted.includes(element.Username)
+      })
 
-      // TODO: set sponsor list
-      setSponsorList(sponsorlist_formatted)
+      setSponsorList(eligible_sponsor_list)
     })()
 
     setIsLoading(false)
@@ -100,7 +110,6 @@ const DriverApplicationCard = (props) => {
               >
                 {sortBy(sponsorList, ['Organization', 'FirstName']).map(
                   (sponsor) => (
-                    // TODO: filter out the sponsors that the driver has already applied to
                     <MenuItem value={sponsor.Username}>
                       {' '}
                       {sponsor.Organization +
