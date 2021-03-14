@@ -21,6 +21,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import LocalShippingIcon from '@material-ui/icons/LocalShipping'
 import StorefrontIcon from '@material-ui/icons/Storefront'
 import StorageIcon from '@material-ui/icons/Storage'
+import GroupIcon from '@material-ui/icons/Group'
 
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
 
@@ -81,7 +82,12 @@ const LeftDrawer = (props) => {
       icon: <LocalGroceryStoreIcon />,
       reqAccTypes: ['Driver'],
     },
-
+    {
+      name: 'My organization',
+      route: '/organization',
+      icon: <GroupIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
     {
       name: 'My logs',
       route: '/logs',
