@@ -1,5 +1,5 @@
 // comment
-import React from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Divider,
@@ -70,6 +70,12 @@ const LeftDrawer = (props) => {
       reqAccTypes: ['Driver'],
     },
     {
+      name: 'My organization',
+      route: '/organization',
+      icon: <GroupIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
+    {
       name: 'My catalog',
       route: '/manage-catalog',
       icon: <StorefrontIcon />,
@@ -82,12 +88,7 @@ const LeftDrawer = (props) => {
       icon: <LocalGroceryStoreIcon />,
       reqAccTypes: ['Driver'],
     },
-    {
-      name: 'My organization',
-      route: '/organization',
-      icon: <GroupIcon />,
-      reqAccTypes: ['Sponsor'],
-    },
+
     {
       name: 'My logs',
       route: '/logs',
