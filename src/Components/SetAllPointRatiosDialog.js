@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 
 import DialogContentText from '@material-ui/core/DialogContentText'
 
 import { Grid, Paper, TextField, Typography } from '@material-ui/core'
+import { UserContext } from '../Helpers/UserContext'
 
 export default function SetAllPointRatiosDialog(props) {
   const [newPointDollarRatio, setNewPointDollarRatio] = useState(null)
   const [pointDollarRatio, setPointDollarRatio] = useState(null)
   const [helperText, setHelperText] = useState(null)
+
+  const userData = useContext(UserContext).user
 
   const handleClose = (resp) => {
     props.setDialogIsOpen(false)
@@ -84,11 +87,19 @@ export default function SetAllPointRatiosDialog(props) {
                     setHelperText(null)
                   }
 
-                  //   TODO: make api call to set all driver's point-to-dollar ratios to newPointDollarRatio
-                  // console.log(pointDollarRatio)
-                  // console.log(newPointDollarRatio)
-
-                  handleClose(true)
+                  let UPDATE_POINT_VALUE_URL =
+                    'https://q8z2hne254.execute-api.us-east-1.amazonaws.com/dev/updatesponsorship'
+                  let requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      SponsorID: userData.Username,
+                      PointDollarRatio: parseFloat(newPointDollarRatio),
+                    }),
+                  }
+                  fetch(UPDATE_POINT_VALUE_URL, requestOptions).then(() => {
+                    handleClose(true)
+                  })
                 }}
               >
                 Save

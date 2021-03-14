@@ -211,6 +211,7 @@ const DriverManagementPage = () => {
           setDialogIsOpen={setPointRatioDialogIsOpen}
           setDialogResponse={setPointRatioDialogIsOpenState}
         />
+
         {/* layout stuff */}
         <TopAppBar pageTitle="Drivers"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
