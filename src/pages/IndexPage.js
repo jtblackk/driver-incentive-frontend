@@ -42,17 +42,20 @@ function IndexPage() {
   }
 
   useEffect(() => {
-    // start loading animation
-    setIsLoading(true)
-    getUserData()
+    ;(async () => {
+      // start loading animation
+      setIsLoading(true)
+      let profile_details = await getUserData()
+      console.log(userData)
 
-    // if the user has no specified account type, force them to set up an account
-    if (userData.AccountStatus === 0) {
-      history.push('/account-setup')
-    } else if (userData.AccountType === 'Sponsor' && !userData.Organization) {
-      history.push('/organization-setup')
-    }
-    setIsLoading(false)
+      // if the user has no specified account type, force them to set up an account
+      if (userData.AccountStatus === 0) {
+        history.push('/account-setup')
+      } else if (userData.AccountType === 'Sponsor' && !userData.Organization) {
+        history.push('/organization-setup')
+      }
+      setIsLoading(false)
+    })()
   }, [])
 
   // show loading screen if data is still being fetched

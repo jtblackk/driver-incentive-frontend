@@ -99,7 +99,8 @@ const OrganizationSetupCard = () => {
                     SAVE_USER_PROFILE_URL,
                     requestOptions,
                   )
-                  setUserData({
+
+                  await setUserData({
                     ...userData,
                     Organization: organizationName,
                   })

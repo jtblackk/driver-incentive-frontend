@@ -14,6 +14,7 @@ import {
 
 const AccountSetupCard = (props) => {
   const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
 
   let history = useHistory()
   const [userDetails, setUserDetails] = useState({
@@ -149,6 +150,16 @@ const AccountSetupCard = (props) => {
                 exit = true
               }
               if (exit) return
+
+              setUserData({
+                ...userData,
+                Username: userDetails.Username,
+                FirstName: userDetails.FirstName,
+                LastName: userDetails.LastName,
+                AccountType: userDetails.AccountType,
+                AccountStatus: 1,
+                Bio: userDetails.Bio,
+              })
 
               // save the profile information
               let SAVE_USER_PROFILE_URL =

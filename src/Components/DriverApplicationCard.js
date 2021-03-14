@@ -69,9 +69,9 @@ const DriverApplicationCard = (props) => {
       })
 
       setSponsorList(eligible_sponsor_list)
-    })()
-
-    setIsLoading(false)
+    })().then(() => {
+      setIsLoading(false)
+    })
   }, [])
 
   if (!isLoading) {
