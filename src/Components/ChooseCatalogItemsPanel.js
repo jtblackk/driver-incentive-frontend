@@ -11,6 +11,7 @@ import GenericTable from '../Components/GenericTable'
 import { useHistory } from 'react-router'
 import DriverManagementDialog from '../Components/DriverManagementDialog'
 import SetAllPointRatiosDialog from '../Components/SetAllPointRatiosDialog'
+import CatalogItemManagementDialog from './CatalogItemManagementDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,80 +27,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ChooseCatalogItemsPanel() {
+export default function ChooseCatalogItemsPanel(props) {
   const classes = useStyles()
   let history = useHistory()
 
   const userData = useContext(UserContext).user
   const [isLoading, setIsLoading] = useState(true)
 
-  // dialog control
-  const [dialogIsOpen, setDialogIsOpen] = useState(false)
-
-  const [pageUpdate, setPageUpdate] = useState(0)
-  function fullPageUpdateState() {
-    setPageUpdate(pageUpdate + 1)
-  }
-  function setDialogIsOpenState(state, refresh) {
-    setDialogIsOpen(state)
-
-    if (refresh) {
-      setPageUpdate(pageUpdate + 1)
-    }
-  }
-
   const [table1HeadCells, setTable1HeadCells] = useState(null)
-
   const [table1Data, setTable1Data] = useState(null)
-  function setTable1DataState(state) {
-    setTable1Data(state)
-  }
-
-  const [selectedEntry, setSelectedEntry] = useState(null)
-  function setSelectedEntryState(state) {
-    setSelectedEntry(state)
-  }
-
-  //   TODO: probably replace this with all catalog item data
-  const [allCatalogData, setAllCatalogData] = useState(null)
-  const setAllCatalogDataState = (state) => {
-    setAllCatalogData(state)
-  }
 
   useEffect(() => {
-    setIsLoading(true)
-    ;(async () => {
-      // TODO: replace this data with live data from the sponsor's catalog | waiting on api
-      let all_catalog_items_formatted = [
-        {
-          ItemKey: 1,
-          ItemName: 'big cap',
-          DollarPrice: 1.05,
-          Stock: '2/25',
-        },
-        {
-          ItemKey: 2,
-          ItemName: 'bigger cap',
-          DollarPrice: 2.25,
-          Stock: '4/10',
-        },
-      ]
-
-      setAllCatalogData(all_catalog_items_formatted)
-
-      setTable1Data(
-        all_catalog_items_formatted.map((element) => {
-          return {
-            ItemKey: element.ItemKey,
-            ItemName: element.ItemName,
-            DollarPrice: element.DollarPrice,
-            Stock: element.Stock,
-          }
-        }),
-      )
-    })().then(() => {
-      setIsLoading(false)
-    })
+    setIsLoading(false)
 
     setTable1HeadCells([
       {
@@ -129,7 +68,49 @@ export default function ChooseCatalogItemsPanel() {
         width: 100,
       },
     ])
-  }, [pageUpdate])
+
+    setTable1Data(
+      props.tableProps.data.map((element) => {
+        return {
+          ItemKey: element.ItemKey,
+          ItemName: element.ItemName,
+          DollarPrice: element.DollarPrice,
+          Stock: element.Stock,
+        }
+      }),
+    )
+  }, [])
+
+  // // dialog control
+  // const [addItemDialogIsOpen, setAddItemDialogIsOpen] = useState(false)
+  // function setAddItemDialogIsOpenState(state, refresh) {
+  //   setAddItemDialogIsOpen(state)
+
+  //   if (refresh) {
+  //     setPageUpdate(pageUpdate + 1)
+  //   }
+  // }
+
+  // const [itemManagementDialogIsOpen, setItemManagementDialogIsOpen] = useState(
+  //   false,
+  // )
+  // function setItemManagementDialogIsOpenState(state, refresh) {
+  //   setItemManagementDialogIsOpen(state)
+
+  //   if (refresh) {
+  //     setPageUpdate(pageUpdate + 1)
+  //   }
+  // }
+
+  // const [pageUpdate, setPageUpdate] = useState(0)
+  // function fullPageUpdateState() {
+  //   setPageUpdate(pageUpdate + 1)
+  // }
+
+  // const [selectedCatalogEntry, setSelectedCategoryEntry] = useState(null)
+  // function setSelectedCategoryEntryState(state) {
+  //   setSelectedCategoryEntry(state)
+  // }
 
   return (
     // TODO: NEED TO ADD SUPPORT FOR CATALOG ITEM INFO DIALOG
@@ -169,6 +150,7 @@ export default function ChooseCatalogItemsPanel() {
             color="primary"
             onClick={() => {
               // TODO: NEED TO ADD SUPPORT FOR ADD NEW ITEM DIALOG
+              props.dialogProps.setAddItemDialogIsOpenState(true)
             }}
           >
             Add item
@@ -178,7 +160,7 @@ export default function ChooseCatalogItemsPanel() {
       <Grid item xs={12}>
         <br />
       </Grid>
-      <Grid item>
+      <Grid item xs={12}>
         {isLoading ? (
           <div>
             <br />
@@ -189,15 +171,15 @@ export default function ChooseCatalogItemsPanel() {
           <GenericTable
             headCells={table1HeadCells}
             data={table1Data}
-            setDataState={setTable1DataState}
+            setDataState={props.tableProps.setDataState}
             tableKey="ItemKey"
             showKey={true}
-            initialSortedColumn="LastName"
+            initialSortedColumn="ItemName"
             initialSortedDirection="asc"
-            selectedRow={selectedEntry}
-            setSelectedRow={setSelectedEntryState}
-            dialogIsOpen={dialogIsOpen}
-            setDialogIsOpenState={setDialogIsOpenState}
+            selectedRow={props.tableProps.selectedRow}
+            setSelectedRow={props.tableProps.setSelectedRow}
+            dialogIsOpen={props.tableProps.dialogIsOpen}
+            setDialogIsOpenState={props.tableProps.setDialogIsOpen}
           />
         )}
       </Grid>
