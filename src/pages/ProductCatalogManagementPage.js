@@ -126,7 +126,7 @@ const ProductCatalogManagementPage = () => {
             }}
           />
 
-          <Grid container justify="center" component={Paper}>
+          <Grid container justify="center">
             <Grid item sm={12} md={8} lg={7} xl={6}>
               <ChooseCatalogItemsPanel
                 tableProps={{
