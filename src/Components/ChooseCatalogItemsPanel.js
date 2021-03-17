@@ -128,7 +128,7 @@ export default function ChooseCatalogItemsPanel(props) {
 
       {/* Button row */}
       <Grid item xs={12} container spacing={1} justify="flex-end">
-        <Grid item xs={5}>
+        <Grid item>
           <Button
             fullWidth
             size="small"
@@ -136,13 +136,14 @@ export default function ChooseCatalogItemsPanel(props) {
             style={{ backgroundColor: '#444444', color: 'white' }}
             onClick={() => {
               // TODO: NEED TO ADD SUPPORT FOR DELETING ALL CATALOG ITEMS
+              props.dialogProps.setDeleteItemCatalogIsOpenState(true)
             }}
           >
             Delete all items
           </Button>
         </Grid>
 
-        <Grid item xs={3}>
+        <Grid item>
           <Button
             fullWidth
             size="small"

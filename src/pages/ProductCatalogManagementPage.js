@@ -9,6 +9,7 @@ import ChooseCatalogItemsPanel from '../Components/ChooseCatalogItemsPanel'
 import CatalogItemManagementDialog from '../Components/CatalogItemManagementDialog'
 import LoadingIcon from '../Components/LoadingIcon'
 import AddCatalogItemDialog from '../Components/AddCatalogItemDialog'
+import DeleteCatalogItemDialog from '../Components/DeleteCatalogItemDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +46,15 @@ const ProductCatalogManagementPage = () => {
   const [addItemDialogIsOpen, setAddItemDialogIsOpen] = useState(false)
   function setAddItemDialogIsOpenState(state, refresh) {
     setAddItemDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
+  const [deleteItemCatalogIsOpen, setDeleteItemCatalogIsOpen] = useState(false)
+  function setDeleteItemCatalogIsOpenState(state, refresh) {
+    setDeleteItemCatalogIsOpen(state)
 
     if (refresh) {
       setPageUpdate(pageUpdate + 1)
@@ -126,6 +136,16 @@ const ProductCatalogManagementPage = () => {
             }}
           />
 
+          <DeleteCatalogItemDialog
+            dialogProps={{
+              deleteItemCatalogIsOpen: deleteItemCatalogIsOpen,
+              setDeleteItemCatalogIsOpenState: setDeleteItemCatalogIsOpenState,
+              fullPageUpdateState: fullPageUpdateState,
+              allCatalogData: allCatalogData,
+              setAllCatalogDataState: setAllCatalogDataState,
+            }}
+          />
+
           <Grid container justify="center">
             <Grid item sm={12} md={8} lg={7} xl={6}>
               <ChooseCatalogItemsPanel
@@ -144,6 +164,7 @@ const ProductCatalogManagementPage = () => {
                   setAddItemDialogIsOpenState: setAddItemDialogIsOpenState,
                   allCatalogData: allCatalogData,
                   setAllCatalogDataState: setAllCatalogDataState,
+                  setDeleteItemCatalogIsOpenState: setDeleteItemCatalogIsOpenState,
                 }}
               />
             </Grid>

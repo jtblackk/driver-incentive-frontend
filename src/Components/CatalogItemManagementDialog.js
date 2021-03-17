@@ -73,26 +73,23 @@ export default function CatalogItemManagementDialog(props) {
         open={props.dialogProps.itemManagementDialogIsOpen}
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
+          {'Item info: <item name>'}
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing="2">
             <Grid item xs={12}>
-              <Typography>put item data here</Typography>
+              <Typography>put item description data here</Typography>
             </Grid>
             <Grid item xs={12}>
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <Typography>put item controls here</Typography>
+              <Typography>
+                put item controls here (remove item button)
+              </Typography>
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Save changes
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   )

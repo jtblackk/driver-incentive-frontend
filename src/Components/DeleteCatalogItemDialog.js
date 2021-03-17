@@ -7,36 +7,41 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Divider, Grid, Typography } from '@material-ui/core'
 
-export default function AddCatalogItemDialog(props) {
+export default function DeleteCatalogItemDialog(props) {
   const handleClickOpen = () => {
-    props.dialogProps.setAddItemDialogIsOpenState(true)
+    props.dialogProps.setDeleteItemCatalogIsOpenState(true)
   }
 
   const handleClose = () => {
-    props.dialogProps.setAddItemDialogIsOpenState(false)
+    props.dialogProps.setDeleteItemCatalogIsOpenState(false)
   }
 
   return (
     <div>
       <Dialog
-        open={props.dialogProps.addItemDialogIsOpen}
+        open={props.dialogProps.deleteItemCatalogIsOpen}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Select items to add'}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Delete all items?'}</DialogTitle>
         <DialogContent>
           <Grid container spacing="2">
             <Grid item xs={12}>
               <Typography>
-                display selectable items here (filter out items that are already
-                owned)
+                Are you sure you want to remove all items from your catalog?
               </Typography>
             </Grid>
           </Grid>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            No
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   )
