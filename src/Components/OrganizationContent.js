@@ -27,7 +27,6 @@ function OrganizationInfoPanel(props) {
   if (isLoading) {
     return <LoadingIcon></LoadingIcon>
   } else {
-    console.log(userData)
     return (
       // header
       <Grid
