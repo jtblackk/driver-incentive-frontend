@@ -123,7 +123,7 @@ const ViewSponsorsPage = () => {
               ' ' +
               element.LastName,
             TotalPoints: parseInt(element.Points),
-            // TODO: use appropriate title for the startdate field. right now it breaks if there's an incorrect date format
+            // TODO: use appropriate title for the startdate field. right now it breaks if there's an incorrect date format. (i.e., make sure all sponsorships are using correct datetime format in dynamodb)
             StartDat: element.AppDecisionDate,
           }
         })

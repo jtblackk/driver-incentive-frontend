@@ -12,6 +12,7 @@ import { UserContext } from '../Helpers/UserContext'
 import getUserDetails from '../Helpers/CommonFunctions'
 import { Grid, Paper } from '@material-ui/core'
 import SuperSponsorContent from '../Components/SuperSponsorOrganizationContent'
+import OrganizationContent from '../Components/OrganizationContent'
 // set up styling
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,17 +61,8 @@ function OrganizationPage() {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Grid container justify="center">
-            <Grid
-              item
-              xs={12}
-              sm={11}
-              md={8}
-              lg={6}
-              xl={4}
-              component={Paper}
-              style={{ padding: 20 }}
-            >
-              <Typography paragraph>Put organization summary here</Typography>
+            <Grid item container xs={12} sm={11} md={8} lg={6} xl={4}>
+              <OrganizationContent />
             </Grid>
 
             <Grid xs={12} item>

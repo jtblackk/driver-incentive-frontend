@@ -9,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import { Divider, Grid } from '@material-ui/core'
-import DriverManagementDialog from './DriverManagementDialog'
 
 const styles = (theme) => ({
   root: {
@@ -56,11 +55,6 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions)
 
 export default function CatalogItemManagementDialog(props) {
-  const [open, setOpen] = React.useState(false)
-
-  const handleClickOpen = () => {
-    props.dialogProps.setItemManagementDialogIsOpenState(true)
-  }
   const handleClose = () => {
     props.dialogProps.setItemManagementDialogIsOpenState(false)
   }

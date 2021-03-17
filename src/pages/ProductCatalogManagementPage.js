@@ -36,7 +36,6 @@ const ProductCatalogManagementPage = () => {
     setItemTableData(state)
   }
 
-  //   TODO: probably replace this with all catalog item data
   const [allCatalogData, setAllCatalogData] = useState(null)
   const setAllCatalogDataState = (state) => {
     setAllCatalogData(state)

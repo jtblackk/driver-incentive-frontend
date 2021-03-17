@@ -85,29 +85,29 @@ function RenameOrganizationPanel(props) {
 
                     if (!organizationName) {
                       setOrganizationNameHelperText('Required')
+                      return
                     }
 
                     if (clean_sonsor_list.includes(toLower(organizationName))) {
                       setOrganizationNameHelperText('Must be unique')
+                      return
                     }
-                  })
 
-                setIsLoading(true)
-                // save the profile information
-                let SAVE_USER_PROFILE_URL =
-                  'https://waza1dohpl.execute-api.us-east-1.amazonaws.com/dev/updateorgname'
-                let requestOptions = {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    Org: userData.Organization,
-                    NewOrgName: organizationName,
-                  }),
-                }
-                fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
-                  // TODO: trigger rerender of all relevant data on the organization management page
-                  setIsLoading(false)
-                })
+                    // save the profile information
+                    let SAVE_USER_PROFILE_URL =
+                      'https://waza1dohpl.execute-api.us-east-1.amazonaws.com/dev/updateorgname'
+                    let requestOptions = {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        Org: userData.Organization,
+                        NewOrgName: organizationName,
+                      }),
+                    }
+                    fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                      window.location.reload()
+                    })
+                  })
               }}
             >
               Save

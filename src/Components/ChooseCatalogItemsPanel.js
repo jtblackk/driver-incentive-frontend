@@ -1,17 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import LeftDrawer from '../Components/LeftDrawer'
-import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from '../Components/LoadingIcon'
-import ApplicationManagementDialog from '../Components/ApplicationManagementDialog'
 import GenericTable from '../Components/GenericTable'
 import { useHistory } from 'react-router'
-import DriverManagementDialog from '../Components/DriverManagementDialog'
-import SetAllPointRatiosDialog from '../Components/SetAllPointRatiosDialog'
-import CatalogItemManagementDialog from './CatalogItemManagementDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,8 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ChooseCatalogItemsPanel(props) {
   const classes = useStyles()
-  let history = useHistory()
-
   const userData = useContext(UserContext).user
   const [isLoading, setIsLoading] = useState(true)
 
@@ -81,40 +73,7 @@ export default function ChooseCatalogItemsPanel(props) {
     )
   }, [])
 
-  // // dialog control
-  // const [addItemDialogIsOpen, setAddItemDialogIsOpen] = useState(false)
-  // function setAddItemDialogIsOpenState(state, refresh) {
-  //   setAddItemDialogIsOpen(state)
-
-  //   if (refresh) {
-  //     setPageUpdate(pageUpdate + 1)
-  //   }
-  // }
-
-  // const [itemManagementDialogIsOpen, setItemManagementDialogIsOpen] = useState(
-  //   false,
-  // )
-  // function setItemManagementDialogIsOpenState(state, refresh) {
-  //   setItemManagementDialogIsOpen(state)
-
-  //   if (refresh) {
-  //     setPageUpdate(pageUpdate + 1)
-  //   }
-  // }
-
-  // const [pageUpdate, setPageUpdate] = useState(0)
-  // function fullPageUpdateState() {
-  //   setPageUpdate(pageUpdate + 1)
-  // }
-
-  // const [selectedCatalogEntry, setSelectedCategoryEntry] = useState(null)
-  // function setSelectedCategoryEntryState(state) {
-  //   setSelectedCategoryEntry(state)
-  // }
-
   return (
-    // TODO: NEED TO ADD SUPPORT FOR CATALOG ITEM INFO DIALOG
-
     <Grid container item component={Paper} style={{ padding: 20 }}>
       <Grid item xs={12}>
         <Typography variant="h6">Catalog items</Typography>
@@ -135,7 +94,6 @@ export default function ChooseCatalogItemsPanel(props) {
             variant="contained"
             style={{ backgroundColor: '#444444', color: 'white' }}
             onClick={() => {
-              // TODO: NEED TO ADD SUPPORT FOR DELETING ALL CATALOG ITEMS
               props.dialogProps.setDeleteItemCatalogIsOpenState(true)
             }}
           >
@@ -150,7 +108,6 @@ export default function ChooseCatalogItemsPanel(props) {
             variant="contained"
             color="primary"
             onClick={() => {
-              // TODO: NEED TO ADD SUPPORT FOR ADD NEW ITEM DIALOG
               props.dialogProps.setAddItemDialogIsOpenState(true)
             }}
           >
