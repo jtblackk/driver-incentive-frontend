@@ -8,6 +8,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   TextField,
 } from '@material-ui/core'
@@ -15,6 +16,7 @@ import {
 const AccountSetupCard = (props) => {
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
+  const isSponsorProfile = userData.Username.includes('@') ? false : true
 
   let history = useHistory()
   const [userDetails, setUserDetails] = useState({
@@ -33,33 +35,38 @@ const AccountSetupCard = (props) => {
 
   return (
     <Grid
+      item
       container
       justify="center"
       direct="column"
       alignItems="center"
       spacing={2}
     >
-      {/* account type */}
-      <Grid item xs={4} align="left">
-        <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
-        <Select
-          labelId="AccountTypeLabel"
-          id="AccountType"
-          fullWidth
-          error={accTypeHelperText}
-          helperText={accTypeHelperText}
-          onChange={(event) => {
-            setAccTypeHelperText(null)
-            // update account type in state
-            let newUserDetails = userDetails
-            newUserDetails.AccountType = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        >
-          <MenuItem value="Driver">Driver</MenuItem>
-          <MenuItem value="Sponsor">Sponsor</MenuItem>
-        </Select>
-      </Grid>
+      {!userData.Username.includes('@') ? null : (
+        <Grid item container fullWidth justify="center">
+          {/* account type */}
+          <Grid item xs={4}>
+            <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
+            <Select
+              labelId="AccountTypeLabel"
+              id="AccountType"
+              fullWidth
+              error={accTypeHelperText}
+              helperText={accTypeHelperText}
+              onChange={(event) => {
+                setAccTypeHelperText(null)
+                // update account type in state
+                let newUserDetails = userDetails
+                newUserDetails.AccountType = event.target.value
+                setUserDetails(newUserDetails)
+              }}
+            >
+              <MenuItem value="Driver">Driver</MenuItem>
+              <MenuItem value="Sponsor">Sponsor</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+      )}
 
       {/* name row */}
       <Grid item container xs={12} spacing={1} justify="center" direction="row">
@@ -141,7 +148,7 @@ const AccountSetupCard = (props) => {
                 setLnameHelperText('Required')
                 exit = true
               }
-              if (!userDetails.AccountType) {
+              if (!userDetails.AccountType && !userData.Organization) {
                 setAccTypeHelperText('Required')
                 exit = true
               }
@@ -156,7 +163,9 @@ const AccountSetupCard = (props) => {
                 Username: userDetails.Username,
                 FirstName: userDetails.FirstName,
                 LastName: userDetails.LastName,
-                AccountType: userDetails.AccountType,
+                AccountType: !userData.Organization
+                  ? userDetails.AccountType
+                  : 'Sponsor',
                 AccountStatus: 1,
                 Bio: userDetails.Bio,
               })
@@ -171,7 +180,9 @@ const AccountSetupCard = (props) => {
                   Username: userDetails.Username,
                   FirstName: userDetails.FirstName,
                   LastName: userDetails.LastName,
-                  AccountType: userDetails.AccountType,
+                  AccountType: !userData.Organization
+                    ? userDetails.AccountType
+                    : 'Sponsor',
                   AccountStatus: 1,
                   Bio: userDetails.Bio,
                   IsInitialSignup: true,
@@ -181,7 +192,10 @@ const AccountSetupCard = (props) => {
                 // route user to appropriate page
                 if (userDetails.AccountType === 'Driver') {
                   history.push('/application')
-                } else if (userDetails.AccountType === 'Sponsor') {
+                } else if (
+                  userDetails.AccountType === 'Sponsor' &&
+                  !isSponsorProfile
+                ) {
                   history.push('organization-setup')
                 } else {
                   history.push('/')

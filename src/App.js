@@ -29,10 +29,12 @@ function App() {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const [activeProfile, setActiveProfile] = useState(null)
+
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let profile_details = await getUserDetails()
+      let profile_details = await getUserDetails(user ? user.Username : null)
       setUser(profile_details)
     })().then(() => {
       setIsLoading(false)
@@ -43,7 +45,9 @@ function App() {
     return (
       <div>
         <BrowserRouter>
-          <UserContext.Provider value={{ user, setUser }}>
+          <UserContext.Provider
+            value={{ user, setUser, activeProfile, setActiveProfile }}
+          >
             <Switch>
               <Route exact path="/" component={IndexPage} />
               <Route exact path="/profile" component={ProfilePage} />
