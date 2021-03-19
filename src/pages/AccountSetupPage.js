@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Grid, Paper, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountSetupCard from '../Components/AccountSetupCard'
 import { Auth } from 'aws-amplify'
@@ -47,7 +47,7 @@ function AccountSetupPage() {
       {/* page content (starts after first div) */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container justify="space-evenly">
+        <Grid container justify="center">
           <Grid item container xs={8}>
             {currentUser ? (
               <AccountSetupCard accountEmail={currentUser} />
