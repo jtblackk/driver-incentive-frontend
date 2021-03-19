@@ -30,12 +30,12 @@ function RenameOrganizationPanel(props) {
         component={Paper}
         style={{ padding: 20 }}
       >
-        <Grid item xs={5}>
+        <Grid item xs={12}>
           <Typography variant="h6">Rename your organization</Typography>
         </Grid>
-        <Grid item xs={6} align="right">
+        {/* <Grid item xs={6} align="right">
           <Typography>(only super sponsors should see this panel)</Typography>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <Typography>
             Change the name of your organization. Changes affect all of your
