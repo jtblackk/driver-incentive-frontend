@@ -90,7 +90,6 @@ export default function ChooseCatalogItemsPanel(props) {
         <Grid item>
           <Button
             fullWidth
-            size="small"
             variant="contained"
             style={{ backgroundColor: '#444444', color: 'white' }}
             onClick={() => {
@@ -104,7 +103,6 @@ export default function ChooseCatalogItemsPanel(props) {
         <Grid item>
           <Button
             fullWidth
-            size="small"
             variant="contained"
             color="primary"
             onClick={() => {

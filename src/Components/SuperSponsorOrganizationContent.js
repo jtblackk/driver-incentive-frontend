@@ -49,7 +49,7 @@ function RenameOrganizationPanel(props) {
 
         {/* organization name form */}
         <Grid item container xs={12} alignItems="center" spacing={2}>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={7} md={5}>
             <TextField
               fullWidth
               variant="filled"

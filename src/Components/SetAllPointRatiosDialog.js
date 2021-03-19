@@ -4,8 +4,16 @@ import Dialog from '@material-ui/core/Dialog'
 
 import DialogContentText from '@material-ui/core/DialogContentText'
 
-import { Grid, Paper, TextField, Typography } from '@material-ui/core'
+import {
+  Grid,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
+
+import CloseIcon from '@material-ui/icons/Close'
 
 export default function SetAllPointRatiosDialog(props) {
   const [newPointDollarRatio, setNewPointDollarRatio] = useState(null)
@@ -32,10 +40,27 @@ export default function SetAllPointRatiosDialog(props) {
         aria-describedby="alert-dialog-description"
       >
         <Grid container style={{ padding: 20 }} component={Paper}>
-          <Grid item xs={12}>
-            <Typography variant="h5" id="alert-dialog-title">
-              Set all drivers' point to USD conversion
-            </Typography>
+          <Grid
+            item
+            container
+            xs={12}
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item xs={10}>
+              <Typography variant="h5" id="alert-dialog-title">
+                Set all drivers' point to USD conversion
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton
+                onClick={() => {
+                  handleClose(false)
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <DialogContentText id="alert-dialog-description">

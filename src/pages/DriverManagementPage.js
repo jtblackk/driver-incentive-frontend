@@ -251,14 +251,16 @@ const DriverManagementPage = () => {
                     alignItems="center"
                     spacing={2}
                   >
-                    <Grid item xs={8}>
+                    <Grid item xs={12}>
                       <Typography variant="h6">Your drivers</Typography>
                       <Typography>
                         A list of the drivers you're sponsoring. Click on an
                         entry for more information.
                       </Typography>
                     </Grid>
-
+                  </Grid>
+                  <br></br>
+                  <Grid item container xs={12} justify="flex-end">
                     {/* set all point values button */}
                     <Grid item xs={4} align="right">
                       <Button
@@ -273,6 +275,7 @@ const DriverManagementPage = () => {
                       </Button>
                     </Grid>
                   </Grid>
+
                   <br></br>
                   <GenericTable
                     headCells={table1HeadCells}
