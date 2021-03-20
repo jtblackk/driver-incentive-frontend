@@ -12,6 +12,19 @@ import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
 
 function OrganizationInfoPanel(props) {
+  useEffect(() => {
+    ;(async () => {
+      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization.replace(
+        ' ',
+        '%20',
+      )}`
+      let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      let org_users_json = await org_users_raw.json()
+      let org_users_parsed = JSON.parse(org_users_json.body.toString())
+      console.log(org_users_parsed)
+    })()
+  })
+
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
@@ -79,7 +92,7 @@ function OrganizationInfoPanel(props) {
           <Grid item container xs={12} md={12} spacing={2}>
             <Grid item xs={6} align="right">
               <Typography>
-                <Box fontWeight="fontWeightBold">Total sponsors</Box>
+                <Box fontWeight="fontWeightBold">Total sponsors:</Box>
               </Typography>
             </Grid>
             <Grid item xs={6} align="left">
@@ -90,7 +103,7 @@ function OrganizationInfoPanel(props) {
           <Grid item container xs={12} md={12} spacing={2}>
             <Grid item xs={6} align="right">
               <Typography>
-                <Box fontWeight="fontWeightBold">Total drivers</Box>
+                <Box fontWeight="fontWeightBold">Total drivers:</Box>
               </Typography>
             </Grid>
             <Grid item xs={6} align="left">

@@ -70,7 +70,11 @@ function IndexPage() {
       console.log(activeProfile)
       if (userData.AccountStatus === 0) {
         history.push('/account-setup')
-      } else if (userData.AccountType === 'Sponsor' && !userData.Organization) {
+      } else if (
+        userData.AccountType === 'Sponsor' &&
+        !userData.Organization &&
+        !activeProfile
+      ) {
         history.push('/organization-setup')
       } else if (
         userData.AccountType === 'Sponsor' &&

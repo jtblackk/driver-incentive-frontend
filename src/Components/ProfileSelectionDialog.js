@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import { Grid, Paper } from '@material-ui/core'
 import getUserDetails from '../Helpers/CommonFunctions'
 import { UserContext } from '../Helpers/UserContext'
+import LoadingIcon from './LoadingIcon'
 
 const styles = (theme) => ({
   root: {
@@ -57,7 +58,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions)
 
 export default function ProfileSelectionDialog(props) {
-  console.log(props)
+  // console.log(props)
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
@@ -68,12 +69,48 @@ export default function ProfileSelectionDialog(props) {
     props.dialogProps.setProfileSelectionDialogIsOpenState(false)
   }
 
-  const sponsor_profiles = [
-    { Username: 'jtblack@g.clemson.edu', name: 'Jeff Black' },
-    { Username: 'team11sponsordemo@gmail.com', name: 'Demo supersponsor' },
-    { Username: 'sponsor_profile_demo_1', name: 'Demo sponsor' },
-    { Username: 'team11driverdemo@gmail.com', name: 'Demo driver' },
-  ]
+  const [sponsorsInOrganization, setSponsorsInOrganization] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    ;(async () => {
+      let GET_ORG_SPONSORS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorgsponsors?Organization=${userData.Organization.replace(
+        ' ',
+        '%20',
+      )}`
+      let org_sponsors_raw = await fetch(GET_ORG_SPONSORS_URL)
+      let org_sponsors_json = await org_sponsors_raw.json()
+      let org_sponsors_parsed = JSON.parse(org_sponsors_json.body.toString())
+
+      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization.replace(
+        ' ',
+        '%20',
+      )}`
+      let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      let org_users_json = await org_users_raw.json()
+      let org_users_parsed = JSON.parse(org_users_json.body.toString())
+      console.log(org_users_parsed)
+
+      let org_sponsors_formatted = org_sponsors_parsed.Items.map((element) => {
+        return {
+          Username: element.Username.S,
+          Name: element.FirstName.S + ' ' + element.LastName.S,
+        }
+      })
+      // console.log(org_sponsors_formatted)
+
+      const sponsor_profiles = [
+        { Username: 'jtblack@g.clemson.edu', Name: 'Jeff Black' },
+        { Username: 'team11sponsordemo@gmail.com', Name: 'Demo supersponsor' },
+        { Username: 'sponsor_profile_demo_1', Name: 'Demo sponsor' },
+        { Username: 'team11driverdemo@gmail.com', Name: 'Demo driver' },
+      ]
+
+      setSponsorsInOrganization(org_sponsors_formatted)
+    })()
+    setIsLoading(false)
+  }, [])
 
   return (
     <div>
@@ -88,7 +125,7 @@ export default function ProfileSelectionDialog(props) {
           <Grid item xs={12} container justify="flex-start" alignItems="center">
             <Grid item xs={12}>
               <Typography variant="h5" id="alert-dialog-title">
-                Choose a profile
+                Log in to a profile
               </Typography>
             </Grid>
           </Grid>
@@ -97,49 +134,47 @@ export default function ProfileSelectionDialog(props) {
             <br />
           </Grid>
 
-          {/* <Grid container item xs={7} justify="center" component={Paper}> */}
-          {/* TODO: display all available profiles on the account */}
-          <Grid container justify="center" spacing={3}>
-            {sponsor_profiles.map((element) => {
-              return (
-                <Grid
-                  key={element.Username}
-                  item
-                  container
-                  spacing={2}
-                  xs={4}
-                  component={Paper}
-                  style={{ cursor: 'pointer', margin: 10 }}
-                  onClick={(event) => {
-                    console.log(element.Username)
-                    getUserDetails(element.Username).then((chosen_user) => {
-                      console.log(chosen_user)
-                      setUserData(chosen_user)
-                      props.dialogProps.setActiveProfile(chosen_user)
-                      handleClose()
-                    })
-                  }}
-                >
-                  {/* <Paper style={{ padding: 20, cursor: 'pointer' }}> */}
-                  <Grid item align="center" xs={12}>
-                    <br />
+          {isLoading || !sponsorsInOrganization ? (
+            <LoadingIcon />
+          ) : (
+            <Grid container justify="center" spacing={3}>
+              {sponsorsInOrganization.map((element) => {
+                return (
+                  <Grid
+                    key={element.Username}
+                    item
+                    container
+                    spacing={2}
+                    xs={4}
+                    component={Paper}
+                    style={{ cursor: 'pointer', margin: 10 }}
+                    onClick={(event) => {
+                      getUserDetails(element.Username).then((chosen_user) => {
+                        setUserData(chosen_user)
+                        props.dialogProps.setActiveProfile(chosen_user)
+                        handleClose()
+                      })
+                    }}
+                  >
+                    {/* <Paper style={{ padding: 20, cursor: 'pointer' }}> */}
+                    <Grid item align="center" xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item align="center" xs={12}>
+                      {element.Name}
+                    </Grid>
+                    <Grid item align="center" xs={12}>
+                      {element.Username}
+                    </Grid>
+                    <Grid item align="center" xs={12}>
+                      <br />
+                    </Grid>
+                    {/* </Paper> */}
                   </Grid>
-                  <Grid item align="center" xs={12}>
-                    {element.name}
-                  </Grid>
-                  <Grid item align="center" xs={12}>
-                    {element.Username}
-                  </Grid>
-                  <Grid item align="center" xs={12}>
-                    <br />
-                  </Grid>
-                  {/* </Paper> */}
-                </Grid>
-              )
-            })}
-          </Grid>
-
-          {/* </Grid> */}
+                )
+              })}
+            </Grid>
+          )}
 
           <Grid item align="center" xs={12}>
             <br />

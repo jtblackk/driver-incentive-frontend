@@ -22,8 +22,9 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping'
 import StorefrontIcon from '@material-ui/icons/Storefront'
 import StorageIcon from '@material-ui/icons/Storage'
 import GroupIcon from '@material-ui/icons/Group'
-
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
+import { UserContext } from '../Helpers/UserContext'
 
 // pages to show on the upper part of the drawer
 
@@ -41,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const LeftDrawer = (props) => {
+  const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
+  const activeProfile = useContext(UserContext).activeProfile
+  const setActiveProfile = useContext(UserContext).setActiveProfile
+
   let history = useHistory()
   const classes = useStyles()
 
@@ -104,8 +110,26 @@ const LeftDrawer = (props) => {
       icon: <MeetingRoomIcon />,
       reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
       onClick: () => {
-        history.push('/')
         Auth.signOut()
+        history.push('/')
+      },
+    },
+    {
+      name: 'Switch profile',
+      route: null,
+      icon: <SwapHorizIcon />,
+      reqAccTypes: ['Sponsor'],
+      onClick: () => {
+        setActiveProfile(null)
+        console.log(history.location.pathname)
+        if (
+          history.location.pathname === '/' ||
+          history.location.pathname === ''
+        ) {
+          window.location.reload()
+        } else {
+          history.push('/')
+        }
       },
     },
     {
@@ -114,12 +138,12 @@ const LeftDrawer = (props) => {
       icon: <PersonIcon />,
       reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
     },
-    {
-      name: 'Settings',
-      route: '/settings',
-      icon: <SettingsIcon />,
-      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-    },
+    // {
+    //   name: 'Settings',
+    //   route: '/settings',
+    //   icon: <SettingsIcon />,
+    //   reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    // },
   ]
 
   return (
