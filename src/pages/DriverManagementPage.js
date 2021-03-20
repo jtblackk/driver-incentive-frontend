@@ -262,7 +262,7 @@ const DriverManagementPage = () => {
                   <br></br>
                   <Grid item container xs={12} justify="flex-end">
                     {/* set all point values button */}
-                    <Grid item xs={4} align="right">
+                    <Grid item align="right">
                       <Button
                         variant="contained"
                         color="primary"
