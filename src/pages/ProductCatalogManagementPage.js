@@ -81,6 +81,11 @@ const ProductCatalogManagementPage = () => {
     setSelectedCategoryEntry(state)
   }
 
+  const [checkedItems, setCheckedItems] = useState(null)
+  function setCheckedItemsState(state) {
+    setCheckedItems(state)
+  }
+
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
@@ -101,6 +106,14 @@ const ProductCatalogManagementPage = () => {
       ]
 
       setAllCatalogData(all_catalog_items_formatted)
+      setCheckedItems(
+        all_catalog_items_formatted.map((element) => {
+          return {
+            key: element.ItemKey,
+            isChecked: false,
+          }
+        }),
+      )
     })().then(() => {
       setIsLoading(false)
     })
@@ -155,6 +168,8 @@ const ProductCatalogManagementPage = () => {
                   setSelectedRow: setSelectedCategoryEntryState,
                   dialogIsOpen: itemManagementDialogIsOpen,
                   setDialogIsOpen: setItemManagementDialogIsOpenState,
+                  setCheckedItemsState: setCheckedItemsState,
+                  checkedItems: checkedItems,
                 }}
                 dialogProps={{
                   itemManagementDialogIsOpen: itemManagementDialogIsOpen,

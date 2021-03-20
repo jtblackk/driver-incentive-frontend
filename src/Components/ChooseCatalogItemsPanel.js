@@ -4,7 +4,7 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from '../Components/LoadingIcon'
-import GenericTable from '../Components/GenericTable'
+import GenericTableSelectable from '../Components/GenericTableSelectable'
 import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
@@ -124,7 +124,7 @@ export default function ChooseCatalogItemsPanel(props) {
             <br />
           </div>
         ) : (
-          <GenericTable
+          <GenericTableSelectable
             headCells={table1HeadCells}
             data={table1Data}
             setDataState={props.tableProps.setDataState}
@@ -136,6 +136,8 @@ export default function ChooseCatalogItemsPanel(props) {
             setSelectedRow={props.tableProps.setSelectedRow}
             dialogIsOpen={props.tableProps.dialogIsOpen}
             setDialogIsOpenState={props.tableProps.setDialogIsOpen}
+            checkedItems={props.tableProps.checkedItems}
+            setCheckedItems={props.tableProps.setCheckedItemsState}
           />
         )}
       </Grid>
