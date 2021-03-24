@@ -105,14 +105,10 @@ const LeftDrawer = (props) => {
 
   let bottom_pages = [
     {
-      name: 'Sign out',
-      route: null,
-      icon: <MeetingRoomIcon />,
+      name: 'My profile',
+      route: '/profile',
+      icon: <PersonIcon />,
       reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-      onClick: () => {
-        Auth.signOut()
-        history.push('/')
-      },
     },
     {
       name: 'Switch profile',
@@ -121,7 +117,6 @@ const LeftDrawer = (props) => {
       reqAccTypes: ['Sponsor'],
       onClick: () => {
         setActiveProfile(null)
-        console.log(history.location.pathname)
         if (
           history.location.pathname === '/' ||
           history.location.pathname === ''
@@ -133,10 +128,14 @@ const LeftDrawer = (props) => {
       },
     },
     {
-      name: 'My profile',
-      route: '/profile',
-      icon: <PersonIcon />,
+      name: 'Sign out',
+      route: null,
+      icon: <MeetingRoomIcon />,
       reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+      onClick: () => {
+        Auth.signOut()
+        history.push('/')
+      },
     },
     // {
     //   name: 'Settings',

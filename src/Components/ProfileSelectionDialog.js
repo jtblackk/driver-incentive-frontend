@@ -58,7 +58,6 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions)
 
 export default function ProfileSelectionDialog(props) {
-  // console.log(props)
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
@@ -83,29 +82,12 @@ export default function ProfileSelectionDialog(props) {
       let org_sponsors_json = await org_sponsors_raw.json()
       let org_sponsors_parsed = JSON.parse(org_sponsors_json.body.toString())
 
-      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization.replace(
-        ' ',
-        '%20',
-      )}`
-      let org_users_raw = await fetch(GET_ORG_USERS_URL)
-      let org_users_json = await org_users_raw.json()
-      let org_users_parsed = JSON.parse(org_users_json.body.toString())
-      console.log(org_users_parsed)
-
       let org_sponsors_formatted = org_sponsors_parsed.Items.map((element) => {
         return {
           Username: element.Username.S,
           Name: element.FirstName.S + ' ' + element.LastName.S,
         }
       })
-      // console.log(org_sponsors_formatted)
-
-      const sponsor_profiles = [
-        { Username: 'jtblack@g.clemson.edu', Name: 'Jeff Black' },
-        { Username: 'team11sponsordemo@gmail.com', Name: 'Demo supersponsor' },
-        { Username: 'sponsor_profile_demo_1', Name: 'Demo sponsor' },
-        { Username: 'team11driverdemo@gmail.com', Name: 'Demo driver' },
-      ]
 
       setSponsorsInOrganization(org_sponsors_formatted)
     })()
