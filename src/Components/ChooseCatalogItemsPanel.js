@@ -35,9 +35,9 @@ export default function ChooseCatalogItemsPanel(props) {
     setTable1HeadCells([
       {
         id: 'ItemKey',
-        label: 'Key',
+        label: 'Product ID',
         isDate: false,
-        width: 100,
+        width: 125,
       },
       {
         id: 'ItemName',
@@ -50,14 +50,14 @@ export default function ChooseCatalogItemsPanel(props) {
         id: 'DollarPrice',
         label: 'Price (USD)',
         isDate: false,
-        width: 100,
+        width: 80,
       },
 
       {
         id: 'Stock',
         label: 'Stock',
         isDate: false,
-        width: 100,
+        width: 80,
       },
     ])
 
