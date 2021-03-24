@@ -15,7 +15,6 @@ import LoadingIcon from './LoadingIcon'
 require('datejs')
 
 export default function GenericTableSelectable(props) {
-  // console.log(props)
   const [rows, setRows] = useState(null)
 
   const [columnToSort, setColumnToSort] = useState(props.initialSortedColumn)
@@ -42,9 +41,6 @@ export default function GenericTableSelectable(props) {
   }, [])
 
   function onSelectAllClick(curr_state) {
-    // TODO: make sure all items in the table are selected
-    console.log('select all')
-
     let updated_items = props.checkedItems.map((element) => {
       return {
         ...element,
@@ -52,26 +48,19 @@ export default function GenericTableSelectable(props) {
       }
     })
 
-    console.log(updated_items)
     props.setCheckedItems(updated_items)
   }
 
   // returns whether or not a row is marked as 'checked' in program state. true if yes. false if no.
   function isSelected(row_key) {
-    console.log(`isSelected() on row with key=${row_key}`)
     let selectedItem = props.checkedItems.find((element) => {
       return element.key === row_key
     })
-    // console.log(selectedItem.isChecked)
     return selectedItem.isChecked
   }
 
   function setIsSelected(row_key, state) {
-    console.log(`setIsSelected() with state = ${state}`)
-
     let updated_items = props.checkedItems.map((element) => {
-      // console.log(element.key)
-      console.log(row_key)
       if (element.key === row_key) {
         return { ...element, isChecked: !element.isChecked }
       } else {
@@ -80,7 +69,6 @@ export default function GenericTableSelectable(props) {
     })
 
     props.setCheckedItems(updated_items)
-    console.log(updated_items)
   }
 
   if (!isLoading) {
