@@ -36,7 +36,24 @@ function OrganizationPage() {
   const setUserData = useContext(UserContext).setUser
 
   useEffect(() => {
-    setIsLoading(false)
+    setIsLoading(true)
+    ;(async () => {
+      // TODO: load oranization data | use new api
+      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
+      // let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=the%20autobots`
+      // let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      // let org_users_json = await org_users_raw.json()
+      // let org_users_array = await JSON.parse(org_users_json.body.toString())
+      // console.log(org_users_array)
+
+      // org_users_array.forEach((element) => {
+      //   console.log(element)
+      //   console.log('\n')
+      // })
+      // console.log(org_users_array)
+    })().then(() => {
+      setIsLoading(false)
+    })
   }, [])
 
   // show loading screen if data is still being fetched
