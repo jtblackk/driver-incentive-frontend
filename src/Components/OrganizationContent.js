@@ -18,19 +18,17 @@ function OrganizationInfoPanel(props) {
         ' ',
         '%20',
       )}`
-      let org_users_raw = await fetch(GET_ORG_USERS_URL)
-      let org_users_json = await org_users_raw.json()
-      let org_users_parsed = JSON.parse(org_users_json.body.toString())
-      console.log(org_users_parsed)
+      // let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      // let org_users_json = await org_users_raw.json()
+      // let org_users_parsed = JSON.parse(org_users_json.body.toString())
+      // TODO: continue parsing data and calculate analytics | waiting for api
+      // console.log(org_users_parsed)
     })()
   })
 
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
-  const [organizationName, setOrganizationName] = useState(
-    userData.Organization,
-  )
   const [organizationNameHelperText, setOrganizationNameHelperText] = useState(
     null,
   )
