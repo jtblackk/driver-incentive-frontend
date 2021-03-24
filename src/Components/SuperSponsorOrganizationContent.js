@@ -3,6 +3,7 @@ import { toLower } from 'lodash'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
+import OrganizationSponsorManagementPanel from './OrganizationSponsorManagementPanel'
 
 function RenameOrganizationPanel(props) {
   const userData = useContext(UserContext).user
@@ -126,9 +127,11 @@ export default function SuperSponsorContent(props) {
         <RenameOrganizationPanel />
       </Grid>
       <Grid item xs={12}>
-        <Typography>
-          view/Add/remove organization's sponsors (table w/ dialolg & button?)
-        </Typography>
+        <br />
+      </Grid>
+
+      <Grid item container justify="center" xs={12}>
+        <OrganizationSponsorManagementPanel />
       </Grid>
     </Grid>
   )
