@@ -57,7 +57,7 @@ const ViewSponsorsPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // get all the potential sponsors
+      // get all list of all sponsors in the system
       let GET_SPONSORLIST_URL =
         'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
       let sponsorlist_response = await fetch(GET_SPONSORLIST_URL)
@@ -72,6 +72,7 @@ const ViewSponsorsPage = () => {
         }
       })
 
+      // get the sponsors that the driver is partnered to
       let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
       let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
       let partnered_sponsors_data = await partnered_sponsors_response.json()
@@ -88,22 +89,34 @@ const ViewSponsorsPage = () => {
             Points: parseInt(element.Points.N),
             PointDollarRatio: parseFloat(element.PointDollarRatio.N),
             Status: parseInt(element.Status.N),
+            ...sponsorlist_formatted.find((element_2) => {
+              return element_2.Username === element.SponsorID.S
+            }),
           }
         },
       )
-      let partnered_sponsors_names = partnered_sponsors_array.map((element) => {
-        return element.SponsorID.S
-      })
+      let partnered_sponsors_names = partnered_sponsors_array
+        .filter((element) => element != null)
+        .map((element) => {
+          return element.SponsorID.S
+        })
 
-      let active_sponsors_data = sponsorlist_formatted.map((element) => {
-        if (partnered_sponsors_names.includes(element.Username)) {
+      let active_sponsors_data = partnered_sponsors_formatted.map((element) => {
+        if (
+          partnered_sponsors_names.includes(element.Username) &&
+          element.Status === 2
+        ) {
           return {
             SponsorID: element.Username,
             FirstName: element.FirstName,
             LastName: element.LastName,
             Organization: element.Organization,
             ...partnered_sponsors_formatted.find((element_2) => {
-              return element_2.DriverID === userData.Username
+              if (element_2) {
+                return element_2.DriverID === userData.Username
+              } else {
+                return null
+              }
             }),
           }
         } else {
@@ -123,11 +136,11 @@ const ViewSponsorsPage = () => {
               ' ' +
               element.LastName,
             TotalPoints: parseInt(element.Points),
-            // TODO: use appropriate title for the startdate field. right now it breaks if there's an incorrect date format. (i.e., make sure all sponsorships are using correct datetime format in dynamodb)
-            StartDat: element.AppDecisionDate,
+            StartDate: element.AppDecisionDate,
           }
         })
 
+      console.log(partnered_sponsors_formatted)
       setTable1Data(active_sponsors_table_data)
     })().then(() => {
       setIsLoading(false)
