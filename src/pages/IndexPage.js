@@ -66,8 +66,6 @@ function IndexPage() {
       // start loading animation
       setIsLoading(true)
 
-      console.log(userData)
-      console.log(activeProfile)
       if (userData.AccountStatus === 0) {
         history.push('/account-setup')
       } else if (
@@ -81,7 +79,6 @@ function IndexPage() {
         userData.Organization &&
         !activeProfile
       ) {
-        console.log('enable profile selection dialog')
         setProfileSelectionDialogIsOpenState(true)
       }
       setIsLoading(false)
