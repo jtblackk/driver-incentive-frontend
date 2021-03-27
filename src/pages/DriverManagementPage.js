@@ -78,14 +78,14 @@ const DriverManagementPage = () => {
       )
       const driver_profile_data_formatted = driver_profile_data_parsed.map(
         (val) => {
-          if (val.Items[0]) {
+          if (val) {
             return {
-              Username: val.Items[0].Username.S,
-              FirstName: val.Items[0].FirstName.S,
-              LastName: val.Items[0].LastName.S,
-              AccountType: val.Items[0].AccountType.S,
-              AccountStatus: parseInt(val.Items[0].AccountStatus.N),
-              Bio: val.Items[0].Bio.S,
+              Username: val.Username.S,
+              FirstName: val.FirstName.S,
+              LastName: val.LastName.S,
+              AccountType: val.AccountType.S,
+              AccountStatus: parseInt(val.AccountStatus.N),
+              Bio: val.Bio.S,
             }
           } else {
             return null
