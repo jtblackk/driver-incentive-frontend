@@ -5,6 +5,8 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import DeleteSponsorshipDialog from './DeleteSponsorshipDialog'
+
 import {
   AppBar,
   Box,
@@ -25,11 +27,36 @@ import UserProfileCard from './UserProfileCard'
 require('datejs')
 
 function DriverManagementTab(props) {
+  // dialog control
+  const [deleteProfileDialogIsOpen, setDeleteProfileDialogIsOpen] = useState(
+    false,
+  )
+  function setDeleteProfileCatalogIsOpenState(state, refresh) {
+    setDeleteProfileDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function fullPageUpdateState() {
+    setPageUpdate(pageUpdate + 1)
+  }
+
   const left_col_width = 4
   const right_col_width = 6
 
   return (
     <Grid container justify="center">
+      <DeleteSponsorshipDialog
+        dialogProps={{
+          dialogIsOpen: deleteProfileDialogIsOpen,
+          setDialogIsOpen: setDeleteProfileCatalogIsOpenState,
+          pageUpdateFunc: fullPageUpdateState,
+        }}
+        parentProps={props}
+      />
       <Grid item xs={12}>
         <br />
       </Grid>
@@ -156,40 +183,7 @@ function DriverManagementTab(props) {
               variant="contained"
               style={{ backgroundColor: '#444444', color: 'white' }}
               onClick={() => {
-                // TODO: confirmation message before ending sponsorship. How to handle this in a dialog screen?
-
-                let SAVE_APPLICATION_RESPONSE_URL =
-                  'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-                let requestOptions = {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    SponsorID: props.selectedDriverData.SponsorID,
-                    DriverID: props.selectedDriverData.DriverID,
-                    Status: 3,
-                  }),
-                }
-                fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions)
-                  .then(() => {
-                    let newDriverDataState = props.allDriverData.map(
-                      (element) => {
-                        if (
-                          element.Username === props.selectedDriverData.DriverID
-                        ) {
-                          return {
-                            ...element,
-                            Status: 3,
-                          }
-                        } else {
-                          return element
-                        }
-                      },
-                    )
-                    props.setAllDriverDataState(newDriverDataState)
-                  })
-                  .then(() => {
-                    props.setDialogIsOpenState(false, true)
-                  })
+                setDeleteProfileCatalogIsOpenState(true)
               }}
             >
               End sponsorship
