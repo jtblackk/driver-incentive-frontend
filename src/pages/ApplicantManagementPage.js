@@ -114,14 +114,14 @@ const ApplicantManagementPage = () => {
       const driverdata_json = await driverdata_response.json()
       const driverdata_parsed = JSON.parse(driverdata_json.body.toString())
       const driverdata_reformatted = driverdata_parsed.map((val) => {
-        if (val.Items[0]) {
+        if (val) {
           return {
-            Username: val.Items[0].Username.S,
-            FirstName: val.Items[0].FirstName.S,
-            LastName: val.Items[0].LastName.S,
-            AccountType: val.Items[0].AccountType.S,
-            AccountStatus: parseInt(val.Items[0].AccountStatus.N),
-            Bio: val.Items[0].Bio.S,
+            Username: val.Username.S,
+            FirstName: val.FirstName.S,
+            LastName: val.LastName.S,
+            AccountType: val.AccountType.S,
+            AccountStatus: parseInt(val.AccountStatus.N),
+            Bio: val.Bio.S,
           }
         }
       })
@@ -168,7 +168,7 @@ const ApplicantManagementPage = () => {
             Response:
               val.Status === 1
                 ? 'Denied'
-                : val.Status === 2
+                : val.Status === 2 || val.Status === 3
                 ? 'Accepted'
                 : null,
             SubmissionDate: val.AppSubmissionDate,

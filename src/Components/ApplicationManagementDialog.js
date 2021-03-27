@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+import { initial } from 'lodash'
 require('datejs')
 
 export default function ApplicationManagementDialog(props) {
@@ -53,8 +54,20 @@ export default function ApplicationManagementDialog(props) {
       prop:
         props.applicationDetails.Status === 1
           ? 'Denied'
-          : props.applicationDetails.Status === 2
+          : (props.applicationDetails.Status === 2) |
+            (props.applicationDetails.Status === 3)
           ? 'Accepted'
+          : null,
+    },
+    {
+      name: 'Status',
+      prop:
+        props.applicationDetails.Status === 1
+          ? 'N/A'
+          : props.applicationDetails.Status === 2
+          ? 'Active'
+          : props.applicationDetails.Status === 3
+          ? 'Terminated'
           : null,
     },
     {
@@ -244,7 +257,7 @@ export default function ApplicationManagementDialog(props) {
               </Grid>
               {/* bottom half */}
 
-              {initial_response_fields[0].prop ? (
+              {props.applicationDetails.Status > 0 ? (
                 initial_response_fields.map((field) => {
                   return (
                     <Grid
