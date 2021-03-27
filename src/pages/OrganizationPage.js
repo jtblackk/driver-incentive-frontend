@@ -35,10 +35,15 @@ function OrganizationPage() {
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
+  const [organizationUsers, setOrganizationUsers] = useState(null)
+  function setOrganizationUsersState(state) {
+    setOrganizationUsers(state)
+  }
+
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // TODO: load oranization data | use new api
+      // TODO: load oranization users data | waiting on  api
       let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
       // let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=the%20autobots`
       // let org_users_raw = await fetch(GET_ORG_USERS_URL)
@@ -46,11 +51,44 @@ function OrganizationPage() {
       // let org_users_array = await JSON.parse(org_users_json.body.toString())
       // console.log(org_users_array)
 
-      // org_users_array.forEach((element) => {
-      //   console.log(element)
-      //   console.log('\n')
-      // })
-      // console.log(org_users_array)
+      setOrganizationUsers([
+        {
+          Username: 'demo_driver_8@gmail.com',
+          AccountStatus: 1,
+          Bio:
+            'Amateur social media nerd. Web enthusiast. Avid zombie geek. Certified pop cultureaholic.',
+          Sponsors: [],
+          SignupDate: '2021-03-10T02:15:05.245Z',
+          FirstName: 'Beth',
+          LastName: 'Contreras',
+          AccountType: 'Driver',
+        },
+        {
+          Username: 'demo_sponsor_1@gmail.com',
+          AccountStatus: 1,
+          Bio:
+            'Amateur social media fan. Professional bacon trailblazer. Hardcore explorer. Award-winning tv expert. Friendly pop culture maven.',
+          Sponsors: [],
+          SignupDate: '2021-03-13T03:24:53.345Z',
+          FirstName: 'Karlyn',
+          LastName: 'Barrett',
+          AccountType: 'Sponsor',
+          Organization: 'Alamo Delivery',
+        },
+
+        {
+          Username: 'team11sponsordemo@gmail.com',
+          AccountStatus: 1,
+          Bio:
+            'Amateur social media fan. Professional bacon trailblazer. Hardcore explorer. Award-winning tv expert. Friendly pop culture maven.',
+          Sponsors: [],
+          SignupDate: '2021-03-14T03:24:53.345Z',
+          FirstName: 'Cool',
+          LastName: 'Sponsor',
+          AccountType: 'Sponsor',
+          Organization: 'Alamo Delivery',
+        },
+      ])
     })().then(() => {
       setIsLoading(false)
     })
@@ -78,8 +116,13 @@ function OrganizationPage() {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Grid container justify="center">
-            <Grid item container xs={12} sm={11} md={8} lg={6} xl={4}>
-              <OrganizationContent />
+            <Grid item container xs={12} sm={11} md={8} lg={7} xl={4}>
+              <OrganizationContent
+                orgProps={{
+                  organizationUsers: organizationUsers,
+                  setOrganizationUsersState: setOrganizationUsersState,
+                }}
+              />
             </Grid>
 
             <Grid xs={12} item>
@@ -87,8 +130,15 @@ function OrganizationPage() {
             </Grid>
 
             {/* supersponsor content: only renders for super sponsors */}
-            <Grid item container xs={12} sm={11} md={8} lg={6} xl={4}>
-              {userData.Username.includes('@') ? <SuperSponsorContent /> : null}
+            <Grid item container xs={12} sm={11} md={8} lg={7} xl={4}>
+              {userData.Username.includes('@') ? (
+                <SuperSponsorContent
+                  orgProps={{
+                    organizationUsers: organizationUsers,
+                    setOrganizationUsersState: setOrganizationUsersState,
+                  }}
+                />
+              ) : null}
             </Grid>
           </Grid>
         </main>

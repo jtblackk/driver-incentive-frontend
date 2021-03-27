@@ -7,7 +7,6 @@ import GenericTable from './GenericTable'
 import LoadingIcon from './LoadingIcon'
 
 const OrganizationSponsorManagementPanel = (props) => {
-  console.log(props)
   const [isLoading, setIsLoading] = useState(true)
 
   // dialog control
@@ -53,16 +52,28 @@ const OrganizationSponsorManagementPanel = (props) => {
     setSelectedEntry(state)
   }
 
+  const orgProps = props.parentProps.orgProps
+
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      setTable1Data([
-        {
-          Username: 'user_1',
-          FirstName: 'a first name',
-          LastName: 'a last name',
+      let org_sponsor_profiles = orgProps.organizationUsers.filter(
+        (element) => {
+          return element.AccountType === 'Sponsor'
         },
-      ])
+      )
+      let org_sponsor_profiles_table_data = org_sponsor_profiles.map(
+        (element) => {
+          return {
+            Username: element.Username,
+            FirstName: element.FirstName,
+            LastName: element.LastName,
+            CreatedDate: element.SignupDate,
+          }
+        },
+      )
+
+      setTable1Data(org_sponsor_profiles_table_data)
     })().then(() => {
       setIsLoading(false)
     })
@@ -72,19 +83,25 @@ const OrganizationSponsorManagementPanel = (props) => {
         id: 'Username',
         label: 'Username',
         isDate: false,
-        width: 100,
+        width: 150,
       },
       {
         id: 'FirstName',
         label: 'First name',
         isDate: false,
-        width: 100,
+        width: 50,
       },
       {
         id: 'LastName',
         label: 'Last name',
         isDate: false,
-        width: 115,
+        width: 50,
+      },
+      {
+        id: 'CreatedDate',
+        label: 'Member since',
+        isDate: false,
+        width: 200,
       },
     ])
   }, [pageUpdate])
@@ -96,14 +113,18 @@ const OrganizationSponsorManagementPanel = (props) => {
       <Grid item xs={12} container component={Paper} style={{ padding: 20 }}>
         <AddSponsorProfileDialog
           dialogProps={{
+            parentProps: props,
             selectionDialogIsOpen: addSponsorProfileDialogIsOpen,
             setSelectionDialogIsOpenState: setAddSponsorProfileDialogIsOpenState,
           }}
         />
         <ViewSponsorProfileDialog
           dialogProps={{
+            parentProps: props,
             selectionDialogIsOpen: viewSponsorProfileDialogIsOpen,
             setSelectionDialogIsOpenState: setViewSponsorProfileDialogIsOpen,
+            selectedEntry: selectedEntry,
+            setSelectedEntryState: setSelectedEntryState,
           }}
         />
         <Grid item xs={12}>
@@ -138,8 +159,8 @@ const OrganizationSponsorManagementPanel = (props) => {
             setDataState={setTable1DataState}
             tableKey="Username"
             showKey={true}
-            initialSortedColumn="LastName"
-            initialSortedDirection="asc"
+            initialSortedColumn="CreatedDate"
+            initialSortedDirection="desc"
             selectedRow={selectedEntry}
             setSelectedRow={setSelectedEntryState}
             dialogIsOpen={setViewSponsorProfileDialogIsOpen}

@@ -131,7 +131,7 @@ export default function SuperSponsorContent(props) {
       </Grid>
 
       <Grid item container justify="center" xs={12}>
-        <OrganizationSponsorManagementPanel />
+        <OrganizationSponsorManagementPanel parentProps={props} />
       </Grid>
     </Grid>
   )
