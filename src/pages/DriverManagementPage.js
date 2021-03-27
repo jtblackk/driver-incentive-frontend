@@ -54,6 +54,13 @@ const DriverManagementPage = () => {
     setTable1Data(state)
   }
 
+  const [table2HeadCells, setTable2HeadCells] = useState(null)
+
+  const [table2Data, setTable2Data] = useState(null)
+  function setTable2DataState(state) {
+    setTable2Data(state)
+  }
+
   const [selectedEntry, setSelectedEntry] = useState(null)
   function setSelectedEntryState(state) {
     setSelectedEntry(state)
@@ -132,6 +139,10 @@ const DriverManagementPage = () => {
         return val.Status === 2
       })
 
+      let terminated_drivers = sponsorship_list_formatted.filter((val) => {
+        return val.Status === 3
+      })
+
       let current_drivers_data = current_drivers.map((val) => {
         return {
           ...val,
@@ -140,7 +151,17 @@ const DriverManagementPage = () => {
           ),
         }
       })
-      setAllDriverData(current_drivers_data)
+
+      let terminated_drivers_data = terminated_drivers.map((val) => {
+        return {
+          ...val,
+          ...driver_profile_data_formatted.find(
+            (element) => element.Username === val.DriverID,
+          ),
+        }
+      })
+
+      setAllDriverData([...current_drivers_data, ...terminated_drivers_data])
 
       let current_drivers_table_data = current_drivers_data.map((val) => {
         return {
@@ -152,7 +173,19 @@ const DriverManagementPage = () => {
         }
       })
 
+      let terminated_drivers_table_data = terminated_drivers_data.map((val) => {
+        return {
+          Username: val.Username,
+          FirstName: val.FirstName,
+          LastName: val.LastName,
+
+          // PointValue: '$' + val.PointDollarRatio + ' / point',
+          // TerminatedOn: 'date here',
+        }
+      })
+
       setTable1Data([...current_drivers_table_data])
+      setTable2Data([...terminated_drivers_table_data])
     })().then(() => {
       setIsLoading(false)
     })
@@ -188,6 +221,40 @@ const DriverManagementPage = () => {
         isDate: false,
         width: 100,
       },
+    ])
+
+    setTable2HeadCells([
+      {
+        id: 'Username',
+        label: 'Username',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'FirstName',
+        label: 'First name',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'LastName',
+        label: 'Last name',
+        isDate: false,
+        width: 115,
+      },
+      // {
+      //   id: 'TotalPoints',
+      //   label: 'Total points',
+      //   isDate: false,
+      //   width: 100,
+      // },
+      // TODO: set this up to use actual date
+      // {
+      //   id: 'TerminatedDate',
+      //   label: 'Terminated on',
+      //   isDate: false,
+      //   width: 100,
+      // },
     ])
   }, [pageUpdate])
 
@@ -281,6 +348,43 @@ const DriverManagementPage = () => {
                     headCells={table1HeadCells}
                     data={table1Data}
                     setDataState={setTable1DataState}
+                    tableKey="Username"
+                    showKey={true}
+                    initialSortedColumn="LastName"
+                    initialSortedDirection="asc"
+                    selectedRow={selectedEntry}
+                    setSelectedRow={setSelectedEntryState}
+                    dialogIsOpen={dialogIsOpen}
+                    setDialogIsOpenState={setDialogIsOpenState}
+                  />
+                </div>
+              </Paper>
+            </Grid>
+
+            {/* active drivers */}
+            <Grid item xs={10} xl={6}>
+              <Paper>
+                <div style={{ padding: 20 }}>
+                  <Grid
+                    container
+                    justify="space-between"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <Grid item xs={12}>
+                      <Typography variant="h6">Past drivers</Typography>
+                      <Typography>
+                        A list of your past drivers (i.e., any driver whos
+                        sponsorship has been terminated)
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <br></br>
+
+                  <GenericTable
+                    headCells={table2HeadCells}
+                    data={table2Data}
+                    setDataState={setTable2DataState}
                     tableKey="Username"
                     showKey={true}
                     initialSortedColumn="LastName"
