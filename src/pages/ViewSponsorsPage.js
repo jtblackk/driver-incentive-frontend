@@ -140,7 +140,6 @@ const ViewSponsorsPage = () => {
           }
         })
 
-      console.log(partnered_sponsors_formatted)
       setTable1Data(active_sponsors_table_data)
     })().then(() => {
       setIsLoading(false)

@@ -14,15 +14,7 @@ import LoadingIcon from './LoadingIcon'
 function OrganizationInfoPanel(props) {
   useEffect(() => {
     ;(async () => {
-      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization.replace(
-        ' ',
-        '%20',
-      )}`
-      // let org_users_raw = await fetch(GET_ORG_USERS_URL)
-      // let org_users_json = await org_users_raw.json()
-      // let org_users_parsed = JSON.parse(org_users_json.body.toString())
-      // TODO: continue parsing data and calculate analytics | waiting for api
-      // console.log(org_users_parsed)
+      // TODO: parse organization data | waiting for api
     })()
   })
 
@@ -118,7 +110,7 @@ export default function OrganizationContent(props) {
   return (
     <Grid item xs={12} container justify="center">
       <Grid item xs={12}>
-        <OrganizationInfoPanel />
+        <OrganizationInfoPanel parentProps={props} />
       </Grid>
     </Grid>
   )

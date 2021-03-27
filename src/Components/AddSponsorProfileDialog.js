@@ -127,7 +127,7 @@ export default function AddSponsorProfileDialog(props) {
                       setUsernameHelperText('Avoid special characters')
                       validationFailed = true
                     } else if (false) {
-                      // TODO: check for username uniquity | need api to get all sponsors on the app
+                      // TODO: check for username username uniquity | need api to get all usernames on the app
                       validationFailed = true
                     }
 
@@ -165,11 +165,9 @@ export default function AddSponsorProfileDialog(props) {
                         AccountStatus: 1,
                       }),
                     }
-
                     fetch(REGISTER_PROFILE_URL, requestOptions)
 
                     handleClose()
-                    console.log(requestOptions)
                   }}
                 >
                   Create profile
