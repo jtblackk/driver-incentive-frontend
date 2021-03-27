@@ -82,16 +82,20 @@ export default function GenericTable(props) {
               <TableRow
                 hover={true}
                 key={row[props.tableKey]}
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  let selectedRow = rows.find((element) => {
-                    return element[props.tableKey] === row[props.tableKey]
-                  })
+                style={props.setSelectedRow ? { cursor: 'pointer' } : null}
+                onClick={
+                  props.setSelectedRow
+                    ? () => {
+                        let selectedRow = rows.find((element) => {
+                          return element[props.tableKey] === row[props.tableKey]
+                        })
 
-                  props.setSelectedRow(selectedRow)
+                        props.setSelectedRow(selectedRow)
 
-                  props.setDialogIsOpenState(true)
-                }}
+                        props.setDialogIsOpenState(true)
+                      }
+                    : null
+                }
               >
                 {/* display the row key if requested */}
                 {props.showKey ? (
