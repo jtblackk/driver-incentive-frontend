@@ -140,7 +140,32 @@ export default function AddCatalogItemDialog(props) {
               </Grid>
               <Grid item container xs={12} justify="flex-end">
                 <Grid item>
-                  <Button variant="contained" color="primary">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      console.log(props)
+                      let checked_ids = checkedItems
+                        .filter((element) => element.isChecked)
+                        .map((element) => element.key)
+
+                      // append new items to old items
+                      let new_list_of_ids = [
+                        ...props.dialogProps.allCatalogData
+                          .filter((element) => element.ItemKey)
+                          .map((element) => element.ItemKey),
+                        ...checked_ids,
+                      ]
+
+                      // TODO: save new list of product IDs to database | waiting on api
+                      console.log(new_list_of_ids)
+
+                      // save internal data
+
+                      handleClose()
+                      window.location.reload()
+                    }}
+                  >
                     Add items
                   </Button>
                 </Grid>
