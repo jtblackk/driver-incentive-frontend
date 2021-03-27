@@ -15,6 +15,7 @@ import LoadingIcon from './LoadingIcon'
 require('datejs')
 
 export default function GenericTableSelectable(props) {
+  console.log(props)
   const [rows, setRows] = useState(null)
 
   const [columnToSort, setColumnToSort] = useState(props.initialSortedColumn)

@@ -89,27 +89,57 @@ const ProductCatalogManagementPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // TODO: replace this data with live data from the sponsor's catalog | waiting on api
-      let all_catalog_items_formatted = [
-        {
-          ItemKey: 1,
-          ItemName: 'big cap',
-          DollarPrice: 1.05,
-          Stock: '2/25',
-        },
-        {
-          ItemKey: 2,
-          ItemName: 'bigger cap',
-          DollarPrice: 2.25,
-          Stock: '4/10',
-        },
+      // TODO: replace this data with live data | waiting on api to get a sponsor's ebay items
+      let list_of_product_ids = [
+        '122472037548',
+        '152355004654',
+        '182890213137',
+        '164099086115',
       ]
 
-      setAllCatalogData(all_catalog_items_formatted)
+      // TODO: get item data from list
+
+      let GET_EBAY_ITEMS_URL =
+        'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ProductIDs: list_of_product_ids,
+        }),
+      }
+      let item_data_raw = await fetch(GET_EBAY_ITEMS_URL, requestOptions)
+      let item_data_json = await item_data_raw.json()
+      let item_data_parsed = JSON.parse(item_data_json.body)
+
+      let item_data_array = item_data_parsed.Item.map((element) => {
+        // console.log(element)
+        return {
+          ProductID: element.ItemID,
+          Name: element.Title,
+          PhotoURL: element.PictureURL[0],
+          Stock: element.QuantityThreshold ? 'Yes' : 'No',
+          Description: element.Description,
+          Price: element.ConvertedCurrentPrice.Value,
+        }
+      })
+
+      let catalog_item_table_data = item_data_array.map((element) => {
+        return {
+          ProductID: element.ProductID,
+          PhotoURL: element.PhotoURL,
+          Name: element.Name,
+          Price: element.Price,
+          Stock: element.Stock,
+        }
+      })
+      console.log(catalog_item_table_data)
+
+      setAllCatalogData(catalog_item_table_data)
       setCheckedItems(
-        all_catalog_items_formatted.map((element) => {
+        catalog_item_table_data.map((element) => {
           return {
-            key: element.ItemKey,
+            key: element.ProductID,
             isChecked: false,
           }
         }),

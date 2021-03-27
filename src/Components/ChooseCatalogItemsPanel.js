@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { Button, Grid, Paper, Typography } from '@material-ui/core'
+import { Avatar, Button, Grid, Paper, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from '../Components/LoadingIcon'
 import GenericTableSelectable from '../Components/GenericTableSelectable'
@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function ChooseCatalogItemsPanel(props) {
+  console.log(props)
+
   const classes = useStyles()
   const userData = useContext(UserContext).user
   const [isLoading, setIsLoading] = useState(true)
@@ -33,21 +35,27 @@ export default function ChooseCatalogItemsPanel(props) {
     setIsLoading(false)
 
     setTable1HeadCells([
+      // {
+      //   id: 'ItemKey',
+      //   label: 'Product ID',
+      //   isDate: false,
+      //   width: 125,
+      // },
       {
-        id: 'ItemKey',
-        label: 'Product ID',
+        id: 'Photo',
+        label: 'Photo',
         isDate: false,
-        width: 125,
+        width: 20,
       },
       {
-        id: 'ItemName',
+        id: 'Name',
         label: 'Name',
         isDate: false,
-        width: 200,
+        width: 250,
       },
 
       {
-        id: 'DollarPrice',
+        id: 'Price',
         label: 'Price (USD)',
         isDate: false,
         width: 80,
@@ -55,7 +63,7 @@ export default function ChooseCatalogItemsPanel(props) {
 
       {
         id: 'Stock',
-        label: 'Stock',
+        label: 'In stock?',
         isDate: false,
         width: 80,
       },
@@ -64,9 +72,10 @@ export default function ChooseCatalogItemsPanel(props) {
     setTable1Data(
       props.tableProps.data.map((element) => {
         return {
-          ItemKey: element.ItemKey,
-          ItemName: element.ItemName,
-          DollarPrice: element.DollarPrice,
+          ProductID: element.ProductID,
+          Photo: <Avatar src={element.PhotoURL} variant="square" />,
+          Name: element.Name,
+          Price: element.Price,
           Stock: element.Stock,
         }
       }),
@@ -128,9 +137,9 @@ export default function ChooseCatalogItemsPanel(props) {
             headCells={table1HeadCells}
             data={table1Data}
             setDataState={props.tableProps.setDataState}
-            tableKey="ItemKey"
-            showKey={true}
-            initialSortedColumn="ItemName"
+            tableKey="ProductID"
+            showKey={false}
+            initialSortedColumn="Name"
             initialSortedDirection="asc"
             selectedRow={props.tableProps.selectedRow}
             setSelectedRow={props.tableProps.setSelectedRow}
