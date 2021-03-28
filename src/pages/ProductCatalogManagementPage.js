@@ -3,10 +3,10 @@ import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { Grid, Paper, Typography } from '@material-ui/core'
+import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import ChooseCatalogItemsPanel from '../Components/ChooseCatalogItemsPanel'
-import CatalogItemManagementDialog from '../Components/CatalogItemManagementDialog'
+import CatalogItemDialog from '../Components/CatalogItemDialog'
 import LoadingIcon from '../Components/LoadingIcon'
 import AddCatalogItemDialog from '../Components/AddCatalogItemDialog'
 import DeleteCatalogItemDialog from '../Components/DeleteCatalogItemDialog'
@@ -103,8 +103,6 @@ const ProductCatalogManagementPage = () => {
         '302673385924',
       ]
 
-      // TODO: get item data from list
-
       let GET_EBAY_ITEMS_URL =
         'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
       let requestOptions = {
@@ -118,19 +116,21 @@ const ProductCatalogManagementPage = () => {
       let item_data_json = await item_data_raw.json()
       let item_data_parsed = JSON.parse(item_data_json.body)
 
-      console.log(item_data_parsed)
+      // console.log(item_data_parsed)
 
       let item_data_array = item_data_parsed.Item.map((element) => {
         return {
           ProductID: element.ItemID,
           Name: element.Title,
           PhotoURL: element.PictureURL[0],
-          Stock: element.Quantity,
-          Description: element.Description,
+          Stock: element.Quantity - element.QuantitySold,
+          Description: element.Description.slice(0, 550),
           Price: element.ConvertedCurrentPrice.Value,
           Location: element.Location,
         }
       })
+
+      // console.log(item_data_array)
 
       let catalog_item_table_data = item_data_array.map((element) => {
         return {
@@ -168,16 +168,64 @@ const ProductCatalogManagementPage = () => {
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <CatalogItemManagementDialog
+          <CatalogItemDialog
             dialogProps={{
-              itemManagementDialogIsOpen: itemManagementDialogIsOpen,
-              setItemManagementDialogIsOpenState: setItemManagementDialogIsOpenState,
+              itemDialogIsOpen: itemManagementDialogIsOpen,
+              setItemDialogIsOpen: setItemManagementDialogIsOpenState,
               fullPageUpdateState: fullPageUpdateState,
               selectedCatalogEntry: selectedCatalogEntry
                 ? allCatalogData.find((element) => {
                     return element.ProductID === selectedCatalogEntry.ProductID
                   })
                 : null,
+              ActionSection: () => {
+                return (
+                  <Grid item container xs={12} spacing={1}>
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        // style={{ backgroundColor: '#444444', color: 'White' }}
+                        onClick={() => {
+                          let new_checked_items = checkedItems.map(
+                            (element) => {
+                              if (
+                                element.key === selectedCatalogEntry.ProductID
+                              ) {
+                                return {
+                                  ...element,
+                                  isChecked: true,
+                                }
+                              } else {
+                                return element
+                              }
+                            },
+                          )
+
+                          setCheckedItems(new_checked_items)
+                          setItemManagementDialogIsOpenState(false)
+                        }}
+                      >
+                        Select item
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: '#444444', color: 'White' }}
+                        onClick={() => {
+                          // update checkedItems (filter the removed item out of the list) ?
+                          // update allCatalogData (filter the removed item out of the list) ?
+                          // TODO: make api call to set the new list of product ids | waiting on catalog setter
+                          setItemManagementDialogIsOpenState(false)
+                          window.location.reload()
+                        }}
+                      >
+                        Remove from catalog
+                      </Button>
+                    </Grid>
+                  </Grid>
+                )
+              },
             }}
           />
           <AddCatalogItemDialog
@@ -201,7 +249,7 @@ const ProductCatalogManagementPage = () => {
           />
 
           <Grid container justify="center">
-            <Grid item sm={12} md={8} lg={7} xl={6}>
+            <Grid item sm={12} md={11} lg={9} xl={7}>
               <ChooseCatalogItemsPanel
                 tableProps={{
                   data: allCatalogData,

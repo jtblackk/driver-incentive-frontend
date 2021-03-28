@@ -103,7 +103,7 @@ export default function ChooseCatalogItemsPanel(props) {
               props.dialogProps.setDeleteItemCatalogIsOpenState(true)
             }}
           >
-            Delete items
+            Delete selected
           </Button>
         </Grid>
 
@@ -116,7 +116,7 @@ export default function ChooseCatalogItemsPanel(props) {
               props.dialogProps.setAddItemDialogIsOpenState(true)
             }}
           >
-            Add items
+            Add new items
           </Button>
         </Grid>
       </Grid>

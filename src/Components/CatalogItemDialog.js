@@ -49,17 +49,10 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent)
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions)
-
-export default function CatalogItemManagementDialog(props) {
-  console.log(props)
+export default function CatalogItemDialog(props) {
+  // console.log(props)
   const handleClose = () => {
-    props.dialogProps.setItemManagementDialogIsOpenState(false)
+    props.dialogProps.setItemDialogIsOpen(false)
   }
 
   let left_col_width = 4
@@ -71,12 +64,12 @@ export default function CatalogItemManagementDialog(props) {
         <Dialog
           onClose={handleClose}
           aria-labelledby="customized-dialog-title"
-          open={props.dialogProps.itemManagementDialogIsOpen}
+          open={props.dialogProps.itemDialogIsOpen}
           maxWidth="lg"
           fullWidth
         >
           <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-            Ebay Item
+            {props.dialogProps.selectedCatalogEntry.Name}
           </DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2} justify="flex-start">
@@ -85,7 +78,7 @@ export default function CatalogItemManagementDialog(props) {
                   <img
                     src={props.dialogProps.selectedCatalogEntry.PhotoURL}
                     alt="alt text"
-                    style={{ maxWidth: '300px' }}
+                    style={{ maxWidth: '250px', maxHeight: '250px' }}
                   />
                 </Grid>
                 <Grid
@@ -96,25 +89,39 @@ export default function CatalogItemManagementDialog(props) {
                   direction="row"
                 >
                   <Grid item xs={12} align="left">
-                    <b>{props.dialogProps.selectedCatalogEntry.Name}</b>
+                    {props.dialogProps.selectedCatalogEntry.Stock} in stock | $
+                    {props.dialogProps.selectedCatalogEntry.Price} each
+                  </Grid>
+                  <Grid item xs={12} align="left"></Grid>
+
+                  <Grid item xs={12}>
+                    <br />
                   </Grid>
                   <Grid item xs={12} align="left">
-                    ${props.dialogProps.selectedCatalogEntry.Price}
+                    <Typography>
+                      <b>Description</b>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} align="left">
+                    {props.dialogProps.selectedCatalogEntry.Description}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <br />
                   </Grid>
 
-                  <Grid item xs={12} align="left">
-                    <Button variant="contained" color="primary">
-                      Add to catalog
-                    </Button>
-                  </Grid>
+                  {props.dialogProps.ActionSection ? (
+                    <Grid item xs={12} align="left">
+                      <props.dialogProps.ActionSection />
+                    </Grid>
+                  ) : null}
                 </Grid>
               </Grid>
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Divider />
-              </Grid>
+              </Grid> */}
 
-              <Grid item container xs={12}>
+              {/* <Grid item container xs={12}>
                 <Grid item xs={12} align="center">
                   <Typography>
                     <b>Ebay Description</b>
@@ -123,16 +130,16 @@ export default function CatalogItemManagementDialog(props) {
                 <Grid item xs={12}>
                   {parse(props.dialogProps.selectedCatalogEntry.Description)}
                 </Grid>
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Divider />
               </Grid>
               <Grid item xs={12}>
                 <Typography>
                   put item controls here (remove item button)
                 </Typography>
-              </Grid>
+              </Grid> */}
             </Grid>
           </DialogContent>
         </Dialog>
