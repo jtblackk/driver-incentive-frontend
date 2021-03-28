@@ -89,6 +89,7 @@ const ProductCatalogManagementPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
+      // test?
       // TODO: replace this data with live data | waiting on api to get a sponsor's ebay items
       let list_of_product_ids = [
         '333596718645',
