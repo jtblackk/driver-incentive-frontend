@@ -208,7 +208,7 @@ const ProductCatalogManagementPage = () => {
                         Select item
                       </Button>
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                       <Button
                         variant="contained"
                         style={{ backgroundColor: '#444444', color: 'White' }}
@@ -222,7 +222,7 @@ const ProductCatalogManagementPage = () => {
                       >
                         Remove from catalog
                       </Button>
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 )
               },
