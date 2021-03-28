@@ -7,12 +7,12 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Avatar, Divider, Grid, Paper, Typography } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
-import Ebay from 'ebay-node-api'
+
 import GenericTableSelectableSpecial from './GenericTableSelectableSpecial'
 
-let eBay = require('ebay-node-api')
-
 export default function AddCatalogItemDialog(props) {
+  console.log(props)
+
   const handleClickOpen = () => {
     props.dialogProps.setAddItemDialogIsOpenState(true)
   }
@@ -53,14 +53,14 @@ export default function AddCatalogItemDialog(props) {
           id: 'ItemName',
           label: 'Name',
           isDate: false,
-          width: 150,
+          width: 200,
         },
 
         {
           id: 'DollarPrice',
           label: 'Price (USD)',
           isDate: false,
-          width: 80,
+          width: 60,
         },
       ])
 
@@ -69,14 +69,22 @@ export default function AddCatalogItemDialog(props) {
       let ebay_items_raw = await fetch(FETCH_EBAY_ITEMS_URL)
       let ebay_items_json = await ebay_items_raw.json()
       let ebay_items_array = ebay_items_json
-      let ebay_items_array_formatted = ebay_items_array.map((element) => {
-        return {
-          ItemKey: element.ItemID,
-          ItemName: element.ItemName,
-          ItemPhotoURL: element.PhotoURL ? element.PhotoURL : null,
-          Price: element.Price,
-        }
-      })
+
+      let ebay_items_array_formatted = ebay_items_array
+        .map((element) => {
+          return {
+            ItemKey: element.ItemID,
+            ItemName: element.ItemName,
+            ItemPhotoURL: element.PhotoURL ? element.PhotoURL : null,
+            Price: element.Price,
+          }
+        })
+        .filter(
+          (element) =>
+            !props.dialogProps.allCatalogData.find(
+              (element_2) => element_2.ProductID === element.ItemKey,
+            ),
+        )
 
       let ebay_items_table_data = ebay_items_array_formatted.map((element) => {
         return {
@@ -102,6 +110,8 @@ export default function AddCatalogItemDialog(props) {
       setIsLoading(false)
     })
   }, [])
+
+  // TODO: need to add dialog for viewing more of an item's info (table row drop-down thing? or a dialog?)
 
   return (
     <div>
