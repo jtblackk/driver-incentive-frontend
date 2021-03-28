@@ -117,14 +117,17 @@ const ProductCatalogManagementPage = () => {
       let item_data_json = await item_data_raw.json()
       let item_data_parsed = JSON.parse(item_data_json.body)
 
+      console.log(item_data_parsed)
+
       let item_data_array = item_data_parsed.Item.map((element) => {
         return {
           ProductID: element.ItemID,
           Name: element.Title,
           PhotoURL: element.PictureURL[0],
-          Stock: element.QuantityThreshold ? 'Yes' : 'No',
+          Stock: element.Quantity,
           Description: element.Description,
           Price: element.ConvertedCurrentPrice.Value,
+          Location: element.Location,
         }
       })
 

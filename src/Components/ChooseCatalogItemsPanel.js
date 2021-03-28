@@ -56,14 +56,14 @@ export default function ChooseCatalogItemsPanel(props) {
         id: 'Price',
         label: 'Price (USD)',
         isDate: false,
-        width: 80,
+        width: 60,
       },
 
       {
         id: 'Stock',
-        label: 'In stock?',
+        label: 'Quantity',
         isDate: false,
-        width: 80,
+        width: 60,
       },
     ])
 
