@@ -91,10 +91,15 @@ const ProductCatalogManagementPage = () => {
     ;(async () => {
       // TODO: replace this data with live data | waiting on api to get a sponsor's ebay items
       let list_of_product_ids = [
+        '333596718645',
         '122472037548',
         '152355004654',
+        '333596715743',
         '182890213137',
+        '112981655768',
+        '392985369381',
         '164099086115',
+        '302673385924',
       ]
 
       // TODO: get item data from list
@@ -113,7 +118,6 @@ const ProductCatalogManagementPage = () => {
       let item_data_parsed = JSON.parse(item_data_json.body)
 
       let item_data_array = item_data_parsed.Item.map((element) => {
-        // console.log(element)
         return {
           ProductID: element.ItemID,
           Name: element.Title,
@@ -133,9 +137,9 @@ const ProductCatalogManagementPage = () => {
           Stock: element.Stock,
         }
       })
-      console.log(catalog_item_table_data)
+      // console.log(catalog_item_table_data)
 
-      setAllCatalogData(catalog_item_table_data)
+      setAllCatalogData(item_data_array)
       setCheckedItems(
         catalog_item_table_data.map((element) => {
           return {
@@ -165,7 +169,11 @@ const ProductCatalogManagementPage = () => {
               itemManagementDialogIsOpen: itemManagementDialogIsOpen,
               setItemManagementDialogIsOpenState: setItemManagementDialogIsOpenState,
               fullPageUpdateState: fullPageUpdateState,
-              selectedCatalogEntry: selectedCatalogEntry,
+              selectedCatalogEntry: selectedCatalogEntry
+                ? allCatalogData.find((element) => {
+                    return element.ProductID === selectedCatalogEntry.ProductID
+                  })
+                : null,
             }}
           />
           <AddCatalogItemDialog
