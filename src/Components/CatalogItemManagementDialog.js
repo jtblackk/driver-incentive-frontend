@@ -8,7 +8,9 @@ import MuiDialogActions from '@material-ui/core/DialogActions'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
-import { Divider, Grid } from '@material-ui/core'
+import { Divider, Grid, Paper } from '@material-ui/core'
+
+import parse from 'html-react-parser'
 
 const styles = (theme) => ({
   root: {
@@ -55,36 +57,88 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions)
 
 export default function CatalogItemManagementDialog(props) {
+  console.log(props)
   const handleClose = () => {
     props.dialogProps.setItemManagementDialogIsOpenState(false)
   }
 
-  return (
-    <div>
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={props.dialogProps.itemManagementDialogIsOpen}
-      >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          {'Item info: <item name>'}
-        </DialogTitle>
-        <DialogContent dividers>
-          <Grid container spacing="2">
-            <Grid item xs={12}>
-              <Typography>put item description data here</Typography>
+  let left_col_width = 4
+  let right_col_width = 7
+
+  if (props.dialogProps.selectedCatalogEntry) {
+    return (
+      <div>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={props.dialogProps.itemManagementDialogIsOpen}
+          maxWidth="lg"
+          fullWidth
+        >
+          <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+            Ebay Item
+          </DialogTitle>
+          <DialogContent dividers>
+            <Grid container spacing={2} justify="flex-start">
+              <Grid item container xs={12} spacing={2} justify="flex-start">
+                <Grid item xs={left_col_width} align="center">
+                  <img
+                    src={props.dialogProps.selectedCatalogEntry.PhotoURL}
+                    alt="alt text"
+                    style={{ maxWidth: '300px' }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={right_col_width}
+                  container
+                  alignItems="flex-start"
+                  direction="row"
+                >
+                  <Grid item xs={12} align="left">
+                    <b>{props.dialogProps.selectedCatalogEntry.Name}</b>
+                  </Grid>
+                  <Grid item xs={12} align="left">
+                    ${props.dialogProps.selectedCatalogEntry.Price}
+                  </Grid>
+
+                  <Grid item xs={12} align="left">
+                    <Button variant="contained" color="primary">
+                      Add to catalog
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+
+              <Grid item container xs={12}>
+                <Grid item xs={12} align="center">
+                  <Typography>
+                    <b>Ebay Description</b>
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  {parse(props.dialogProps.selectedCatalogEntry.Description)}
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>
+                  put item controls here (remove item button)
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                put item controls here (remove item button)
-              </Typography>
-            </Grid>
-          </Grid>
-        </DialogContent>
-      </Dialog>
-    </div>
-  )
+          </DialogContent>
+        </Dialog>
+      </div>
+    )
+  } else {
+    return null
+  }
 }
