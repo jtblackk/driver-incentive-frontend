@@ -116,8 +116,6 @@ const ProductCatalogManagementPage = () => {
       let item_data_json = await item_data_raw.json()
       let item_data_parsed = JSON.parse(item_data_json.body)
 
-      // console.log(item_data_parsed)
-
       let item_data_array = item_data_parsed.Item.map((element) => {
         return {
           ProductID: element.ItemID,
@@ -130,8 +128,6 @@ const ProductCatalogManagementPage = () => {
         }
       })
 
-      // console.log(item_data_array)
-
       let catalog_item_table_data = item_data_array.map((element) => {
         return {
           ProductID: element.ProductID,
@@ -141,7 +137,6 @@ const ProductCatalogManagementPage = () => {
           Stock: element.Stock,
         }
       })
-      // console.log(catalog_item_table_data)
 
       setAllCatalogData(item_data_array)
       setCheckedItems(

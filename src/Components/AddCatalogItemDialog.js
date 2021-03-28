@@ -11,8 +11,6 @@ import LoadingIcon from './LoadingIcon'
 import GenericTableSelectableSpecial from './GenericTableSelectableSpecial'
 
 export default function AddCatalogItemDialog(props) {
-  console.log(props)
-
   const handleClickOpen = () => {
     props.dialogProps.setAddItemDialogIsOpenState(true)
   }

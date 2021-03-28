@@ -125,18 +125,23 @@ export default function GenericTableSelectable(props) {
               <TableRow
                 hover={true}
                 key={row[props.tableKey]}
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  let selectedRow = rows.find((element) => {
-                    return element[props.tableKey] === row[props.tableKey]
-                  })
+                style={props.setSelectedRow ? { cursor: 'pointer' } : null}
+                onClick={
+                  props.setSelectedRow
+                    ? () => {
+                        let selectedRow = rows.find((element) => {
+                          return element[props.tableKey] === row[props.tableKey]
+                        })
 
-                  if (props.setSelectedRow) props.setSelectedRow(selectedRow)
+                        if (props.setSelectedRow)
+                          props.setSelectedRow(selectedRow)
 
-                  if (props.setDialogIsOpenState) {
-                    props.setDialogIsOpenState(true)
-                  }
-                }}
+                        if (props.setDialogIsOpenState) {
+                          props.setDialogIsOpenState(true)
+                        }
+                      }
+                    : null
+                }
               >
                 <TableCell padding="checkbox">
                   <Checkbox
