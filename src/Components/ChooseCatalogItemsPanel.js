@@ -22,8 +22,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function ChooseCatalogItemsPanel(props) {
-  console.log(props)
-
   const classes = useStyles()
   const userData = useContext(UserContext).user
   const [isLoading, setIsLoading] = useState(true)

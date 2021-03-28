@@ -144,7 +144,6 @@ export default function AddCatalogItemDialog(props) {
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                      console.log(props)
                       let checked_ids = checkedItems
                         .filter((element) => element.isChecked)
                         .map((element) => element.key)

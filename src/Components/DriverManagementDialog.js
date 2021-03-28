@@ -204,8 +204,6 @@ function DriverManagementTab(props) {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  // TODO: api call to set driver account status
-                  //TODO: reload page
                   let UPDATE_SPONSORSHIP_URL =
                     'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
@@ -244,8 +242,6 @@ function DriverManagementTab(props) {
 }
 
 function EditPointDollarRatioMenu(props) {
-  console.log(props)
-
   const [pointDollarRatio, setPointDollarRatio] = useState(
     props.selectedDriverData.PointDollarRatio,
   )

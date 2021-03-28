@@ -13,6 +13,7 @@
     "datejs": "^1.0.0-rc3",
     "ebay-node-api": "^2.8.9",
     "email-validator": "^2.0.4",
+    "html-react-parser": "^1.2.4",
     "lodash": "^4.17.21",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

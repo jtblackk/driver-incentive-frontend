@@ -122,7 +122,8 @@ export default function AddSponsorProfileDialog(props) {
                       validationFailed = true
                     } else if (
                       username.includes("'") ||
-                      username.includes(' ')
+                      username.includes(' ') ||
+                      username.includes('"')
                     ) {
                       setUsernameHelperText('Avoid special characters')
                       validationFailed = true
