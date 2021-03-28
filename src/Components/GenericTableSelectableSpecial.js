@@ -131,7 +131,8 @@ export default function GenericTableSelectable(props) {
                     return element[props.tableKey] === row[props.tableKey]
                   })
 
-                  // props.setSelectedRow(selectedRow)
+                  if (props.setSelectedRow) props.setSelectedRow(selectedRow)
+
                   if (props.setDialogIsOpenState) {
                     props.setDialogIsOpenState(true)
                   }
