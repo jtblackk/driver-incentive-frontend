@@ -57,28 +57,15 @@ const ViewSponsorsPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // get all list of all sponsors in the system
-      let GET_SPONSORLIST_URL =
-        'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
-      let sponsorlist_response = await fetch(GET_SPONSORLIST_URL)
-      let sponsorlist_data = await sponsorlist_response.json()
-      let sponsorlist_array = JSON.parse(sponsorlist_data.body.toString()).Items
-      let sponsorlist_formatted = sponsorlist_array.map((element) => {
-        return {
-          Username: element.Username.S,
-          FirstName: element.FirstName.S,
-          LastName: element.LastName.S,
-          Organization: element.Organization.S,
-        }
-      })
-
       // get the sponsors that the driver is partnered to
+      // TODO: this api has been upgraded to provide more information. optimize this page to use that new data.
       let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
       let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = JSON.parse(
         partnered_sponsors_data.body.toString(),
       ).Items
+
       let partnered_sponsors_formatted = partnered_sponsors_array.map(
         (element) => {
           return {
@@ -88,53 +75,26 @@ const ViewSponsorsPage = () => {
             AppDecisionDate: element.AppDecisionDate.S,
             Points: parseInt(element.Points.N),
             PointDollarRatio: parseFloat(element.PointDollarRatio.N),
+            FirstName: element.FirstName.S,
+            LastName: element.LastName.S,
+            Organization: element.Organization.S,
             Status: parseInt(element.Status.N),
-            ...sponsorlist_formatted.find((element_2) => {
-              return element_2.Username === element.SponsorID.S
-            }),
           }
         },
       )
-      let partnered_sponsors_names = partnered_sponsors_array
-        .filter((element) => element != null)
-        .map((element) => {
-          return element.SponsorID.S
-        })
 
-      let active_sponsors_data = partnered_sponsors_formatted.map((element) => {
-        if (
-          partnered_sponsors_names.includes(element.Username) &&
-          element.Status === 2
-        ) {
-          return {
-            SponsorID: element.Username,
-            FirstName: element.FirstName,
-            LastName: element.LastName,
-            Organization: element.Organization,
-            ...partnered_sponsors_formatted.find((element_2) => {
-              if (element_2) {
-                return element_2.DriverID === userData.Username
-              } else {
-                return null
-              }
-            }),
-          }
-        } else {
-          return null
-        }
-      })
+      let active_sponsors_data = partnered_sponsors_formatted.filter(
+        (element) => element.Status === 2,
+      )
 
       let active_sponsors_table_data = active_sponsors_data
         .filter((element) => element)
         .map((element) => {
           return {
             SponsorshipID: element.SponsorshipID,
-            Sponsor:
-              element.Organization +
-              ': ' +
-              element.FirstName +
-              ' ' +
-              element.LastName,
+            Organization: element.Organization,
+            FirstName: element.FirstName,
+            LastName: element.LastName,
             TotalPoints: parseInt(element.Points),
             StartDate: element.AppDecisionDate,
           }
@@ -147,8 +107,20 @@ const ViewSponsorsPage = () => {
 
     setTable1HeadCells([
       {
-        id: 'Sponsor',
-        label: 'Sponsor',
+        id: 'Organization',
+        label: 'Organization',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'FirstName',
+        label: 'First name',
+        isDate: false,
+        width: 100,
+      },
+      {
+        id: 'LastName',
+        label: 'Last name',
         isDate: false,
         width: 100,
       },
@@ -214,7 +186,7 @@ const ViewSponsorsPage = () => {
                     setDataState={setTable1DataState}
                     tableKey="SponsorshipID"
                     showKey={false}
-                    initialSortedColumn="Sponsor"
+                    initialSortedColumn="Organization"
                     initialSortedDirection="asc"
                     selectedRow={selectedEntry}
                     setSelectedRow={setSelectedEntryState}
