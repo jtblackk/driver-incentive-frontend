@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -9,8 +9,11 @@ import { Avatar, Divider, Grid, Paper, Typography } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 
 import GenericTableSelectableSpecial from './GenericTableSelectableSpecial'
+import { UserContext } from '../Helpers/UserContext'
 
 export default function AddCatalogItemDialog(props) {
+  let userData = useContext(UserContext).user
+
   const handleClickOpen = () => {
     props.dialogProps.setAddItemDialogIsOpenState(true)
   }
@@ -159,18 +162,25 @@ export default function AddCatalogItemDialog(props) {
                       // append new items to old items
                       let new_list_of_ids = [
                         ...props.dialogProps.allCatalogData
-                          .filter((element) => element.ItemKey)
-                          .map((element) => element.ItemKey),
+                          .filter((element) => element.ProductID)
+                          .map((element) => element.ProductID),
                         ...checked_ids,
                       ]
 
-                      // TODO: save new list of product IDs to database | waiting on api
-                      console.log(new_list_of_ids)
+                      let SET_CATALOG_URL = `https://4hw5o2emwe.execute-api.us-east-1.amazonaws.com/dev/setcatalogitems`
+                      let requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          SponsorID: userData.Username,
+                          ProductIDs: new_list_of_ids,
+                        }),
+                      }
 
-                      // save internal data
-
-                      handleClose()
-                      window.location.reload()
+                      fetch(SET_CATALOG_URL, requestOptions).then(() => {
+                        window.location.reload()
+                        setIsLoading(false)
+                      })
                     }}
                   >
                     Add items
