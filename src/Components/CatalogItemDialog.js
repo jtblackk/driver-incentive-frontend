@@ -50,7 +50,6 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent)
 
 export default function CatalogItemDialog(props) {
-  // console.log(props)
   const handleClose = () => {
     props.dialogProps.setItemDialogIsOpen(false)
   }

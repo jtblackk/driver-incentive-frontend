@@ -191,7 +191,7 @@ export default function ViewSponsorProfileDialog(props) {
                     variant="contained"
                     style={{ backgroundColor: '#444444', color: 'white' }}
                     onClick={() => {
-                      // TODO: implement profile deletion
+                      // TODO: implement sponsor profile deletion
                       handleClose()
                     }}
                   >
