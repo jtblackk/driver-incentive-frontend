@@ -89,19 +89,16 @@ const ProductCatalogManagementPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // test?
-      // TODO: replace this data with live data | waiting on api to get a sponsor's ebay items
-      let list_of_product_ids = [
-        '333596718645',
-        '122472037548',
-        '152355004654',
-        '333596715743',
-        '182890213137',
-        '112981655768',
-        '392985369381',
-        '164099086115',
-        '302673385924',
-      ]
+      let CATALOG_ITEMS_URL = `https://bfv61oiy3h.execute-api.us-east-1.amazonaws.com/dev/getcatalogitems?SponsorID=${userData.Username}`
+      let catalog_items_raw = await fetch(CATALOG_ITEMS_URL)
+      let catalog_items_json = await catalog_items_raw.json()
+      let catalog_items_array = await JSON.parse(
+        catalog_items_json.body.toString(),
+      )
+      let catalog_items_parsed = catalog_items_array.Items[0].ProductIDs.L
+      let catalog_items_formatted = catalog_items_parsed.map(
+        (element) => element.S,
+      )
 
       let GET_EBAY_ITEMS_URL =
         'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
@@ -109,12 +106,12 @@ const ProductCatalogManagementPage = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ProductIDs: list_of_product_ids,
+          ProductIDs: catalog_items_formatted,
         }),
       }
       let item_data_raw = await fetch(GET_EBAY_ITEMS_URL, requestOptions)
       let item_data_json = await item_data_raw.json()
-      let item_data_parsed = JSON.parse(item_data_json.body)
+      let item_data_parsed = await JSON.parse(item_data_json.body)
 
       let item_data_array = item_data_parsed.Item.map((element) => {
         return {
@@ -210,7 +207,7 @@ const ProductCatalogManagementPage = () => {
                         onClick={() => {
                           // update checkedItems (filter the removed item out of the list) ?
                           // update allCatalogData (filter the removed item out of the list) ?
-                          // TODO: make api call to set the new list of product ids | waiting on catalog setter
+                         
                           setItemManagementDialogIsOpenState(false)
                           window.location.reload()
                         }}
@@ -240,6 +237,7 @@ const ProductCatalogManagementPage = () => {
               fullPageUpdateState: fullPageUpdateState,
               allCatalogData: allCatalogData,
               setAllCatalogDataState: setAllCatalogDataState,
+              checkedItems: checkedItems,
             }}
           />
 
