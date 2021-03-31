@@ -116,7 +116,7 @@ function OrganizationPage() {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Grid container justify="center">
-            <Grid item container xs={12} sm={11} md={8} lg={7} xl={4}>
+            <Grid item container xs={10} xl={6}>
               <OrganizationContent
                 orgProps={{
                   organizationUsers: organizationUsers,
@@ -130,7 +130,7 @@ function OrganizationPage() {
             </Grid>
 
             {/* supersponsor content: only renders for super sponsors */}
-            <Grid item container xs={12} sm={11} md={8} lg={7} xl={4}>
+            <Grid item container xs={10} xl={6}>
               {userData.Username.includes('@') ? (
                 <SuperSponsorContent
                   orgProps={{
