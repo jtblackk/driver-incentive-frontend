@@ -23,6 +23,7 @@ const OrganizationSetupCard = () => {
     fetch(GET_SPONSORDATA_URL)
       .then((response) => response.json())
       .then((data) => {
+        console.log(JSON.parse(data.body.toString()).Items)
         let clean_sonsor_list = []
         let sponsor_array = JSON.parse(data.body.toString()).Items
         sponsor_array.forEach((val) => {
@@ -86,7 +87,7 @@ const OrganizationSetupCard = () => {
                 ;(async () => {
                   setIsLoading(true)
                   let SAVE_USER_PROFILE_URL =
-                    'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
