@@ -12,7 +12,6 @@ import GenericTableSelectableSpecial from './GenericTableSelectableSpecial'
 import { UserContext } from '../Helpers/UserContext'
 
 export default function AddCatalogItemDialog(props) {
-  console.log(props)
   let userData = useContext(UserContext).activeProfile
 
   const handleClickOpen = () => {

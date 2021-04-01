@@ -81,11 +81,9 @@ export default function ProfileSelectionDialog(props) {
       let org_sponsors_raw = await fetch(GET_ORG_SPONSORS_URL)
       let org_sponsors_json = await org_sponsors_raw.json()
       let org_sponsors_parsed = JSON.parse(org_sponsors_json.body.toString())
-      console.log(org_sponsors_parsed)
       let org_sponsors_formatted = org_sponsors_parsed.Items.filter(
         (element) => parseInt(element.AccountStatus.N) < 2,
       ).map((element) => {
-        console.log(element)
         return {
           Username: element.Username.S,
           Name: element.FirstName.S + ' ' + element.LastName.S,

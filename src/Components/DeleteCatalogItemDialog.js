@@ -64,7 +64,6 @@ export default function DeleteCatalogItemDialog(props) {
                 }
 
                 fetch(SET_CATALOG_URL, requestOptions).then(() => {
-                  console.log(props)
                   props.setDeleteItemCatalogIsOpenState(false, true)
                 })
               }}

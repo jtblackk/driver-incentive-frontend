@@ -118,9 +118,7 @@ export default function SetAllPointRatiosDialog(props) {
                     }),
                   }
                   fetch(UPDATE_POINT_VALUE_URL, requestOptions).then(() => {
-                    console.log(props)
                     props.setDialogIsOpen(false, true)
-                    // handleClose(true)
                   })
                 }}
               >

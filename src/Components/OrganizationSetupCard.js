@@ -23,7 +23,6 @@ const OrganizationSetupCard = () => {
     fetch(GET_SPONSORDATA_URL)
       .then((response) => response.json())
       .then((data) => {
-        console.log(JSON.parse(data.body.toString()).Items)
         let clean_sonsor_list = []
         let sponsor_array = JSON.parse(data.body.toString()).Items
         sponsor_array.forEach((val) => {

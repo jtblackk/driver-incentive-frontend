@@ -200,21 +200,6 @@ const ProductCatalogManagementPage = () => {
                         Select item
                       </Button>
                     </Grid>
-                    {/* <Grid item>
-                      <Button
-                        variant="contained"
-                        style={{ backgroundColor: '#444444', color: 'White' }}
-                        onClick={() => {
-                          // update checkedItems (filter the removed item out of the list) ?
-                          // update allCatalogData (filter the removed item out of the list) ?
-                         
-                          setItemManagementDialogIsOpenState(false)
-                          window.location.reload()
-                        }}
-                      >
-                        Remove from catalog
-                      </Button>
-                    </Grid> */}
                   </Grid>
                 )
               },
