@@ -259,8 +259,12 @@ const DriverManagementPage = () => {
   }, [pageUpdate])
 
   const [pointRatioDialogIsOpen, setPointRatioDialogIsOpen] = useState(false)
-  function setPointRatioDialogIsOpenState(state) {
+  function setPointRatioDialogIsOpenState(state, refresh) {
     setPointRatioDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
   }
 
   const [pointRatioDialogResponse, setPointRatioDialogResponse] = useState(
@@ -275,8 +279,9 @@ const DriverManagementPage = () => {
       <div className={classes.root}>
         <SetAllPointRatiosDialog
           dialogIsOpen={pointRatioDialogIsOpen}
-          setDialogIsOpen={setPointRatioDialogIsOpen}
-          setDialogResponse={setPointRatioDialogIsOpenState}
+          setDialogIsOpen={setPointRatioDialogIsOpenState}
+          // setDialogResponse={setPointRatioDialogIsOpenState}
+          // fullPageUpdate={setPointRatioDialogIsOpenState}
         />
 
         {/* layout stuff */}

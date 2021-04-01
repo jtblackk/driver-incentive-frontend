@@ -35,9 +35,7 @@ export default function DeleteCatalogItemDialog(props) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {'Delete all items?'}
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{'Delete items?'}</DialogTitle>
           <DialogContent>
             <Grid container spacing="2">
               <Grid item xs={12}>
@@ -66,8 +64,8 @@ export default function DeleteCatalogItemDialog(props) {
                 }
 
                 fetch(SET_CATALOG_URL, requestOptions).then(() => {
-                  window.location.reload()
-                  handleClose()
+                  console.log(props)
+                  props.setDeleteItemCatalogIsOpenState(false, true)
                 })
               }}
               color="primary"

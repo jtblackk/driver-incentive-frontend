@@ -24,11 +24,6 @@ export default function SetAllPointRatiosDialog(props) {
 
   const handleClose = (resp) => {
     props.setDialogIsOpen(false)
-    props.setDialogResponse(resp)
-    if (resp === true) {
-      window.location.reload()
-    } else {
-    }
   }
 
   return (
@@ -123,7 +118,9 @@ export default function SetAllPointRatiosDialog(props) {
                     }),
                   }
                   fetch(UPDATE_POINT_VALUE_URL, requestOptions).then(() => {
-                    handleClose(true)
+                    console.log(props)
+                    props.setDialogIsOpen(false, true)
+                    // handleClose(true)
                   })
                 }}
               >
