@@ -17,6 +17,7 @@ import ChooseCatalogSponsorDialog from '../Components/ChooseCatalogSponsorDialog
 import LoadingIcon from '../Components/LoadingIcon'
 import { Loading } from 'aws-amplify-react'
 import { Image } from '@material-ui/icons'
+import { blue } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +53,42 @@ const ProductCatalogBrowsingPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [catalogItems, setCatalogItems] = useState(null)
   const [activeSponsor, setActiveSponsor] = useState(false)
+
+  const [cart, setCart] = useState([])
+  function addItemToCart(item, quantity) {
+    let original_cart = [...cart]
+    console.log(original_cart)
+
+    // console.log('adding ' + quantity + ' ' + item)
+
+    // if item already exists in the cart, just change the quantity
+    let search_result = original_cart.find((element) => {
+      return element.ProductID === item
+    })
+
+    if (!search_result) {
+      original_cart.push({ ProductID: item, Quantity: quantity })
+      setCart(original_cart)
+    } else {
+      // update cart
+      let updated_cart = cart.map((element) => {
+        if (element.ProductID === item) {
+          return {
+            ...element,
+            Quantity: element.Quantity + quantity,
+          }
+        } else {
+          return {
+            ...element,
+          }
+        }
+      })
+      setCart(updated_cart)
+    }
+
+    // if item does not exist in the cart, create a new cart entry
+  }
+  function changeItemQuantity(item, newQuantity) {}
 
   const [pageNumber, setPageNumber] = useState(0)
   const itemsPerPage = 5
@@ -140,6 +177,9 @@ const ProductCatalogBrowsingPage = () => {
               Choose a sponsor to view their dialog
             </Button>
           </Grid>
+          <Grid item xs={12} container>
+            <p>{cart ? JSON.stringify(cart) : null}</p>
+          </Grid>
           {!isLoading ? (
             <div>
               {activeSponsor ? (
@@ -163,12 +203,20 @@ const ProductCatalogBrowsingPage = () => {
                             <img
                               src={element.PhotoURL}
                               alt="product"
-                              style={{ maxWidth: '250px', maxHeight: '250px' }}
+                              style={{
+                                maxWidth: '250px',
+                                maxHeight: '275px',
+                                minWidth: '250px',
+                              }}
                             />
                           </Grid>
                           <Grid item container xs={7}>
                             <Grid item xs={12}>
-                              <Typography>{element.Name}</Typography>
+                              <Typography>
+                                <b style={{ color: '#444444' }}>
+                                  {element.Name}
+                                </b>
+                              </Typography>
                             </Grid>
 
                             <Grid item xs={12} align="right">
@@ -185,7 +233,13 @@ const ProductCatalogBrowsingPage = () => {
                             </Grid>
 
                             <Grid item xs={12} align="right">
-                              <Button variant="contained" color="primary">
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                  addItemToCart(element.ProductID, 1)
+                                }}
+                              >
                                 Add to cart
                               </Button>
                             </Grid>
