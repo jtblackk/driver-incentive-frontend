@@ -12,7 +12,8 @@ import GenericTableSelectableSpecial from './GenericTableSelectableSpecial'
 import { UserContext } from '../Helpers/UserContext'
 
 export default function AddCatalogItemDialog(props) {
-  let userData = useContext(UserContext).user
+  console.log(props)
+  let userData = useContext(UserContext).activeProfile
 
   const handleClickOpen = () => {
     props.dialogProps.setAddItemDialogIsOpenState(true)
@@ -178,7 +179,11 @@ export default function AddCatalogItemDialog(props) {
                       }
 
                       fetch(SET_CATALOG_URL, requestOptions).then(() => {
-                        window.location.reload()
+                        props.dialogProps.setAddItemDialogIsOpenState(
+                          false,
+                          true,
+                        )
+                        // window.location.reload()
                         setIsLoading(false)
                       })
                     }}
