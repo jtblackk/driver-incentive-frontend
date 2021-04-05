@@ -100,7 +100,13 @@ export default function ChooseCatalogItemsPanel(props) {
             variant="contained"
             style={{ backgroundColor: '#444444', color: 'white' }}
             onClick={() => {
-              props.dialogProps.setDeleteItemCatalogIsOpenState(true)
+              if (
+                props.tableProps.checkedItems.filter(
+                  (element) => element.isChecked === true,
+                ).length > 0
+              ) {
+                props.dialogProps.setDeleteItemCatalogIsOpenState(true)
+              }
             }}
           >
             Delete selected
