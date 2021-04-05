@@ -12,20 +12,54 @@ import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
 
 function OrganizationInfoPanel(props) {
+  console.log(props)
+
   useEffect(() => {
     ;(async () => {
-      // TODO: parse organization data | waiting for api
+      let sponsor_count = props.parentProps.orgProps.organizationUsers.reduce(
+        (count, element) => {
+          if (element.AccountStatus === 1 && element.AccountType === 'Sponsor')
+            return count + 1
+          else return count
+        },
+        0,
+      )
+
+      let driver_count = props.parentProps.orgProps.organizationUsers.reduce(
+        (count, element) => {
+          console.log(element)
+          if (
+            element.AccountStatus === 1 &&
+            element.AccountType === 'Driver' &&
+            element.Status === 2
+          )
+            return count + 1
+          else return count
+        },
+        0,
+      )
+
+      let leader = props.parentProps.orgProps.organizationUsers.find(
+        (element) => {
+          return element.Username.includes('@')
+        },
+      )
+
+      console.log(leader)
+
+      setSponsorCount(sponsor_count)
+      setDriverCount(driver_count)
+      setOrgLeader(leader.Username)
+      // console.log(sponsor_count)
+      // console.log(driver_count)
     })()
   })
 
   const userData = useContext(UserContext).user
-  const setUserData = useContext(UserContext).setUser
-
-  const [organizationNameHelperText, setOrganizationNameHelperText] = useState(
-    null,
-  )
-
   const [isLoading, setIsLoading] = useState(false)
+  const [sponsorCount, setSponsorCount] = useState(null)
+  const [driverCount, setDriverCount] = useState(null)
+  const [orgLeader, setOrgLeader] = useState(null)
 
   if (isLoading) {
     return <LoadingIcon></LoadingIcon>
@@ -75,7 +109,7 @@ function OrganizationInfoPanel(props) {
               </Typography>
             </Grid>
             <Grid item xs={6} align="left">
-              org leader's email and name
+              {orgLeader}
             </Grid>
           </Grid>
 
@@ -86,7 +120,7 @@ function OrganizationInfoPanel(props) {
               </Typography>
             </Grid>
             <Grid item xs={6} align="left">
-              number of sponsors
+              {sponsorCount}
             </Grid>
           </Grid>
 
@@ -97,7 +131,7 @@ function OrganizationInfoPanel(props) {
               </Typography>
             </Grid>
             <Grid item xs={6} align="left">
-              number of drivers
+              {driverCount}
             </Grid>
           </Grid>
         </Grid>

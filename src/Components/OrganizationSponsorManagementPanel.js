@@ -5,6 +5,7 @@ import AddSponsorProfileDialog from './AddSponsorProfileDialog'
 import ViewSponsorProfileDialog from './ViewSponsorProfileDialog'
 import GenericTable from './GenericTable'
 import LoadingIcon from './LoadingIcon'
+require('datejs')
 
 const OrganizationSponsorManagementPanel = (props) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -23,7 +24,8 @@ const OrganizationSponsorManagementPanel = (props) => {
     setAddSponsorProfileDialogIsOpen(state)
 
     if (refresh) {
-      setPageUpdate(pageUpdate + 1)
+      // console.log(props)
+      props.parentProps.pageProps.updatePage()
     }
   }
 
@@ -31,12 +33,23 @@ const OrganizationSponsorManagementPanel = (props) => {
     viewSponsorProfileDialogIsOpen,
     setViewSponsorProfileDialogIsOpen,
   ] = useState(false)
-
   function setViewSponsorProfileDialogIsOpenState(state, refresh) {
     setViewSponsorProfileDialogIsOpen(state)
 
     if (refresh) {
-      setPageUpdate(pageUpdate + 1)
+      props.parentProps.pageProps.updatePage()
+    }
+  }
+
+  const [
+    viewTerminatedProfileDialogIsOpen,
+    setViewTerminatedProfileDialogIsOpen,
+  ] = useState(false)
+  function setViewTerminatedProfileDialogIsOpenState(state, refresh) {
+    setViewTerminatedProfileDialogIsOpen(state)
+
+    if (refresh) {
+      props.parentProps.pageProps.updatePage()
     }
   }
 
@@ -47,6 +60,11 @@ const OrganizationSponsorManagementPanel = (props) => {
     setTable1Data(state)
   }
 
+  const [table2Data, setTable2Data] = useState(null)
+  function setTable2DataState(state) {
+    setTable2Data(state)
+  }
+
   const [selectedEntry, setSelectedEntry] = useState(null)
   function setSelectedEntryState(state) {
     setSelectedEntry(state)
@@ -55,14 +73,34 @@ const OrganizationSponsorManagementPanel = (props) => {
   const orgProps = props.parentProps.orgProps
 
   useEffect(() => {
-    setIsLoading(true)
     ;(async () => {
+      setIsLoading(true)
       let org_sponsor_profiles = orgProps.organizationUsers.filter(
         (element) => {
           return element.AccountType === 'Sponsor'
         },
       )
-      let org_sponsor_profiles_table_data = org_sponsor_profiles.map(
+
+      let active_sponsor_profiles = org_sponsor_profiles.filter((element) => {
+        return element.AccountStatus === 1
+      })
+
+      let terminated_sonsor_profiles = org_sponsor_profiles.filter(
+        (element) => {
+          return element.AccountStatus === 2
+        },
+      )
+
+      let active_profile_table_data = active_sponsor_profiles.map((element) => {
+        return {
+          Username: element.Username,
+          FirstName: element.FirstName,
+          LastName: element.LastName,
+          CreatedDate: element.SignupDate,
+        }
+      })
+
+      let terminated_profile_table_data = terminated_sonsor_profiles.map(
         (element) => {
           return {
             Username: element.Username,
@@ -73,7 +111,8 @@ const OrganizationSponsorManagementPanel = (props) => {
         },
       )
 
-      setTable1Data(org_sponsor_profiles_table_data)
+      setTable1Data(active_profile_table_data)
+      setTable2Data(terminated_profile_table_data)
     })().then(() => {
       setIsLoading(false)
     })
@@ -100,7 +139,7 @@ const OrganizationSponsorManagementPanel = (props) => {
       {
         id: 'CreatedDate',
         label: 'Member since',
-        isDate: false,
+        isDate: true,
         width: 200,
       },
     ])
@@ -110,62 +149,189 @@ const OrganizationSponsorManagementPanel = (props) => {
     return <LoadingIcon />
   } else {
     return (
-      <Grid item xs={12} container component={Paper} style={{ padding: 20 }}>
-        <AddSponsorProfileDialog
-          dialogProps={{
-            parentProps: props,
-            selectionDialogIsOpen: addSponsorProfileDialogIsOpen,
-            setSelectionDialogIsOpenState: setAddSponsorProfileDialogIsOpenState,
-          }}
-        />
-        <ViewSponsorProfileDialog
-          dialogProps={{
-            parentProps: props,
-            selectionDialogIsOpen: viewSponsorProfileDialogIsOpen,
-            setSelectionDialogIsOpenState: setViewSponsorProfileDialogIsOpen,
-            selectedEntry: selectedEntry,
-            setSelectedEntryState: setSelectedEntryState,
-          }}
-        />
-        <Grid item xs={12}>
-          <Typography variant="h6">Manage your sponsors</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>Add, view, and remove your sponsor profiles</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <br />
-        </Grid>
-        <Grid item xs={12} container justify="flex-end">
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                setAddSponsorProfileDialogIsOpenState(true)
+      <Grid container>
+        <Grid item xs={12} container component={Paper} style={{ padding: 20 }}>
+          <AddSponsorProfileDialog
+            dialogProps={{
+              parentProps: props,
+              selectionDialogIsOpen: addSponsorProfileDialogIsOpen,
+              setSelectionDialogIsOpenState: setAddSponsorProfileDialogIsOpenState,
+              fullPageUpdateState: fullPageUpdateState,
+            }}
+          />
+          {/* active sponsor dialog */}
+          {!selectedEntry ? null : (
+            <ViewSponsorProfileDialog
+              dialogProps={{
+                parentProps: props,
+                selectionDialogIsOpen: viewSponsorProfileDialogIsOpen,
+                setSelectionDialogIsOpenState: setViewSponsorProfileDialogIsOpenState,
+                selectedEntry: selectedEntry,
+                setSelectedEntryState: setSelectedEntryState,
+                fullPageUpdateState: fullPageUpdateState,
+                action: selectedEntry.Username.includes('@') ? null : (
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: '#444444', color: 'white' }}
+                    onClick={() => {
+                      let SAVE_USER_PROFILE_URL =
+                        'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                      let requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          Username: selectedEntry.Username,
+                          AccountStatus: 2,
+                        }),
+                      }
+
+                      fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                        setViewSponsorProfileDialogIsOpenState(false, true)
+                      })
+                    }}
+                  >
+                    Delete profile
+                  </Button>
+                ),
               }}
-            >
-              Add sponsor
-            </Button>
+            />
+          )}
+
+          {/* deleted sponsor dialog */}
+          <ViewSponsorProfileDialog
+            dialogProps={{
+              parentProps: props,
+              selectionDialogIsOpen: viewTerminatedProfileDialogIsOpen,
+              setSelectionDialogIsOpenState: setViewTerminatedProfileDialogIsOpenState,
+              selectedEntry: selectedEntry,
+              setSelectedEntryState: setSelectedEntryState,
+              fullPageUpdateState: fullPageUpdateState,
+              action: (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    let SAVE_USER_PROFILE_URL =
+                      'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                    let requestOptions = {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        Username: selectedEntry.Username,
+                        AccountStatus: 1,
+                      }),
+                    }
+                    fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                      setViewTerminatedProfileDialogIsOpenState(false, true)
+                    })
+                  }}
+                >
+                  Reinstate profile
+                </Button>
+              ),
+            }}
+          />
+          <Grid item xs={12}>
+            <Typography variant="h6">Manage your sponsors</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>Add, view, and remove your sponsor profiles</Typography>
           </Grid>
           <Grid item xs={12}>
             <br />
           </Grid>
+          <Grid
+            item
+            xs={12}
+            container
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item align="left">
+              <Typography variant="h6">Active profiles</Typography>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  setAddSponsorProfileDialogIsOpenState(true)
+                }}
+              >
+                Create sponsor profile
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <br />
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <GenericTable
+              headCells={table1HeadCells}
+              data={table1Data}
+              setDataState={setTable1DataState}
+              tableKey="Username"
+              showKey={true}
+              initialSortedColumn="CreatedDate"
+              initialSortedDirection="desc"
+              selectedRow={selectedEntry}
+              setSelectedRow={setSelectedEntryState}
+              dialogIsOpen={setViewSponsorProfileDialogIsOpen}
+              setDialogIsOpenState={setViewSponsorProfileDialogIsOpenState}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <br></br>
+          </Grid>
+          <Grid item xs={12}>
+            <br></br>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <GenericTable
-            headCells={table1HeadCells}
-            data={table1Data}
-            setDataState={setTable1DataState}
-            tableKey="Username"
-            showKey={true}
-            initialSortedColumn="CreatedDate"
-            initialSortedDirection="desc"
-            selectedRow={selectedEntry}
-            setSelectedRow={setSelectedEntryState}
-            dialogIsOpen={setViewSponsorProfileDialogIsOpen}
-            setDialogIsOpenState={setViewSponsorProfileDialogIsOpenState}
-          />
+
+        <Grid item>
+          <br />
+        </Grid>
+
+        {/* part 2 */}
+        <Grid item xs={12} container component={Paper} style={{ padding: 20 }}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Deleted sponsor profiles</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>
+              View and reinstate the sponsor profiles you have deleted
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            container
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item xs={12}>
+              <br />
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <GenericTable
+              headCells={table1HeadCells}
+              data={table2Data}
+              setDataState={setTable2DataState}
+              tableKey="Username"
+              showKey={true}
+              initialSortedColumn="CreatedDate"
+              initialSortedDirection="desc"
+              selectedRow={selectedEntry}
+              setSelectedRow={setSelectedEntryState}
+              dialogIsOpen={setViewTerminatedProfileDialogIsOpen}
+              setDialogIsOpenState={setViewTerminatedProfileDialogIsOpenState}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <br />
+          </Grid>
         </Grid>
       </Grid>
     )

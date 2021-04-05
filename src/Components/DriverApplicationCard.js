@@ -43,14 +43,17 @@ const DriverApplicationCard = (props) => {
       let sponsorlist_response = await fetch(GET_SPONSORLIST_URL)
       let sponsorlist_data = await sponsorlist_response.json()
       let sponsorlist_array = JSON.parse(sponsorlist_data.body.toString()).Items
-      let sponsorlist_formatted = sponsorlist_array.map((element) => {
-        return {
-          Username: element.Username.S,
-          FirstName: element.FirstName.S,
-          LastName: element.LastName.S,
-          Organization: element.Organization.S,
-        }
-      })
+      let sponsorlist_formatted = sponsorlist_array
+        .map((element) => {
+          return {
+            Username: element.Username.S,
+            FirstName: element.FirstName.S,
+            LastName: element.LastName.S,
+            Organization: element.Organization.S,
+            AccountStatus: parseInt(element.AccountStatus.N),
+          }
+        })
+        .filter((element) => element.AccountStatus === 1)
 
       let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
       let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)

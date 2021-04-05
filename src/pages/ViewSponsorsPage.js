@@ -9,6 +9,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import ApplicationManagementDialog from '../Components/ApplicationManagementDialog'
 import GenericTable from '../Components/GenericTable'
 import { useHistory } from 'react-router'
+import ViewSponsorAsDriverDialog from '../Components/ViewSponsorAsDriverDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,33 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }))
+
+let table2HeadCells = [
+  {
+    id: 'Organization',
+    label: 'Organization',
+    isDate: false,
+    width: 50,
+  },
+  {
+    id: 'FirstName',
+    label: 'First name',
+    isDate: false,
+    width: 50,
+  },
+  {
+    id: 'LastName',
+    label: 'Last name',
+    isDate: false,
+    width: 50,
+  },
+  {
+    id: 'ApplicationDate',
+    label: 'Submitted on',
+    isDate: false,
+    width: 200,
+  },
+]
 
 const ViewSponsorsPage = () => {
   const classes = useStyles()
@@ -49,10 +77,17 @@ const ViewSponsorsPage = () => {
     setTable1Data(state)
   }
 
+  const [table2Data, setTable2Data] = useState(null)
+  function setTable2DataState(state) {
+    setTable2Data(state)
+  }
+
   const [selectedEntry, setSelectedEntry] = useState(null)
   function setSelectedEntryState(state) {
     setSelectedEntry(state)
   }
+
+  const [allSponsorshipsData, setAllSponsorshipsData] = useState(null)
 
   useEffect(() => {
     setIsLoading(true)
@@ -65,9 +100,10 @@ const ViewSponsorsPage = () => {
       let partnered_sponsors_array = JSON.parse(
         partnered_sponsors_data.body.toString(),
       ).Items
+      console.log(partnered_sponsors_array)
 
-      let partnered_sponsors_formatted = partnered_sponsors_array.map(
-        (element) => {
+      let partnered_sponsors_formatted = partnered_sponsors_array
+        .map((element) => {
           return {
             SponsorshipID: element.SponsorshipID.S,
             SponsorID: element.SponsorID.S,
@@ -79,9 +115,14 @@ const ViewSponsorsPage = () => {
             LastName: element.LastName.S,
             Organization: element.Organization.S,
             Status: parseInt(element.Status.N),
+            SponsorStatus: parseInt(element.AccountStatus.N),
+            AppSubmissionDate: element.AppSubmissionDate.S,
+            AppComments: element.AppComments.S,
+            AppDecisionReason: element.AppDecisionReason.S,
+            Bio: element.Bio.S,
           }
-        },
-      )
+        })
+        .filter((element) => element.SponsorStatus === 1)
 
       let active_sponsors_data = partnered_sponsors_formatted.filter(
         (element) => element.Status === 2,
@@ -91,7 +132,7 @@ const ViewSponsorsPage = () => {
         .filter((element) => element)
         .map((element) => {
           return {
-            SponsorshipID: element.SponsorshipID,
+            SponsorID: element.SponsorID,
             Organization: element.Organization,
             FirstName: element.FirstName,
             LastName: element.LastName,
@@ -100,7 +141,34 @@ const ViewSponsorsPage = () => {
           }
         })
 
+      console.log(partnered_sponsors_array)
+      let applied_sponsors_data = partnered_sponsors_formatted
+        .filter((element) => element.Status === 0)
+        .map((element) => {
+          return {
+            SponsorID: element.SponsorID,
+            Organization: element.Organization,
+            FirstName: element.FirstName,
+            LastName: element.LastName,
+            AppSubmissionDate: element.AppSubmissionDate,
+          }
+        })
+
+      let applied_sponsors_table_data = applied_sponsors_data
+        .filter((element) => element)
+        .map((element) => {
+          return {
+            SponsorID: element.SponsorID,
+            Organization: element.Organization,
+            FirstName: element.FirstName,
+            LastName: element.LastName,
+            StartDate: element.AppSubmissionDate,
+          }
+        })
+
       setTable1Data(active_sponsors_table_data)
+      setTable2Data(applied_sponsors_table_data)
+      setAllSponsorshipsData(partnered_sponsors_formatted)
     })().then(() => {
       setIsLoading(false)
     })
@@ -110,31 +178,31 @@ const ViewSponsorsPage = () => {
         id: 'Organization',
         label: 'Organization',
         isDate: false,
-        width: 100,
+        width: 50,
       },
       {
         id: 'FirstName',
         label: 'First name',
         isDate: false,
-        width: 100,
+        width: 50,
       },
       {
         id: 'LastName',
         label: 'Last name',
         isDate: false,
-        width: 100,
+        width: 50,
       },
       {
         id: 'TotalPoints',
         label: 'Total Points',
         isDate: false,
-        width: 100,
+        width: 50,
       },
       {
         id: 'StartDate',
         label: 'Sponsored since',
-        isDate: false,
-        width: 100,
+        isDate: true,
+        width: 150,
       },
     ])
   }, [pageUpdate])
@@ -149,6 +217,14 @@ const ViewSponsorsPage = () => {
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
+          <ViewSponsorAsDriverDialog
+            dialogProps={{
+              dialogIsOpen: dialogIsOpen,
+              setDialogIsOpen: setDialogIsOpenState,
+              selectedEntry: selectedEntry,
+              allSponsorshipsData: allSponsorshipsData,
+            }}
+          />
 
           <Grid
             container
@@ -167,6 +243,34 @@ const ViewSponsorsPage = () => {
                         A list of the sponsors you're registered to
                       </Typography>
                     </Grid>
+                  </Grid>
+                  <br></br>
+                  <GenericTable
+                    headCells={table1HeadCells}
+                    data={table1Data}
+                    setDataState={setTable1DataState}
+                    tableKey="SponsorID"
+                    showKey={false}
+                    initialSortedColumn="Organization"
+                    initialSortedDirection="asc"
+                    selectedRow={selectedEntry}
+                    setSelectedRow={setSelectedEntryState}
+                    dialogIsOpen={dialogIsOpen}
+                    setDialogIsOpenState={setDialogIsOpenState}
+                  />
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={10} xl={6}>
+              <Paper>
+                <div style={{ padding: 20 }}>
+                  <Grid container justify="space-between" alignItems="center">
+                    <Grid item>
+                      <Typography variant="h6">Pending applications</Typography>
+                      <Typography>
+                        Sponsors who have not responded to your application
+                      </Typography>
+                    </Grid>
                     <Grid item>
                       <Button
                         variant="contained"
@@ -181,13 +285,13 @@ const ViewSponsorsPage = () => {
                   </Grid>
                   <br></br>
                   <GenericTable
-                    headCells={table1HeadCells}
-                    data={table1Data}
-                    setDataState={setTable1DataState}
-                    tableKey="SponsorshipID"
+                    headCells={table2HeadCells}
+                    data={table2Data}
+                    setDataState={setTable2DataState}
+                    tableKey="SponsorID"
                     showKey={false}
-                    initialSortedColumn="Organization"
-                    initialSortedDirection="asc"
+                    initialSortedColumn="ApplicationDate"
+                    initialSortedDirection="desc"
                     selectedRow={selectedEntry}
                     setSelectedRow={setSelectedEntryState}
                     dialogIsOpen={dialogIsOpen}

@@ -83,8 +83,8 @@ const DriverManagementPage = () => {
       const driver_profile_data_parsed = JSON.parse(
         driver_profile_data_json.body.toString(),
       )
-      const driver_profile_data_formatted = driver_profile_data_parsed.map(
-        (val) => {
+      const driver_profile_data_formatted = driver_profile_data_parsed
+        .map((val) => {
           if (val) {
             return {
               Username: val.Username.S,
@@ -97,8 +97,8 @@ const DriverManagementPage = () => {
           } else {
             return null
           }
-        },
-      )
+        })
+        .filter((element) => element.AccountStatus === 1)
 
       //  fetch applicant list
       let sponsorship_list_api = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
@@ -143,23 +143,27 @@ const DriverManagementPage = () => {
         return val.Status === 3
       })
 
-      let current_drivers_data = current_drivers.map((val) => {
-        return {
-          ...val,
-          ...driver_profile_data_formatted.find(
-            (element) => element.Username === val.DriverID,
-          ),
-        }
-      })
+      let current_drivers_data = current_drivers
+        .map((val) => {
+          return {
+            ...val,
+            ...driver_profile_data_formatted.find(
+              (element) => element.Username === val.DriverID,
+            ),
+          }
+        })
+        .filter((element) => element.AccountStatus)
 
-      let terminated_drivers_data = terminated_drivers.map((val) => {
-        return {
-          ...val,
-          ...driver_profile_data_formatted.find(
-            (element) => element.Username === val.DriverID,
-          ),
-        }
-      })
+      let terminated_drivers_data = terminated_drivers
+        .map((val) => {
+          return {
+            ...val,
+            ...driver_profile_data_formatted.find(
+              (element) => element.Username === val.DriverID,
+            ),
+          }
+        })
+        .filter((element) => element.AccountStatus)
 
       setAllDriverData([...current_drivers_data, ...terminated_drivers_data])
 

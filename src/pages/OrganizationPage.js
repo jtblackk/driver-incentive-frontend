@@ -40,59 +40,66 @@ function OrganizationPage() {
     setOrganizationUsers(state)
   }
 
+  const [terminatedUsers, setTerminatedUsers] = useState(null)
+  function setTerminatedUsersState(state) {
+    setTerminatedUsers(state)
+  }
+
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function fullPageUpdateState() {
+    setPageUpdate(pageUpdate + 1)
+  }
+
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // TODO: load oranization users data | waiting on  api
       let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
-      // let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=the%20autobots`
-      // let org_users_raw = await fetch(GET_ORG_USERS_URL)
-      // let org_users_json = await org_users_raw.json()
-      // let org_users_array = await JSON.parse(org_users_json.body.toString())
-      // console.log(org_users_array)
+      let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      let org_users_json = await org_users_raw.json()
+      let org_users_array = await JSON.parse(org_users_json.body.toString())
 
-      setOrganizationUsers([
-        {
-          Username: 'demo_driver_8@gmail.com',
-          AccountStatus: 1,
-          Bio:
-            'Amateur social media nerd. Web enthusiast. Avid zombie geek. Certified pop cultureaholic.',
-          Sponsors: [],
-          SignupDate: '2021-03-10T02:15:05.245Z',
-          FirstName: 'Beth',
-          LastName: 'Contreras',
-          AccountType: 'Driver',
-        },
-        {
-          Username: 'demo_sponsor_1@gmail.com',
-          AccountStatus: 1,
-          Bio:
-            'Amateur social media fan. Professional bacon trailblazer. Hardcore explorer. Award-winning tv expert. Friendly pop culture maven.',
-          Sponsors: [],
-          SignupDate: '2021-03-13T03:24:53.345Z',
-          FirstName: 'Karlyn',
-          LastName: 'Barrett',
-          AccountType: 'Sponsor',
-          Organization: 'Alamo Delivery',
-        },
+      let org_users_array_formatted = org_users_array
+        .map((element) => {
+          if (element.AccountType.S === 'Sponsor') {
+            return {
+              Username: element.Username.S,
+              AccountType: element.AccountType.S,
+              AccountStatus: parseInt(element.AccountStatus.N),
+              FirstName: element.FirstName.S,
+              LastName: element.LastName.S,
+              Bio: element.Bio.S,
+              SignupDate: element.SignupDate.S.split('.')[0].replace(' ', 'T'),
+              Organization: element.Organization.S,
+            }
+          } else if (element.AccountType.S === 'Driver') {
+            console.log(element)
+            return {
+              Username: element.Username.S,
+              AccountType: element.AccountType.S,
+              AccountStatus: parseInt(element.AccountStatus.N),
+              FirstName: element.FirstName.S,
+              LastName: element.LastName.S,
+              Bio: element.Bio.S,
+              SignupDate: element.SignupDate.S.split('.')[0].replace(' ', 'T'),
+              Status: parseInt(element.Status.N),
+              Points: parseInt(element.Points.N),
+              PointDollarRatio: parseFloat(element.PointDollarRatio.N),
+            }
+          }
+        })
+        .filter((element) => {
+          return element.AccountStatus > 0
+        })
 
-        {
-          Username: 'team11sponsordemo@gmail.com',
-          AccountStatus: 1,
-          Bio:
-            'Amateur social media fan. Professional bacon trailblazer. Hardcore explorer. Award-winning tv expert. Friendly pop culture maven.',
-          Sponsors: [],
-          SignupDate: '2021-03-14T03:24:53.345Z',
-          FirstName: 'Cool',
-          LastName: 'Sponsor',
-          AccountType: 'Sponsor',
-          Organization: 'Alamo Delivery',
-        },
-      ])
+      let not_banned_users = org_users_array_formatted.filter((element) => {
+        return element.AccountStatus < 3
+      })
+
+      setOrganizationUsers(not_banned_users)
     })().then(() => {
       setIsLoading(false)
     })
-  }, [])
+  }, [pageUpdate])
 
   // show loading screen if data is still being fetched
   if (isLoading) {
@@ -122,6 +129,11 @@ function OrganizationPage() {
                   organizationUsers: organizationUsers,
                   setOrganizationUsersState: setOrganizationUsersState,
                 }}
+                pageProps={{
+                  // TODO: be sure to call these functions on page update
+                  updateCount: pageUpdate,
+                  updatePage: fullPageUpdateState,
+                }}
               />
             </Grid>
 
@@ -136,6 +148,11 @@ function OrganizationPage() {
                   orgProps={{
                     organizationUsers: organizationUsers,
                     setOrganizationUsersState: setOrganizationUsersState,
+                  }}
+                  pageProps={{
+                    // TODO: be sure to call these functions on page update
+                    updateCount: pageUpdate,
+                    updatePage: fullPageUpdateState,
                   }}
                 />
               ) : null}
