@@ -72,7 +72,6 @@ function OrganizationPage() {
               Organization: element.Organization.S,
             }
           } else if (element.AccountType.S === 'Driver') {
-            console.log(element)
             return {
               Username: element.Username.S,
               AccountType: element.AccountType.S,
@@ -130,7 +129,6 @@ function OrganizationPage() {
                   setOrganizationUsersState: setOrganizationUsersState,
                 }}
                 pageProps={{
-                  // TODO: be sure to call these functions on page update
                   updateCount: pageUpdate,
                   updatePage: fullPageUpdateState,
                 }}
@@ -150,7 +148,6 @@ function OrganizationPage() {
                     setOrganizationUsersState: setOrganizationUsersState,
                   }}
                   pageProps={{
-                    // TODO: be sure to call these functions on page update
                     updateCount: pageUpdate,
                     updatePage: fullPageUpdateState,
                   }}

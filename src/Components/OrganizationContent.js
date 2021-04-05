@@ -12,8 +12,6 @@ import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
 
 function OrganizationInfoPanel(props) {
-  console.log(props)
-
   useEffect(() => {
     ;(async () => {
       let sponsor_count = props.parentProps.orgProps.organizationUsers.reduce(
@@ -27,7 +25,6 @@ function OrganizationInfoPanel(props) {
 
       let driver_count = props.parentProps.orgProps.organizationUsers.reduce(
         (count, element) => {
-          console.log(element)
           if (
             element.AccountStatus === 1 &&
             element.AccountType === 'Driver' &&
@@ -45,13 +42,9 @@ function OrganizationInfoPanel(props) {
         },
       )
 
-      console.log(leader)
-
       setSponsorCount(sponsor_count)
       setDriverCount(driver_count)
       setOrgLeader(leader.Username)
-      // console.log(sponsor_count)
-      // console.log(driver_count)
     })()
   })
 

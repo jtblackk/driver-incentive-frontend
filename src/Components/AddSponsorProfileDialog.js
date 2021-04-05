@@ -38,7 +38,6 @@ export default function AddSponsorProfileDialog(props) {
       let usernames_json = await usernames_raw.json()
       let username_array = usernames_json.body
       setUsernameList(username_array)
-      // console.log(username_array)
     })().then(() => {
       setIsLoading(false)
     })

@@ -93,14 +93,12 @@ const ViewSponsorsPage = () => {
     setIsLoading(true)
     ;(async () => {
       // get the sponsors that the driver is partnered to
-      // TODO: this api has been upgraded to provide more information. optimize this page to use that new data.
       let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
       let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = JSON.parse(
         partnered_sponsors_data.body.toString(),
       ).Items
-      console.log(partnered_sponsors_array)
 
       let partnered_sponsors_formatted = partnered_sponsors_array
         .map((element) => {
@@ -141,7 +139,6 @@ const ViewSponsorsPage = () => {
           }
         })
 
-      console.log(partnered_sponsors_array)
       let applied_sponsors_data = partnered_sponsors_formatted
         .filter((element) => element.Status === 0)
         .map((element) => {

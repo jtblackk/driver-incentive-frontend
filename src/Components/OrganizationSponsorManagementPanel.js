@@ -24,7 +24,6 @@ const OrganizationSponsorManagementPanel = (props) => {
     setAddSponsorProfileDialogIsOpen(state)
 
     if (refresh) {
-      // console.log(props)
       props.parentProps.pageProps.updatePage()
     }
   }

@@ -246,19 +246,6 @@ const DriverManagementPage = () => {
         isDate: false,
         width: 115,
       },
-      // {
-      //   id: 'TotalPoints',
-      //   label: 'Total points',
-      //   isDate: false,
-      //   width: 100,
-      // },
-      // TODO: set this up to use actual date
-      // {
-      //   id: 'TerminatedDate',
-      //   label: 'Terminated on',
-      //   isDate: false,
-      //   width: 100,
-      // },
     ])
   }, [pageUpdate])
 

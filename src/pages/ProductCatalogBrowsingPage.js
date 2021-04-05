@@ -57,9 +57,7 @@ const ProductCatalogBrowsingPage = () => {
   const [cart, setCart] = useState([])
   function addItemToCart(item, quantity) {
     let original_cart = [...cart]
-    console.log(original_cart)
-
-    // console.log('adding ' + quantity + ' ' + item)
+    // console.log(original_cart)
 
     // if item already exists in the cart, just change the quantity
     let search_result = original_cart.find((element) => {

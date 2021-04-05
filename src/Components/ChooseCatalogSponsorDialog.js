@@ -68,8 +68,6 @@ export default function ChooseCatalogSponsorDialog(props) {
         partnered_sponsors_data.body.toString(),
       ).Items
 
-      console.log(partnered_sponsors_array)
-
       let active_sponsors_array = partnered_sponsors_array.filter(
         (element) =>
           parseInt(element.Status.N) === 2 &&
