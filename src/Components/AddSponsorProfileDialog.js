@@ -31,8 +31,17 @@ export default function AddSponsorProfileDialog(props) {
 
   useEffect(() => {
     setIsLoading(true)
-
-    setIsLoading(false)
+    ;(async () => {
+      let get_usernames_url =
+        'https://hym6oy13e9.execute-api.us-east-1.amazonaws.com/dev/getusernames'
+      let usernames_raw = await fetch(get_usernames_url)
+      let usernames_json = await usernames_raw.json()
+      let username_array = usernames_json.body
+      setUsernameList(username_array)
+      // console.log(username_array)
+    })().then(() => {
+      setIsLoading(false)
+    })
   }, [])
 
   return (
@@ -123,12 +132,19 @@ export default function AddSponsorProfileDialog(props) {
                     } else if (
                       username.includes("'") ||
                       username.includes(' ') ||
-                      username.includes('"')
+                      username.includes('"') ||
+                      username.includes('@')
                     ) {
-                      setUsernameHelperText('Avoid special characters')
+                      setUsernameHelperText(
+                        'Avoid special characters (\', ", @, etc)',
+                      )
                       validationFailed = true
-                    } else if (false) {
-                      // TODO: check for username username uniquity | need api to get all usernames on the app
+                    } else if (
+                      usernameList.find((element) => {
+                        return element === username
+                      })
+                    ) {
+                      setUsernameHelperText('Choose a unique name')
                       validationFailed = true
                     }
 
@@ -166,9 +182,12 @@ export default function AddSponsorProfileDialog(props) {
                         AccountStatus: 1,
                       }),
                     }
-                    fetch(REGISTER_PROFILE_URL, requestOptions)
-
-                    handleClose()
+                    fetch(REGISTER_PROFILE_URL, requestOptions).then(() => {
+                      props.dialogProps.setSelectionDialogIsOpenState(
+                        false,
+                        true,
+                      )
+                    })
                   }}
                 >
                   Create profile
