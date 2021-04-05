@@ -121,18 +121,22 @@ function RenameOrganizationPanel(props) {
 }
 
 export default function SuperSponsorContent(props) {
-  return (
-    <Grid item xs={12} container justify="center">
-      <Grid item xs={12}>
-        <RenameOrganizationPanel />
-      </Grid>
-      <Grid item xs={12}>
-        <br />
-      </Grid>
+  if (!props.orgProps.organizationUsers[0]) {
+    return null
+  } else {
+    return (
+      <Grid item xs={12} container justify="center">
+        <Grid item xs={12}>
+          <RenameOrganizationPanel />
+        </Grid>
+        <Grid item xs={12}>
+          <br />
+        </Grid>
 
-      <Grid item container justify="center" xs={12}>
-        <OrganizationSponsorManagementPanel parentProps={props} />
+        <Grid item container justify="center" xs={12}>
+          <OrganizationSponsorManagementPanel parentProps={props} />
+        </Grid>
       </Grid>
-    </Grid>
-  )
+    )
+  }
 }
