@@ -184,19 +184,10 @@ export default function ViewSponsorProfileDialog(props) {
                 </Grid>
               </Grid>
 
-              {/* Bio */}
+              {/* action button */}
               <Grid item container xs={12} spacing={2} justify="center">
-                <Grid item xs={left_col_width + right_col_width} align="right">
-                  <Button
-                    variant="contained"
-                    style={{ backgroundColor: '#444444', color: 'white' }}
-                    onClick={() => {
-                      // TODO: implement sponsor profile deletion
-                      handleClose()
-                    }}
-                  >
-                    Delete profile
-                  </Button>
+                <Grid item align="right">
+                  {props.dialogProps.action}
                 </Grid>
               </Grid>
 
@@ -213,7 +204,7 @@ export default function ViewSponsorProfileDialog(props) {
               {/* driver table */}
               <Grid item>
                 <Typography variant="h6">
-                  {selectedEntryData.FirstName}'s active drivers
+                  {selectedEntryData.FirstName}'s drivers
                 </Typography>
               </Grid>
               <Grid item container xs={12} spacing={2} justify="center">
