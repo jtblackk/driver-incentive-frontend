@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
@@ -6,15 +6,23 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import {
   Button,
   Divider,
+  FormControl,
   Grid,
   GridList,
   GridListTile,
+  IconButton,
+  InputLabel,
+  Menu,
+  MenuItem,
   Paper,
+  Select,
   Typography,
 } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import ChooseCatalogSponsorDialog from '../Components/ChooseCatalogSponsorDialog'
+import CartDialog from '../Components/CartDialog'
 import LoadingIcon from '../Components/LoadingIcon'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { Loading } from 'aws-amplify-react'
 import { Image } from '@material-ui/icons'
 import { blue } from '@material-ui/core/colors'
@@ -33,9 +41,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ProductCatalogBrowsingPage = () => {
+const ProductCatalogBrowsingPage = (props) => {
   const classes = useStyles()
-  const userData = useContext(UserContext).user
+
+  let userData = useContext(UserContext).user
+  // TODO: use this prop to let a sponsor browse a driver's catalog.
+  if (props.activeDriver) userData = props.activeDriver
 
   const [pageUpdate, setPageUpdate] = useState(0)
   const [
@@ -55,22 +66,35 @@ const ProductCatalogBrowsingPage = () => {
   const [activeSponsor, setActiveSponsor] = useState(false)
 
   const [cart, setCart] = useState([])
+  const [cartDialogIsOpen, setCartDialogIsOpen] = useState(null)
+  function setCartDialogIsOpenState(state, refresh) {
+    setCartDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
   function addItemToCart(item, quantity) {
     let original_cart = [...cart]
     // console.log(original_cart)
 
     // if item already exists in the cart, just change the quantity
     let search_result = original_cart.find((element) => {
-      return element.ProductID === item
+      return element.ProductID === item.ProductID
     })
 
     if (!search_result) {
-      original_cart.push({ ProductID: item, Quantity: quantity })
+      original_cart.push({
+        ProductID: item.ProductID,
+        Quantity: quantity,
+        FullItemDetails: item,
+      })
       setCart(original_cart)
     } else {
       // update cart
       let updated_cart = cart.map((element) => {
-        if (element.ProductID === item) {
+        if (element.ProductID === item.ProductID) {
           return {
             ...element,
             Quantity: element.Quantity + quantity,
@@ -83,15 +107,39 @@ const ProductCatalogBrowsingPage = () => {
       })
       setCart(updated_cart)
     }
-
-    // if item does not exist in the cart, create a new cart entry
   }
-  function changeItemQuantity(item, newQuantity) {}
+
+  function changeItemQuantity(item, newQuantity) {
+    let updated_cart = cart.map((element) => {
+      if (element.ProductID === item.ProductID) {
+        return {
+          ...element,
+          Quantity: newQuantity,
+        }
+      } else {
+        return {
+          ...element,
+        }
+      }
+    })
+
+    setCart(updated_cart)
+  }
+
+  function removeItem(item) {
+    console.log('removing')
+    let updated_cart = cart.filter((element) => {
+      return element.ProductID !== item.ProductID
+    })
+
+    setCart(updated_cart)
+  }
 
   const [pageNumber, setPageNumber] = useState(0)
   const itemsPerPage = 5
   const itemsViewedSoFar = pageNumber * itemsPerPage
   const [pageItems, setPageItems] = useState(null)
+  const [registeredSponsors, setRegisteredSponsors] = useState(null)
 
   async function setActiveSponsorState(state) {
     setIsLoading(true)
@@ -131,7 +179,7 @@ const ProductCatalogBrowsingPage = () => {
         Price: element.ConvertedCurrentPrice.Value,
         Location: element.Location,
       }
-    })
+    }).filter((element) => element.Stock > 0)
 
     let items_to_display = item_data_array.slice(
       itemsViewedSoFar,
@@ -142,129 +190,236 @@ const ProductCatalogBrowsingPage = () => {
     setCatalogItems(item_data_array)
     setIsLoading(false)
   }
+  // console.log(activeSponsor)
 
-  return (
-    <div className={classes.root}>
-      <ChooseCatalogSponsorDialog
-        dialogProps={{
-          dialogIsOpen: sponsorSelectionDialogIsOpen,
-          setDialogIsOpenState: setSponsorSelectionDialogIsOpenState,
-          activeSponsor: activeSponsor,
-          setActiveSponsor: setActiveSponsorState,
-        }}
-      />
+  useEffect(() => {
+    setIsLoading(true)
+    ;(async () => {
+      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
+      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_data = await partnered_sponsors_response.json()
+      let partnered_sponsors_array = await JSON.parse(
+        partnered_sponsors_data.body.toString(),
+      ).Items
 
-      {/* layout stuff */}
-      <TopAppBar pageTitle="Product catalog"></TopAppBar>
-      <LeftDrawer AccountType={userData.AccountType} />
+      let active_sponsors_array = partnered_sponsors_array.filter(
+        (element) =>
+          parseInt(element.Status.N) === 2 &&
+          parseInt(element.AccountStatus.N) === 1,
+      )
 
-      {/* page content (starts after first div) */}
+      let active_sponsors_formatted = active_sponsors_array.map((element) => {
+        return {
+          SponsorID: element.SponsorID.S,
+          SponsorName: element.FirstName.S + ' ' + element.LastName.S,
+          Points: parseInt(element.Points.N),
+          SponsorOrganization: element.Organization.S,
+          PointToDollarRatio: parseFloat(element.PointDollarRatio.N),
+        }
+      })
+      console.log(active_sponsors_formatted)
+      setRegisteredSponsors(active_sponsors_formatted)
+    })().then(() => {
+      setIsLoading(false)
+    })
+  }, [])
 
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+  if (!isLoading) {
+    return (
+      <div className={classes.root}>
+        <ChooseCatalogSponsorDialog
+          dialogProps={{
+            dialogIsOpen: sponsorSelectionDialogIsOpen,
+            setDialogIsOpenState: setSponsorSelectionDialogIsOpenState,
+            activeSponsor: activeSponsor,
+            setActiveSponsor: setActiveSponsorState,
+          }}
+        />
 
-        <Grid container>
-          <Grid item xs={12} container>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                setSponsorSelectionDialogIsOpenState(true)
-              }}
+        <CartDialog
+          dialogProps={{
+            dialogIsOpen: cartDialogIsOpen,
+            setDialogIsOpenState: setCartDialogIsOpenState,
+            activeSponsor: activeSponsor,
+            setActiveSponsor: setActiveSponsorState,
+            activeDriver: userData,
+            cart: cart,
+            changeItemQuantity: changeItemQuantity,
+            removeItem: removeItem,
+          }}
+        />
+
+        {/* layout stuff */}
+        <TopAppBar
+          pageTitle="Product catalog"
+          customItem={
+            <Grid
+              item
+              xs={12}
+              container
+              justify="space-between"
+              // component={Paper}
             >
-              Choose a sponsor to view their dialog
-            </Button>
-          </Grid>
-          <Grid item xs={12} container>
-            <p>{cart ? JSON.stringify(cart) : null}</p>
-          </Grid>
-          {!isLoading ? (
-            <div>
-              {activeSponsor ? (
-                <Grid item xs={12} container justify="flex-start">
-                  <Grid item xs={12}>
-                    <br />
-                  </Grid>
-                  <Grid item container xs={10} spacing={4}>
-                    {catalogItems.map((element) => {
-                      return (
-                        <Grid
-                          item
-                          container
-                          xs={10}
-                          justify="flex-start"
-                          spacing={4}
-                          // component={Paper}
+              <Grid item align="left">
+                {/* <FormControl> */}
+                {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  // label="sponsor"
+                  value={activeSponsor.SponsorID}
+                  // onChange={handleChange}
+                  variant="standard"
+                  style={{ color: 'white' }}
+                  fullWidth
+                >
+                  {registeredSponsors
+                    ? registeredSponsors.map((element) => (
+                        <MenuItem
+                          onClick={() => {
+                            setCart([])
+                            setActiveSponsorState(element)
+                          }}
+                          value={element.SponsorID}
                         >
-                          {/* <img src={element.PhotoURL} /> */}
-                          <Grid item>
-                            <img
-                              src={element.PhotoURL}
-                              alt="product"
-                              style={{
-                                maxWidth: '250px',
-                                maxHeight: '275px',
-                                minWidth: '250px',
-                              }}
-                            />
-                          </Grid>
-                          <Grid item container xs={7}>
-                            <Grid item xs={12}>
-                              <Typography>
-                                <b style={{ color: '#444444' }}>
-                                  {element.Name}
-                                </b>
-                              </Typography>
-                            </Grid>
+                          {element.SponsorOrganization +
+                            ': ' +
+                            element.SponsorName}
+                        </MenuItem>
+                      ))
+                    : null}
+                </Select>
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                container
+                spacing={2}
+                justify="flex-end"
+                alignItems="center"
+              >
+                <Grid item>{activeSponsor.Points} points</Grid>
+                <Grid item>
+                  <IconButton
+                    onClick={() => {
+                      console.log('show a dialog for the cart')
+                      let dialogData = {
+                        cart: cart,
+                        activeSponsor: activeSponsor,
+                        activeDriver: userData,
+                      }
 
-                            <Grid item xs={12} align="right">
-                              <Typography>{element.Stock} in stock</Typography>
-                            </Grid>
-                            <Grid item xs={12} align="right">
-                              <Typography>
-                                {Math.ceil(
-                                  element.Price /
-                                    activeSponsor.PointToDollarRatio,
-                                )}{' '}
-                                Points
-                              </Typography>
-                            </Grid>
-
-                            <Grid item xs={12} align="right">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => {
-                                  addItemToCart(element.ProductID, 1)
-                                }}
-                              >
-                                Add to cart
-                              </Button>
-                            </Grid>
-                          </Grid>
-
-                          <Grid item xs={12}>
-                            <Divider />
-                          </Grid>
-                        </Grid>
-                      )
-                    })}
-                  </Grid>
-                  <Grid item xs={12}>
-                    <br />
-                  </Grid>
+                      setCartDialogIsOpenState(true)
+                      console.log(dialogData)
+                    }}
+                  >
+                    <ShoppingCartIcon style={{ color: 'white' }} />
+                  </IconButton>
                 </Grid>
-              ) : (
-                <p>choose a sponsor to view their dialog</p>
-              )}
-            </div>
-          ) : (
-            <LoadingIcon />
-          )}
-        </Grid>
-      </main>
-    </div>
-  )
+              </Grid>
+            </Grid>
+          }
+        ></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+
+        {/* page content (starts after first div) */}
+
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+
+          <Grid container>
+            {!isLoading ? (
+              <div>
+                {activeSponsor ? (
+                  <Grid item xs={12} container justify="flex-start">
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item container xs={12} spacing={4}>
+                      {catalogItems.map((element) => {
+                        return (
+                          <Grid
+                            item
+                            container
+                            xs={12}
+                            justify="flex-start"
+                            spacing={4}
+                            // component={Paper}
+                          >
+                            {/* <img src={element.PhotoURL} /> */}
+                            <Grid item>
+                              <img
+                                src={element.PhotoURL}
+                                alt="product"
+                                style={{
+                                  maxWidth: '250px',
+                                  maxHeight: '275px',
+                                  minWidth: '250px',
+                                }}
+                              />
+                            </Grid>
+                            <Grid item container xs={7}>
+                              <Grid item xs={12}>
+                                <Typography>
+                                  <b style={{ color: '#444444' }}>
+                                    {element.Name}
+                                  </b>
+                                </Typography>
+                              </Grid>
+
+                              <Grid item xs={12} align="right">
+                                <Typography>
+                                  {element.Stock} in stock
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} align="right">
+                                <Typography>
+                                  {Math.ceil(
+                                    element.Price /
+                                      activeSponsor.PointToDollarRatio,
+                                  )}{' '}
+                                  Points
+                                </Typography>
+                              </Grid>
+
+                              <Grid item xs={12} align="right">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => {
+                                    addItemToCart(element, 1)
+                                  }}
+                                >
+                                  Add to cart
+                                </Button>
+                              </Grid>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                              <Divider />
+                            </Grid>
+                          </Grid>
+                        )
+                      })}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <p>choose a sponsor to view their dialog</p>
+                )}
+              </div>
+            ) : (
+              <LoadingIcon />
+            )}
+          </Grid>
+        </main>
+      </div>
+    )
+  } else {
+    return <LoadingIcon />
+  }
 }
 
 export default ProductCatalogBrowsingPage
