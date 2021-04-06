@@ -24,6 +24,7 @@ import StorageIcon from '@material-ui/icons/Storage'
 import GroupIcon from '@material-ui/icons/Group'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
+import ReceiptIcon from '@material-ui/icons/Receipt'
 import { UserContext } from '../Helpers/UserContext'
 
 // pages to show on the upper part of the drawer
@@ -91,10 +92,15 @@ const LeftDrawer = (props) => {
     {
       name: 'Catalog',
       route: '/browse-catalog',
-      icon: <LocalGroceryStoreIcon />,
+      icon: <StorefrontIcon />,
       reqAccTypes: ['Driver'],
     },
-
+    {
+      name: 'My Orders',
+      route: '/orders',
+      icon: <ReceiptIcon />,
+      reqAccTypes: ['Driver'],
+    },
     {
       name: 'My logs',
       route: '/logs',

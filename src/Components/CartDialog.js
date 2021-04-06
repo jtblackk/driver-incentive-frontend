@@ -19,6 +19,7 @@ import {
 import getUserDetails from '../Helpers/CommonFunctions'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
+import { useHistory } from 'react-router'
 
 const styles = (theme) => ({
   root: {
@@ -52,6 +53,7 @@ const DialogTitle = withStyles(styles)((props) => {
 })
 
 export default function CartDialog(props) {
+  let history = useHistory()
   const userData = useContext(UserContext).user
   const setUserData = useContext(UserContext).setUser
 
@@ -236,7 +238,13 @@ export default function CartDialog(props) {
                           let ordered_products = props.dialogProps.cart
                             .filter((element) => element.Quantity > 0)
                             .map((element) => {
-                              return element.ProductID
+                              return {
+                                ProductID: element.ProductID,
+                                Quantity: parseInt(element.Quantity),
+                                CostPerItem: parseFloat(
+                                  element.FullItemDetails.Price,
+                                ),
+                              }
                             })
 
                           let MAKE_ORDER_URL =
@@ -258,6 +266,8 @@ export default function CartDialog(props) {
                           fetch(MAKE_ORDER_URL, requestOptions).then(() => {
                             // TODO: take the user to an order confirmation page
                             console.log('order confirmation page needs to show')
+                            //for now, just redirect to 'My orders'
+                            history.push('/orders')
                           })
                         }
                       }}

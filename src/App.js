@@ -21,6 +21,7 @@ import getUserDetails from './Helpers/CommonFunctions'
 import ViewSponsorsPage from './pages/ViewSponsorsPage'
 import OrganizationSetupPage from './pages/OrganizationSetupPage'
 import OrganizationPage from './pages/OrganizationPage'
+import OrderReviewPage from './pages/OrderReviewPage'
 
 Amplify.configure(awsconfig)
 
@@ -77,6 +78,7 @@ function App() {
                 component={OrganizationSetupPage}
               />
               <Route exact path="/organization" component={OrganizationPage} />
+              <Route exact path="/orders" component={OrderReviewPage} />
 
               <Route component={PageNotFoundPage} />
             </Switch>
