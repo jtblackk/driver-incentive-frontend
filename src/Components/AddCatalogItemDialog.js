@@ -14,6 +14,10 @@ import { UserContext } from '../Helpers/UserContext'
 export default function AddCatalogItemDialog(props) {
   let userData = useContext(UserContext).activeProfile
 
+  if (!userData) {
+    userData = useContext(UserContext).user
+  }
+
   const handleClickOpen = () => {
     props.dialogProps.setAddItemDialogIsOpenState(true)
   }
@@ -167,6 +171,7 @@ export default function AddCatalogItemDialog(props) {
                         ...checked_ids,
                       ]
 
+                      console.log(userData)
                       let SET_CATALOG_URL = `https://4hw5o2emwe.execute-api.us-east-1.amazonaws.com/dev/setcatalogitems`
                       let requestOptions = {
                         method: 'POST',

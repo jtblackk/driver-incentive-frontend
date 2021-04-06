@@ -64,7 +64,7 @@ export default function ChooseCatalogSponsorDialog(props) {
       let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
       let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
       let partnered_sponsors_data = await partnered_sponsors_response.json()
-      let partnered_sponsors_array = JSON.parse(
+      let partnered_sponsors_array = await JSON.parse(
         partnered_sponsors_data.body.toString(),
       ).Items
 
@@ -127,9 +127,7 @@ export default function ChooseCatalogSponsorDialog(props) {
                     style={{ cursor: 'pointer', margin: 10 }}
                     onClick={(event) => {
                       props.dialogProps.setActiveSponsor({
-                        SponsorID: element.SponsorID,
-                        Points: element.Points,
-                        PointToDollarRatio: element.PointToDollarRatio,
+                        ...element,
                       })
 
                       handleClose()
