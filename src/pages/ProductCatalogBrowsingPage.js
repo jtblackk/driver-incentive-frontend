@@ -77,7 +77,6 @@ const ProductCatalogBrowsingPage = (props) => {
 
   function addItemToCart(item, quantity) {
     let original_cart = [...cart]
-    // console.log(original_cart)
 
     // if item already exists in the cart, just change the quantity
     let search_result = original_cart.find((element) => {
@@ -127,7 +126,6 @@ const ProductCatalogBrowsingPage = (props) => {
   }
 
   function removeItem(item) {
-    console.log('removing')
     let updated_cart = cart.filter((element) => {
       return element.ProductID !== item.ProductID
     })
@@ -190,7 +188,6 @@ const ProductCatalogBrowsingPage = (props) => {
     setCatalogItems(item_data_array)
     setIsLoading(false)
   }
-  // console.log(activeSponsor)
 
   useEffect(() => {
     setIsLoading(true)
@@ -217,7 +214,7 @@ const ProductCatalogBrowsingPage = (props) => {
           PointToDollarRatio: parseFloat(element.PointDollarRatio.N),
         }
       })
-      console.log(active_sponsors_formatted)
+
       setRegisteredSponsors(active_sponsors_formatted)
     })().then(() => {
       setIsLoading(false)
@@ -302,15 +299,7 @@ const ProductCatalogBrowsingPage = (props) => {
                 <Grid item>
                   <IconButton
                     onClick={() => {
-                      console.log('show a dialog for the cart')
-                      let dialogData = {
-                        cart: cart,
-                        activeSponsor: activeSponsor,
-                        activeDriver: userData,
-                      }
-
                       setCartDialogIsOpenState(true)
-                      console.log(dialogData)
                     }}
                   >
                     <ShoppingCartIcon style={{ color: 'white' }} />

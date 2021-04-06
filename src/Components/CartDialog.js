@@ -101,7 +101,7 @@ export default function CartDialog(props) {
         props.dialogProps.activeSponsor.PointToDollarRatio
     )
   }, 0)
-  console.log(props)
+
   return (
     <div>
       <Dialog
@@ -166,7 +166,6 @@ export default function CartDialog(props) {
                             label="Quantity"
                             value={element.Quantity}
                             onChange={(event) => {
-                              console.log(event.target.value)
                               if (
                                 event.target.value >= 0 &&
                                 event.target.value <=
@@ -203,10 +202,7 @@ export default function CartDialog(props) {
                               backgroundColor: '#444444',
                             }}
                             onClick={() => {
-                              // todo: call function to delete the cart item
-                              console.log(props.dialogProps.cart)
                               props.dialogProps.removeItem(element)
-                              console.log(props.dialogProps.cart)
                             }}
                           >
                             Remove from cart
@@ -233,8 +229,6 @@ export default function CartDialog(props) {
                       variant="contained"
                       color="primary"
                       onClick={() => {
-                        // TODO: need to make a loading icon
-                        console.log(cart_cost)
                         if (
                           cart_cost > 0 &&
                           cart_cost < props.dialogProps.activeSponsor.Points
@@ -242,10 +236,6 @@ export default function CartDialog(props) {
                           let ordered_products = props.dialogProps.cart
                             .filter((element) => element.Quantity > 0)
                             .map((element) => {
-                              // return {
-                              //   ProductID: element.ProductID,
-                              //   Quantity: element.Quantity,
-                              // }
                               return element.ProductID
                             })
 

@@ -171,7 +171,6 @@ export default function AddCatalogItemDialog(props) {
                         ...checked_ids,
                       ]
 
-                      console.log(userData)
                       let SET_CATALOG_URL = `https://4hw5o2emwe.execute-api.us-east-1.amazonaws.com/dev/setcatalogitems`
                       let requestOptions = {
                         method: 'POST',
