@@ -221,6 +221,14 @@ const ProductCatalogBrowsingPage = (props) => {
     })
   }, [])
 
+  let cart_count = cart.reduce((prev, curr) => {
+    let item_count = parseInt(prev) + parseInt(curr.Quantity)
+
+    return item_count
+  }, 0)
+
+  console.log(cart_count)
+
   if (!isLoading) {
     return (
       <div className={classes.root}>
@@ -291,7 +299,7 @@ const ProductCatalogBrowsingPage = (props) => {
                 item
                 xs={4}
                 container
-                spacing={2}
+                spacing={1}
                 justify="flex-end"
                 alignItems="center"
               >
@@ -304,7 +312,9 @@ const ProductCatalogBrowsingPage = (props) => {
                   >
                     <ShoppingCartIcon style={{ color: 'white' }} />
                   </IconButton>
+                  {cart_count}
                 </Grid>
+                {/* <Grid item align="left" component={Paper}></Grid> */}
               </Grid>
             </Grid>
           }

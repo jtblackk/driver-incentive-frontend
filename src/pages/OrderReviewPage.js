@@ -314,23 +314,38 @@ export default function OrderReviewPage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      let all_orders_json = mock_data
+      let USER_ORDERS_URL =
+        'https://45mkccncmi.execute-api.us-east-1.amazonaws.com/dev/getorder'
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          DriverID: userData.Username,
+        }),
+      }
 
-      let all_orders_parsed = all_orders_json.map((element) => {
+      let user_orders_resp = await fetch(USER_ORDERS_URL, requestOptions)
+      let user_orders_json = await user_orders_resp.json()
+      let user_orders_obj = JSON.parse(user_orders_json.body)
+      let user_orders_arr = user_orders_obj.Items
+
+      console.log(user_orders_arr)
+
+      let all_orders_parsed = user_orders_arr.map((element) => {
         return {
           OrderID: element.OrderID.S,
           DriverID: element.DriverID.S,
           SponsorID: element.SponsorID.S,
           Organization: element.Organization.S,
           Status: parseInt(element.Status.N),
-          Cost: parseFloat(element.Cost.N),
+          Cost: Math.ceil(parseFloat(element.Cost.N)),
           PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
           OrderDate: element.OrderSubmitted.S,
           Products: element.ProductIDs.L.map((element) => {
             return {
               ProductID: element.M.ProductID.S,
               Quantity: parseInt(element.M.Quantity.N),
-              PricePerItem: parseFloat(element.M.CostPerItem.N),
+              PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(2),
             }
           }),
         }

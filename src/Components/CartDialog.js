@@ -224,7 +224,8 @@ export default function CartDialog(props) {
                   </Grid>
                 )
               })}
-              {cart_cost > 0 ? (
+              {cart_cost > 0 &&
+              cart_cost < props.dialogProps.activeSponsor.Points ? (
                 <Grid item xs={12} container align="right" justify="flex-end">
                   <Grid item xs={12}>
                     <Button
@@ -241,8 +242,8 @@ export default function CartDialog(props) {
                               return {
                                 ProductID: element.ProductID,
                                 Quantity: parseInt(element.Quantity),
-                                CostPerItem: parseFloat(
-                                  element.FullItemDetails.Price,
+                                CostPerItem: Math.ceil(
+                                  parseFloat(element.FullItemDetails.Price),
                                 ),
                               }
                             })
@@ -257,10 +258,11 @@ export default function CartDialog(props) {
                                 props.dialogProps.activeSponsor.SponsorID,
                               DriverID: props.dialogProps.activeDriver.Username,
                               ProductIDs: ordered_products,
-                              Cost:
+                              Cost: Math.ceil(
                                 cart_cost *
-                                props.dialogProps.activeSponsor
-                                  .PointToDollarRatio,
+                                  props.dialogProps.activeSponsor
+                                    .PointToDollarRatio,
+                              ),
                             }),
                           }
                           fetch(MAKE_ORDER_URL, requestOptions).then(() => {
@@ -277,15 +279,20 @@ export default function CartDialog(props) {
                   </Grid>
                   <Grid item>{cart_cost} points</Grid>
                 </Grid>
+              ) : cart_cost > props.dialogProps.activeSponsor.Points ? (
+                <p>
+                  Not enough points {cart_cost} required, but you only have{' '}
+                  {props.dialogProps.activeSponsor.Points}
+                </p>
               ) : (
                 <p>Your cart is empty</p>
               )}
             </Grid>
           )}
-
+          {/* 
           <Grid item align="center" xs={12}>
             <br />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Dialog>
     </div>
