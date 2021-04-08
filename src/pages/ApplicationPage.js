@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import DriverApplicationCard from '../Components/DriverApplicationCard'
-import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import LoadingIcon from '../Components/LoadingIcon'
+import { UserContext } from '../Helpers/UserContext'
+import TopAppBar from '../Components/TopAppBar'
+import LeftDrawer from '../Components/LeftDrawer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,38 +23,43 @@ const useStyles = makeStyles((theme) => ({
 
 function ApplicationPage() {
   const classes = useStyles()
-  const [currentUser, setCurrentUser] = useState(null)
+  const userData = useContext(UserContext).user
 
-  useEffect(() => {
-    // fetch the current user's email address
-    Auth.currentAuthenticatedUser().then((user) => {
-      setCurrentUser(user.attributes.email)
-    })
-  }, [])
-
-  return (
-    <div className={classes.root}>
-      {/* app bar */}
+  function InitialAppBar() {
+    return (
       <AppBar position="fixed">
         <Toolbar>
-          <Grid container justify="space-evenly" spacing={24}>
+          <Grid container justify="space-evenly" spacing={10}>
             <Grid item>
               <Typography variant="h6">Apply to a sponsor</Typography>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
+    )
+  }
+
+  function NormalAppBar() {
+    return (
+      <div>
+        <TopAppBar pageTitle="Apply to a sponsor"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+      </div>
+    )
+  }
+
+  return (
+    <div className={classes.root}>
+      {/* app bar */}
+
+      {userData.AccountType === 0 ? <InitialAppBar /> : <NormalAppBar />}
 
       {/* page content (starts after first div) */}
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container justify="space-evenly">
           <Grid item>
-            {currentUser ? (
-              <DriverApplicationCard accountEmail={currentUser} />
-            ) : (
-              <LoadingIcon />
-            )}
+            <DriverApplicationCard accountEmail={userData.Email_ID} />
           </Grid>
         </Grid>
       </main>

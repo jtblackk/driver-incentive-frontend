@@ -1,10 +1,9 @@
-import { Grid, TextField } from '@material-ui/core'
+import { Avatar, Grid, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 
 const EditAccountCard = (props) => {
-  const setProfileState = props.userProfile.setProfileState
-  const userDetails = props.userProfile.userProfile
-
+  const setProfileState = props.setNewDataState
+  const userDetails = props.userProfile
   const [isLoading, setIsLoading] = useState(false)
 
   if (isLoading) {
@@ -59,7 +58,7 @@ const EditAccountCard = (props) => {
             label="Bio"
             type="text"
             placeholder="Write a short bio"
-            defaultValue={userDetails.UserBio}
+            defaultValue={userDetails.Bio}
             variant="outlined"
             multiline
             fullWidth
@@ -67,7 +66,7 @@ const EditAccountCard = (props) => {
             onChange={(event) => {
               // update UserBio in state
               let newUserDetails = userDetails
-              newUserDetails.UserBio = event.target.value
+              newUserDetails.Bio = event.target.value
               setProfileState(newUserDetails)
             }}
           />

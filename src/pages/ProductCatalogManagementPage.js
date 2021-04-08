@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
-import { Typography } from '@material-ui/core'
+import { Button, Grid, Paper, Typography } from '@material-ui/core'
+import { UserContext } from '../Helpers/UserContext'
+import ChooseCatalogItemsPanel from '../Components/ChooseCatalogItemsPanel'
+import CatalogItemDialog from '../Components/CatalogItemDialog'
+import LoadingIcon from '../Components/LoadingIcon'
+import AddCatalogItemDialog from '../Components/AddCatalogItemDialog'
+import DeleteCatalogItemDialog from '../Components/DeleteCatalogItemDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,20 +27,234 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductCatalogManagementPage = () => {
   const classes = useStyles()
-  return (
-    <div className={classes.root}>
-      {/* layout stuff */}
-      <TopAppBar pageTitle="Home"></TopAppBar>
-      <LeftDrawer AccountType={'Sponsor'} />
+  const userData = useContext(UserContext).user
 
-      {/* page content (starts after first div) */}
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+  const [isLoading, setIsLoading] = useState(true)
 
-        <Typography>you will manage your catalog from here</Typography>
-      </main>
-    </div>
+  const [itemTableData, setItemTableData] = useState(null)
+  function setItemTableDataState(state) {
+    setItemTableData(state)
+  }
+
+  const [allCatalogData, setAllCatalogData] = useState(null)
+  const setAllCatalogDataState = (state) => {
+    setAllCatalogData(state)
+  }
+
+  // dialog control
+  const [addItemDialogIsOpen, setAddItemDialogIsOpen] = useState(false)
+  function setAddItemDialogIsOpenState(state, refresh) {
+    setAddItemDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
+  const [deleteItemCatalogIsOpen, setDeleteItemCatalogIsOpen] = useState(false)
+  function setDeleteItemCatalogIsOpenState(state, refresh) {
+    setDeleteItemCatalogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
+  const [itemManagementDialogIsOpen, setItemManagementDialogIsOpen] = useState(
+    false,
   )
+  function setItemManagementDialogIsOpenState(state, refresh) {
+    setItemManagementDialogIsOpen(state)
+
+    if (refresh) {
+      setPageUpdate(pageUpdate + 1)
+    }
+  }
+
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function fullPageUpdateState() {
+    setPageUpdate(pageUpdate + 1)
+  }
+
+  const [selectedCatalogEntry, setSelectedCategoryEntry] = useState(null)
+  function setSelectedCategoryEntryState(state) {
+    setSelectedCategoryEntry(state)
+  }
+
+  const [checkedItems, setCheckedItems] = useState(null)
+  function setCheckedItemsState(state) {
+    setCheckedItems(state)
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    ;(async () => {
+      let CATALOG_ITEMS_URL = `https://bfv61oiy3h.execute-api.us-east-1.amazonaws.com/dev/getcatalogitems?SponsorID=${userData.Username}`
+      let catalog_items_raw = await fetch(CATALOG_ITEMS_URL)
+      let catalog_items_json = await catalog_items_raw.json()
+      let catalog_items_array = await JSON.parse(
+        catalog_items_json.body.toString(),
+      )
+      let catalog_items_parsed = catalog_items_array.Items[0].ProductIDs.L
+      let catalog_items_formatted = catalog_items_parsed.map(
+        (element) => element.S,
+      )
+
+      let GET_EBAY_ITEMS_URL =
+        'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ProductIDs: catalog_items_formatted,
+        }),
+      }
+      let item_data_raw = await fetch(GET_EBAY_ITEMS_URL, requestOptions)
+      let item_data_json = await item_data_raw.json()
+      let item_data_parsed = await JSON.parse(item_data_json.body)
+
+      let item_data_array = item_data_parsed.Item.map((element) => {
+        return {
+          ProductID: element.ItemID,
+          Name: element.Title,
+          PhotoURL: element.PictureURL[0],
+          Stock: element.Quantity - element.QuantitySold,
+          Description: element.Description.slice(0, 550),
+          Price: element.ConvertedCurrentPrice.Value,
+          Location: element.Location,
+        }
+      })
+
+      let catalog_item_table_data = item_data_array.map((element) => {
+        return {
+          ProductID: element.ProductID,
+          PhotoURL: element.PhotoURL,
+          Name: element.Name,
+          Price: element.Price,
+          Stock: element.Stock,
+        }
+      })
+
+      setAllCatalogData(item_data_array)
+      setCheckedItems(
+        catalog_item_table_data.map((element) => {
+          return {
+            key: element.ProductID,
+            isChecked: false,
+          }
+        }),
+      )
+    })().then(() => {
+      setIsLoading(false)
+    })
+  }, [pageUpdate])
+
+  if (isLoading) {
+    return <LoadingIcon />
+  } else {
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Catalog management"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+        {/* page content (starts after first div) */}
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <CatalogItemDialog
+            dialogProps={{
+              itemDialogIsOpen: itemManagementDialogIsOpen,
+              setItemDialogIsOpen: setItemManagementDialogIsOpenState,
+              fullPageUpdateState: fullPageUpdateState,
+              selectedCatalogEntry: selectedCatalogEntry
+                ? allCatalogData.find((element) => {
+                    return element.ProductID === selectedCatalogEntry.ProductID
+                  })
+                : null,
+              ActionSection: () => {
+                return (
+                  <Grid item container xs={12} spacing={1}>
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        // style={{ backgroundColor: '#444444', color: 'White' }}
+                        onClick={() => {
+                          let new_checked_items = checkedItems.map(
+                            (element) => {
+                              if (
+                                element.key === selectedCatalogEntry.ProductID
+                              ) {
+                                return {
+                                  ...element,
+                                  isChecked: true,
+                                }
+                              } else {
+                                return element
+                              }
+                            },
+                          )
+
+                          setCheckedItems(new_checked_items)
+                          setItemManagementDialogIsOpenState(false)
+                        }}
+                      >
+                        Select item
+                      </Button>
+                    </Grid>
+                  </Grid>
+                )
+              },
+            }}
+          />
+          <AddCatalogItemDialog
+            dialogProps={{
+              addItemDialogIsOpen: addItemDialogIsOpen,
+              setAddItemDialogIsOpenState: setAddItemDialogIsOpenState,
+              fullPageUpdateState: fullPageUpdateState,
+              allCatalogData: allCatalogData,
+              setAllCatalogDataState: setAllCatalogDataState,
+            }}
+          />
+
+          <DeleteCatalogItemDialog
+            dialogProps={{
+              deleteItemCatalogIsOpen: deleteItemCatalogIsOpen,
+              setDeleteItemCatalogIsOpenState: setDeleteItemCatalogIsOpenState,
+              fullPageUpdateState: fullPageUpdateState,
+              allCatalogData: allCatalogData,
+              setAllCatalogDataState: setAllCatalogDataState,
+              checkedItems: checkedItems,
+            }}
+          />
+
+          <Grid container justify="center">
+            <Grid item sm={12} md={11} lg={9} xl={7}>
+              <ChooseCatalogItemsPanel
+                tableProps={{
+                  data: allCatalogData,
+                  setDataState: setItemTableDataState,
+                  selectedRow: selectedCatalogEntry,
+                  setSelectedRow: setSelectedCategoryEntryState,
+                  dialogIsOpen: itemManagementDialogIsOpen,
+                  setDialogIsOpen: setItemManagementDialogIsOpenState,
+                  setCheckedItemsState: setCheckedItemsState,
+                  checkedItems: checkedItems,
+                }}
+                dialogProps={{
+                  itemManagementDialogIsOpen: itemManagementDialogIsOpen,
+                  setItemManagementDialogIsOpenState: setItemManagementDialogIsOpenState,
+                  addItemDialogIsOpen: addItemDialogIsOpen,
+                  setAddItemDialogIsOpenState: setAddItemDialogIsOpenState,
+                  allCatalogData: allCatalogData,
+                  setAllCatalogDataState: setAllCatalogDataState,
+                  setDeleteItemCatalogIsOpenState: setDeleteItemCatalogIsOpenState,
+                }}
+              />
+            </Grid>
+          </Grid>
+        </main>
+      </div>
+    )
+  }
 }
 
 export default ProductCatalogManagementPage

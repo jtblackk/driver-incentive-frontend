@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useState, useContext } from 'react'
+import { UserContext } from '../Helpers/UserContext'
 import { makeStyles } from '@material-ui/core/styles'
-
 import EditIcon from '@material-ui/icons/Edit'
-
 import TopAppBar from '../Components/TopAppBar'
 import UserProfileCard from '../Components/UserProfileCard'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LeftDrawer from '../Components/LeftDrawer'
-import { Auth } from 'aws-amplify'
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import EditAccountCard from '../Components/EditAccountCard'
 import LoadingIcon from '../Components/LoadingIcon'
+import Amplify, { Storage, Auth } from 'aws-amplify'
+import aws_exports from '../aws-exports'
+
+Amplify.configure(aws_exports)
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,20 @@ const useStyles = makeStyles((theme) => ({
 function ProfilePageContent(props) {
   const classes = useStyles()
   const [isEditing, setIsEditing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [newData, setNewData] = useState({
+    Username: props.userProfile.Username,
+    FirstName: props.userProfile.FirstName,
+    LastName: props.userProfile.LastName,
+    Bio: props.userProfile.Bio,
+    AccountType: props.userProfile.AccountType,
+    // SponsorEmailID: 'need to retrieve this',
+    // TotalPoints: 'need to retrieve this',
+    // ProfilePicture: 'need to retrieve this',
+  })
+  function setNewDataState(state) {
+    setNewData(state)
+  }
 
   if (!isEditing) {
     return (
@@ -51,6 +66,7 @@ function ProfilePageContent(props) {
         >
           <Paper className={classes.paper}>
             <Grid item container justify="flex-end">
+              {/* edit button */}
               <Button
                 variant="text"
                 size="small"
@@ -63,7 +79,7 @@ function ProfilePageContent(props) {
             </Grid>
 
             <Grid item>
-              <UserProfileCard userProfile={props} />
+              <UserProfileCard userProfile={props.userProfile} />
             </Grid>
 
             <Grid item>
@@ -86,19 +102,13 @@ function ProfilePageContent(props) {
                   size="small"
                   onClick={() => {
                     ;(async () => {
-                      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${props.userProfile.Email_ID}`
-                      const response = await fetch(GET_USERDATA_URL)
-                      const data = await response.json()
-                      let profile_details = {
-                        Email_ID: data.Item.Email_id,
-                        FirstName: data.Item.FirstName,
-                        LastName: data.Item.LastName,
-                        UserBio: data.Item.UserBio,
-                        AccountType: data.Item.AccountType,
-                        SponsorEmailID: data.Item.SponsorEmailID,
-                        TotalPoints: data.Item.TotalPoints,
-                      }
-                      props.setProfileState(profile_details)
+                      setNewData({
+                        Username: props.userProfile.Username,
+                        FirstName: props.userProfile.FirstName,
+                        LastName: props.userProfile.LastName,
+                        Bio: props.userProfile.Bio,
+                        AccountType: props.userProfile.AccountType,
+                      })
                       setIsEditing(!isEditing)
                     })()
                   }}
@@ -112,21 +122,35 @@ function ProfilePageContent(props) {
                   size="small"
                   color="primary"
                   onClick={() => {
-                    let SAVE_USER_PROFILE_URL =
-                      'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
-                    let requestOptions = {
-                      method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        Email_id: props.userProfile.Email_ID,
-                        FirstName: props.userProfile.FirstName,
-                        LastName: props.userProfile.LastName,
-                        AccountType: props.userProfile.AccountType,
-                        UserBio: props.userProfile.UserBio,
-                      }),
-                    }
-                    fetch(SAVE_USER_PROFILE_URL, requestOptions)
-                    setIsEditing(!isEditing)
+                    setIsLoading(true)
+                    ;(async () => {
+                      // save the profile information
+                      props.setProfileState({
+                        Username: newData.Username,
+                        FirstName: newData.FirstName,
+                        LastName: newData.LastName,
+                        Bio: newData.Bio,
+                        AccountType: newData.AccountType,
+                      })
+
+                      let SAVE_USER_PROFILE_URL =
+                        'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                      let requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          Username: newData.Username,
+                          FirstName: newData.FirstName,
+                          LastName: newData.LastName,
+                          Bio: newData.Bio,
+                          AccountType: newData.AccountType,
+                        }),
+                      }
+                      fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                        setIsLoading(false)
+                        setIsEditing(!isEditing)
+                      })
+                    })()
                   }}
                 >
                   <Typography>Save</Typography>
@@ -136,7 +160,10 @@ function ProfilePageContent(props) {
 
               {/* account info form */}
               <Grid item>
-                <EditAccountCard userProfile={props} />
+                <EditAccountCard
+                  userProfile={newData}
+                  setNewDataState={setNewDataState}
+                />
               </Grid>
 
               <br></br>
@@ -150,49 +177,18 @@ function ProfilePageContent(props) {
 
 function ProfilePage() {
   const classes = useStyles()
-  const [isLoading, setIsLoading] = useState(true)
-  const [userProfileDetails, setUserProfileDetails] = useState({
-    Email_ID: '',
-    FirstName: '',
-    LastName: '',
-    AccountType: '',
-    UserBio: '',
-    TotalPoints: '',
-    SponsorEmailID: '',
-  })
+  const [isLoading, setIsLoading] = useState(false)
+  const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
 
   function setProfileState(state) {
-    setUserProfileDetails(state)
+    setUserData(state)
   }
-
-  useEffect(() => {
-    ;(async () => {
-      const user = await Auth.currentAuthenticatedUser()
-      let user_email = user.attributes.email
-
-      // get user's data
-      let GET_USERDATA_URL = `https://esqgp2f0t8.execute-api.us-east-1.amazonaws.com/dev/getuserdetails?Email_id=${user_email}`
-      const response = await fetch(GET_USERDATA_URL)
-      const data = await response.json()
-      let profile_details = {
-        Email_ID: data.Item.Email_id,
-        FirstName: data.Item.FirstName,
-        LastName: data.Item.LastName,
-        UserBio: data.Item.UserBio,
-        AccountType: data.Item.AccountType,
-        SponsorEmailID: data.Item.SponsorEmailID,
-        TotalPoints: data.Item.TotalPoints,
-      }
-      setUserProfileDetails(profile_details)
-
-      setIsLoading(false)
-    })()
-  }, [])
 
   return (
     <div className={classes.root}>
       {/* layout stuff */}
-      <LeftDrawer AccountType={userProfileDetails.AccountType} />
+      <LeftDrawer AccountType={userData.AccountType} />
       <TopAppBar pageTitle="Your profile" />
 
       {/* content (starts after first div) */}
@@ -202,7 +198,7 @@ function ProfilePage() {
           <LoadingIcon />
         ) : (
           <ProfilePageContent
-            userProfile={userProfileDetails}
+            userProfile={userData}
             setProfileState={setProfileState}
           />
         )}

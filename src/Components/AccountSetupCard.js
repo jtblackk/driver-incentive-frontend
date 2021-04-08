@@ -1,58 +1,84 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
+
+import { UserContext } from '../Helpers/UserContext'
+
 import {
   Button,
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   TextField,
 } from '@material-ui/core'
 
 const AccountSetupCard = (props) => {
+  const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
+  const isSponsorProfile = userData.Username.includes('@') ? false : true
+
   let history = useHistory()
   const [userDetails, setUserDetails] = useState({
-    Email_ID: props.accountEmail,
+    Username: userData.Username,
     FirstName: '',
     LastName: '',
     AccountType: '',
-    UserBio: '',
+    AccountStatus: '',
+    Bio: '',
   })
+
+  const [accTypeHelperText, setAccTypeHelperText] = useState(null)
+  const [fnameHelperText, setFnameHelperText] = useState(null)
+  const [lnameHelperText, setLnameHelperText] = useState(null)
+  const [bioHelperText, setBioHelperText] = useState(null)
 
   return (
     <Grid
+      item
       container
       justify="center"
       direct="column"
       alignItems="center"
       spacing={2}
     >
-      {/* account type */}
-      <Grid item xs={12} align="center">
-        <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
-        <Select
-          labelId="AccountTypeLabel"
-          id="AccountType"
-          onChange={(event) => {
-            // update account type in state
-            let newUserDetails = userDetails
-            newUserDetails.AccountType = event.target.value
-            setUserDetails(newUserDetails)
-          }}
-        >
-          <MenuItem value="Driver">Driver</MenuItem>
-          <MenuItem value="Sponsor">Sponsor</MenuItem>
-        </Select>
-      </Grid>
+      {!userData.Username.includes('@') ? null : (
+        <Grid item container fullWidth justify="center">
+          {/* account type */}
+          <Grid item xs={4}>
+            <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
+            <Select
+              labelId="AccountTypeLabel"
+              id="AccountType"
+              fullWidth
+              error={accTypeHelperText}
+              helperText={accTypeHelperText}
+              onChange={(event) => {
+                setAccTypeHelperText(null)
+                // update account type in state
+                let newUserDetails = userDetails
+                newUserDetails.AccountType = event.target.value
+                setUserDetails(newUserDetails)
+              }}
+            >
+              <MenuItem value="Driver">Driver</MenuItem>
+              <MenuItem value="Sponsor">Sponsor</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+      )}
 
       {/* name row */}
-      <Grid container xs={12} spacing={1} justify="center" direction="row">
+      <Grid item container xs={12} spacing={1} justify="center" direction="row">
         {/* first name */}
         <Grid item xs={2} align="center">
           <TextField
             id="FirstName"
             label="First name"
+            error={fnameHelperText}
+            helperText={fnameHelperText}
             onChange={(event) => {
+              setFnameHelperText(null)
               // update first name in state
               let newUserDetails = userDetails
               newUserDetails.FirstName = event.target.value
@@ -66,7 +92,10 @@ const AccountSetupCard = (props) => {
           <TextField
             id="LastName"
             label="Last name"
+            error={lnameHelperText}
+            helperText={lnameHelperText}
             onChange={(event) => {
+              setLnameHelperText(null)
               // update last name in state
               let newUserDetails = userDetails
               newUserDetails.LastName = event.target.value
@@ -88,62 +117,95 @@ const AccountSetupCard = (props) => {
           multiline
           fullWidth
           rows={4}
+          error={bioHelperText}
+          helperText={bioHelperText}
           onChange={(event) => {
+            setBioHelperText(null)
             // update UserBio in state
             let newUserDetails = userDetails
-            newUserDetails.UserBio = event.target.value
+            newUserDetails.Bio = event.target.value
             setUserDetails(newUserDetails)
           }}
         />
       </Grid>
 
       {/* submit button */}
-      <Grid item xs={12} align="center">
-        <br></br>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            // validate input
-            if (userDetails.FirstName === '') {
-              alert('Please enter your first name')
-              return
-            } else if (userDetails.LastName === '') {
-              alert('Please enter your last name')
-              return
-            } else if (userDetails.AccountType === '') {
-              alert('Please choose an account type')
-              return
-            } else if (userDetails.UserBio === '') {
-              alert('Please write a bio')
-              return
-            }
+      <Grid item container justify="center">
+        <Grid item xs={4} align="center">
+          <br></br>
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              // validate input
+              let exit = false
+              if (!userDetails.FirstName) {
+                setFnameHelperText('Required')
+                exit = true
+              }
+              if (!userDetails.LastName) {
+                setLnameHelperText('Required')
+                exit = true
+              }
+              if (!userDetails.AccountType && !userData.Organization) {
+                setAccTypeHelperText('Required')
+                exit = true
+              }
+              if (!userDetails.Bio) {
+                setBioHelperText('Required')
+                exit = true
+              }
+              if (exit) return
 
-            // save the profile information
-            let SAVE_USER_PROFILE_URL =
-              'https://xgfsi0wpb0.execute-api.us-east-1.amazonaws.com/dev/'
-            let requestOptions = {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                Email_id: userDetails.Email_ID,
+              setUserData({
+                ...userData,
+                Username: userDetails.Username,
                 FirstName: userDetails.FirstName,
                 LastName: userDetails.LastName,
-                AccountType: userDetails.AccountType,
-                UserBio: userDetails.UserBio,
-              }),
-            }
-            fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
-              // route user to appropriate page
-              if (userDetails.AccountType === 'Driver') {
-                history.push('/application')
-              } else {
-                history.push('/')
+                AccountType: !userData.Organization
+                  ? userDetails.AccountType
+                  : 'Sponsor',
+                AccountStatus: 1,
+                Bio: userDetails.Bio,
+              })
+
+              // save the profile information
+              let SAVE_USER_PROFILE_URL =
+                'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+              let requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  Username: userDetails.Username,
+                  FirstName: userDetails.FirstName,
+                  LastName: userDetails.LastName,
+                  AccountType: !userData.Organization
+                    ? userDetails.AccountType
+                    : 'Sponsor',
+                  AccountStatus: 1,
+                  Bio: userDetails.Bio,
+                  IsInitialSignup: true,
+                }),
               }
-            })
-          }}
-        >
-          Save account details
-        </Button>
+              fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                // route user to appropriate page
+                if (userDetails.AccountType === 'Driver') {
+                  history.push('/application')
+                } else if (
+                  userDetails.AccountType === 'Sponsor' &&
+                  !isSponsorProfile
+                ) {
+                  history.push('organization-setup')
+                } else {
+                  history.push('/')
+                }
+              })
+            }}
+          >
+            Save account details
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   )

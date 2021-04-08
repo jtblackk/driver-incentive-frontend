@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import { Box, TableSortLabel } from '@material-ui/core'
 
 import orderBy from 'lodash/orderBy'
+import LoadingIcon from './LoadingIcon'
 
 require('datejs')
 
@@ -59,23 +60,14 @@ const headCells = [
 ]
 
 export default function ProcessedApplicantTable(props) {
-  // console.log(props)
-
   const [rows, setRows] = useState(null)
 
   const [columnToSort, setColumnToSort] = useState('responseDate')
   const [sortDirection, setSortDirection] = useState('desc')
   function handleSort(columnName) {
-    // console.log(
-    //   'handleSort: columnName - ' +
-    //     columnName +
-    //     ' orig sort direction - ' +
-    //     sortDirection,
-    // )
     if (columnName === columnToSort) {
       setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
     } else {
-      // console.log('clicked on a new column')
       setSortDirection('desc')
     }
 
@@ -102,8 +94,6 @@ export default function ProcessedApplicantTable(props) {
   }, [])
 
   if (!isLoading) {
-    console.log(orderBy(rows, columnToSort, sortDirection))
-
     return (
       <TableContainer
         style={{ maxHeight: 370, minHeight: 370 }}
@@ -169,7 +159,6 @@ export default function ProcessedApplicantTable(props) {
       </TableContainer>
     )
   } else {
-    // todo: handle this loading case
-    return <div></div>
+    return <LoadingIcon />
   }
 }

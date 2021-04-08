@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -7,49 +7,77 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+import { initial } from 'lodash'
 require('datejs')
 
 export default function ApplicationManagementDialog(props) {
-  // console.log(props)
-
   const handleClose = (refresh) => {
     props.setDialogIsOpenState(false, refresh)
+    setHelperText(null)
   }
+
+  let applicantProfile = props.driverDetails.find((val) => {
+    return val.Username === props.applicationDetails.DriverID
+  })
 
   let applicationFields = [
     {
-      name: 'Email',
-      prop: props.applicationDetails.applicantEmail,
+      name: 'Username',
+      prop: applicantProfile.Username,
     },
     {
       name: 'Name',
-      prop:
-        props.applicationDetails.applicantFirstName +
-        ' ' +
-        props.applicationDetails.applicantLastName,
+      prop: applicantProfile.FirstName + ' ' + applicantProfile.LastName,
     },
     {
       name: 'Bio',
-      prop: props.applicationDetails.applicantBio,
+      prop: applicantProfile.Bio,
     },
     {
       name: 'Comments',
-      prop: props.applicationDetails.applicantComments,
+      prop: props.applicationDetails.AppComments,
     },
     {
       name: 'Submission date',
-      prop: Date.parse(props.applicationDetails.submissionDate).toUTCString(),
+      prop: Date.parse(
+        props.applicationDetails.AppSubmissionDate,
+      ).toUTCString(),
     },
   ]
 
+  const [helperText, setHelperText] = useState(null)
+
   const [decisionReason, setDecisionReason] = useState(null)
   let initial_response_fields = [
-    { name: 'Response', prop: props.applicationDetails.response },
-    { name: 'Response reason', prop: props.applicationDetails.responseReason },
+    {
+      name: 'Response',
+      prop:
+        props.applicationDetails.Status === 1
+          ? 'Denied'
+          : (props.applicationDetails.Status === 2) |
+            (props.applicationDetails.Status === 3)
+          ? 'Accepted'
+          : null,
+    },
+    {
+      name: 'Status',
+      prop:
+        props.applicationDetails.Status === 1
+          ? 'N/A'
+          : props.applicationDetails.Status === 2
+          ? 'Active'
+          : props.applicationDetails.Status === 3
+          ? 'Terminated'
+          : null,
+    },
+    {
+      name: 'Response reason',
+      prop: props.applicationDetails.AppDecisionReason,
+    },
     {
       name: 'Response date',
-      prop: props.applicationDetails.responseDate
-        ? Date.parse(props.applicationDetails.responseDate).toUTCString()
+      prop: props.applicationDetails.AppDecisionDate
+        ? Date.parse(props.applicationDetails.AppDecisionDate).toUTCString()
         : null,
     },
   ]
@@ -75,22 +103,28 @@ export default function ApplicationManagementDialog(props) {
                 size="small"
                 onClick={() => {
                   if (!decisionReason) {
+                    setHelperText('Must provide a decision reason')
                     return
+                  } else {
+                    setHelperText(null)
                   }
 
                   let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
+
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      applicant_email: props.applicationDetails.applicantEmail,
-                      SponsorEmailID: props.applicationDetails.sponsorEmail,
-                      decision: 'denied',
-                      decisionReason: decisionReason,
-                      applicationStatus: 0,
+                      SponsorID: props.applicationDetails.SponsorID,
+                      DriverID: props.applicationDetails.DriverID,
+                      AppDecisionReason: decisionReason,
+                      Status: 1,
+                      PointDollarRatio: 0.01,
+                      Points: 0,
                     }),
                   }
+
                   fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
                     () => {
                       handleClose(true)
@@ -104,25 +138,29 @@ export default function ApplicationManagementDialog(props) {
 
             <Grid item xs={3}>
               <Button
-                style={{ backgroundColor: '#46CB18', color: 'white' }}
+                style={{ backgroundColor: 'green', color: 'white' }}
                 variant="contained"
                 size="small"
                 onClick={() => {
                   if (!decisionReason) {
+                    setHelperText('Must provide a decision reason')
                     return
+                  } else {
+                    setHelperText(null)
                   }
 
                   let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://k6q4diznde.execute-api.us-east-1.amazonaws.com/dev/applicationresponse'
+                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      applicant_email: props.applicationDetails.applicantEmail,
-                      SponsorEmailID: props.applicationDetails.sponsorEmail,
-                      decision: 'accepted',
-                      decisionReason: decisionReason,
-                      applicationStatus: 2,
+                      SponsorID: props.applicationDetails.SponsorID,
+                      DriverID: props.applicationDetails.DriverID,
+                      AppDecisionReason: decisionReason,
+                      Status: 2,
+                      PointDollarRatio: 0.01,
+                      Points: 0,
                     }),
                   }
                   fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
@@ -219,7 +257,7 @@ export default function ApplicationManagementDialog(props) {
               </Grid>
               {/* bottom half */}
 
-              {initial_response_fields[0].prop ? (
+              {props.applicationDetails.Status > 0 ? (
                 initial_response_fields.map((field) => {
                   return (
                     <Grid
@@ -259,9 +297,11 @@ export default function ApplicationManagementDialog(props) {
                       rows={3}
                       autoFocus
                       fullWidth
-                      error={!decisionReason}
+                      helperText={helperText}
+                      error={helperText}
                       onChange={(event) => {
                         setDecisionReason(event.target.value)
+                        setHelperText(null)
                       }}
                     />
                   </Grid>
