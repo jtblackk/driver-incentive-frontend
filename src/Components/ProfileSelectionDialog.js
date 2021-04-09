@@ -1,3 +1,5 @@
+/* eslint-disable*/
+
 import React, { useContext, useEffect, useState } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import Typography from '@material-ui/core/Typography'

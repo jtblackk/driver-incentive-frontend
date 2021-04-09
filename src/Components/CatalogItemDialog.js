@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'

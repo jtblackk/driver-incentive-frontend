@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'

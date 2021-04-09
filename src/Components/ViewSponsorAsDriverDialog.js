@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'

@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import email_validator from 'email-validator'
 //import { Auth } from "aws-amplify";
 

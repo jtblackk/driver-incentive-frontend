@@ -1,3 +1,5 @@
+/* eslint-disable*/
+
 import './App.css'
 import Amplify from 'aws-amplify'
 import awsconfig from './aws-exports'

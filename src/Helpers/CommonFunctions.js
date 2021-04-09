@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import { Auth } from 'aws-amplify'
 
 export default async function getUserDetails(username) {
