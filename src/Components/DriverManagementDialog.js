@@ -408,6 +408,7 @@ function EditDriverPointsMenu(props) {
                     Points:
                       parseInt(props.selectedDriverData.Points) -
                       parseInt(pointQuantity),
+                    PointChangeReason: reason,
                   }),
                 }
 
@@ -472,6 +473,7 @@ function EditDriverPointsMenu(props) {
                     Points:
                       parseInt(props.selectedDriverData.Points) +
                       parseInt(pointQuantity),
+                    PointChangeReason: reason,
                     // TODO: provide reason for point change. waiting on api/table for this
                   }),
                 }

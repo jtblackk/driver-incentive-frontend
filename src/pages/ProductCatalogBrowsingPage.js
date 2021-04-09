@@ -162,7 +162,7 @@ const ProductCatalogBrowsingPage = (props) => {
         PhotoURL: element.PictureURL[0],
         Stock: element.Quantity - element.QuantitySold,
         Description: element.Description.slice(0, 550),
-        Price: element.ConvertedCurrentPrice.Value,
+        Price: Math.ceil(element.ConvertedCurrentPrice.Value),
         Location: element.Location,
       }
     }).filter((element) => element.Stock > 0)

@@ -142,13 +142,15 @@ export default function OrderReviewPage() {
           Cost: Math.ceil(parseFloat(element.Cost.N)),
           PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
           OrderDate: element.OrderSubmitted.S,
-          Products: element.ProductIDs.L.map((element) => {
-            return {
-              ProductID: element.M.ProductID.S,
-              Quantity: parseInt(element.M.Quantity.N),
-              PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(2),
-            }
-          }),
+          Products: element.M
+            ? element.ProductIDs.L.map((element) => {
+                return {
+                  ProductID: element.M.ProductID.S,
+                  Quantity: parseInt(element.M.Quantity.N),
+                  PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(2),
+                }
+              })
+            : [],
         }
       })
 
