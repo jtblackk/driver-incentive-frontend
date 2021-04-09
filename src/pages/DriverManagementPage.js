@@ -6,9 +6,7 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from '../Components/LoadingIcon'
-import ApplicationManagementDialog from '../Components/ApplicationManagementDialog'
 import GenericTable from '../Components/GenericTable'
-import { useHistory } from 'react-router'
 import DriverManagementDialog from '../Components/DriverManagementDialog'
 import SetAllPointRatiosDialog from '../Components/SetAllPointRatiosDialog'
 
@@ -28,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const DriverManagementPage = () => {
   const classes = useStyles()
-  let history = useHistory()
 
   const userData = useContext(UserContext).user
   const [isLoading, setIsLoading] = useState(true)

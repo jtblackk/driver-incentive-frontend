@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, TextField } from '@material-ui/core'
+import { Button, Grid, TextField } from '@material-ui/core'
 import { toLower } from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../Helpers/UserContext'
@@ -95,10 +95,7 @@ const OrganizationSetupCard = () => {
                       Organization: organizationName,
                     }),
                   }
-                  let response = await fetch(
-                    SAVE_USER_PROFILE_URL,
-                    requestOptions,
-                  )
+                  await fetch(SAVE_USER_PROFILE_URL, requestOptions)
 
                   await setUserData({
                     ...userData,

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Box, Grid, Typography } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 
 const UserProfileCard = (props) => {
   const [isLoading, setIsLoading] = useState(true)
-  const [sponsorName, setSponsorName] = useState('')
   let userDetails = props.userProfile
 
   useEffect(() => {

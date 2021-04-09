@@ -8,7 +8,6 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   TextField,
 } from '@material-ui/core'

@@ -6,15 +6,9 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import {
   Button,
   Divider,
-  FormControl,
   Grid,
-  GridList,
-  GridListTile,
   IconButton,
-  InputLabel,
-  Menu,
   MenuItem,
-  Paper,
   Select,
   Typography,
 } from '@material-ui/core'
@@ -23,9 +17,6 @@ import ChooseCatalogSponsorDialog from '../Components/ChooseCatalogSponsorDialog
 import CartDialog from '../Components/CartDialog'
 import LoadingIcon from '../Components/LoadingIcon'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
-import { Loading } from 'aws-amplify-react'
-import { Image } from '@material-ui/icons'
-import { blue } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -133,10 +124,6 @@ const ProductCatalogBrowsingPage = (props) => {
     setCart(updated_cart)
   }
 
-  const [pageNumber, setPageNumber] = useState(0)
-  const itemsPerPage = 5
-  const itemsViewedSoFar = pageNumber * itemsPerPage
-  const [pageItems, setPageItems] = useState(null)
   const [registeredSponsors, setRegisteredSponsors] = useState(null)
 
   async function setActiveSponsorState(state) {
@@ -179,12 +166,6 @@ const ProductCatalogBrowsingPage = (props) => {
       }
     }).filter((element) => element.Stock > 0)
 
-    let items_to_display = item_data_array.slice(
-      itemsViewedSoFar,
-      itemsViewedSoFar + itemsPerPage,
-    )
-
-    setPageItems(items_to_display)
     setCatalogItems(item_data_array)
     setIsLoading(false)
   }
@@ -258,22 +239,12 @@ const ProductCatalogBrowsingPage = (props) => {
         <TopAppBar
           pageTitle="Product catalog"
           customItem={
-            <Grid
-              item
-              xs={12}
-              container
-              justify="space-between"
-              // component={Paper}
-            >
+            <Grid item xs={12} container justify="space-between">
               <Grid item align="left">
-                {/* <FormControl> */}
-                {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  // label="sponsor"
                   value={activeSponsor.SponsorID}
-                  // onChange={handleChange}
                   variant="standard"
                   style={{ color: 'white' }}
                   fullWidth
@@ -314,7 +285,6 @@ const ProductCatalogBrowsingPage = (props) => {
                   </IconButton>
                   {cart_count}
                 </Grid>
-                {/* <Grid item align="left" component={Paper}></Grid> */}
               </Grid>
             </Grid>
           }
@@ -322,13 +292,19 @@ const ProductCatalogBrowsingPage = (props) => {
         <LeftDrawer AccountType={userData.AccountType} />
 
         {/* page content (starts after first div) */}
-
         <main className={classes.content}>
           <div className={classes.toolbar} />
 
           <Grid container>
             {!isLoading ? (
               <div>
+                {!activeSponsor ||
+                !catalogItems ||
+                catalogItems.length > 0 ? null : (
+                  <Grid item xs={12}>
+                    <Typography>This sponsor has no catalog items</Typography>
+                  </Grid>
+                )}
                 {activeSponsor ? (
                   <Grid item xs={12} container justify="flex-start">
                     <Grid item xs={12}>
@@ -343,9 +319,7 @@ const ProductCatalogBrowsingPage = (props) => {
                             xs={12}
                             justify="flex-start"
                             spacing={4}
-                            // component={Paper}
                           >
-                            {/* <img src={element.PhotoURL} /> */}
                             <Grid item>
                               <img
                                 src={element.PhotoURL}

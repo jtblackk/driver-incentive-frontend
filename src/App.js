@@ -1,5 +1,5 @@
 import './App.css'
-import Amplify, { Auth } from 'aws-amplify'
+import Amplify from 'aws-amplify'
 import awsconfig from './aws-exports'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { withAuthenticator } from 'aws-amplify-react'

@@ -1,16 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Auth } from 'aws-amplify'
-import Typography from '@material-ui/core/Typography'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
-import WaitingForApplicationApprovalScreen from '../Components/WaitingForApplicationAprovalScreen'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
-import getUserDetails from '../Helpers/CommonFunctions'
-import { Grid, Paper } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import SuperSponsorContent from '../Components/SuperSponsorOrganizationContent'
 import OrganizationContent from '../Components/OrganizationContent'
 // set up styling
@@ -31,18 +26,11 @@ const useStyles = makeStyles((theme) => ({
 function OrganizationPage() {
   const [isLoading, setIsLoading] = useState(true)
   const classes = useStyles()
-  let history = useHistory()
   const userData = useContext(UserContext).user
-  const setUserData = useContext(UserContext).setUser
 
   const [organizationUsers, setOrganizationUsers] = useState(null)
   function setOrganizationUsersState(state) {
     setOrganizationUsers(state)
-  }
-
-  const [terminatedUsers, setTerminatedUsers] = useState(null)
-  function setTerminatedUsersState(state) {
-    setTerminatedUsers(state)
   }
 
   const [pageUpdate, setPageUpdate] = useState(0)
@@ -84,10 +72,12 @@ function OrganizationPage() {
               Points: parseInt(element.Points.N),
               PointDollarRatio: parseFloat(element.PointDollarRatio.N),
             }
+          } else {
+            return null
           }
         })
         .filter((element) => {
-          return element.AccountStatus > 0
+          return element && element.AccountStatus > 0
         })
 
       let not_banned_users = org_users_array_formatted.filter((element) => {

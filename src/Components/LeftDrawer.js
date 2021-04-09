@@ -13,7 +13,6 @@ import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/core/styles'
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
-import SettingsIcon from '@material-ui/icons/Settings'
 import { Auth } from 'aws-amplify'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount'
@@ -23,7 +22,6 @@ import StorefrontIcon from '@material-ui/icons/Storefront'
 import StorageIcon from '@material-ui/icons/Storage'
 import GroupIcon from '@material-ui/icons/Group'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
-import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore'
 import ReceiptIcon from '@material-ui/icons/Receipt'
 import { UserContext } from '../Helpers/UserContext'
 
@@ -43,9 +41,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const LeftDrawer = (props) => {
-  const userData = useContext(UserContext).user
-  const setUserData = useContext(UserContext).setUser
-  const activeProfile = useContext(UserContext).activeProfile
   const setActiveProfile = useContext(UserContext).setActiveProfile
 
   let history = useHistory()

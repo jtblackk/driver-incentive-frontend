@@ -1,5 +1,5 @@
-import { Avatar, Grid, TextField } from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
+import { Grid, TextField } from '@material-ui/core'
+import React, { useState } from 'react'
 
 const EditAccountCard = (props) => {
   const setProfileState = props.setNewDataState

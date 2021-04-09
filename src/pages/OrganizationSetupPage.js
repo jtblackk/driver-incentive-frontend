@@ -1,6 +1,4 @@
 import React from 'react'
-import LeftDrawer from '../Components/LeftDrawer'
-import TopAppBar from '../Components/TopAppBar'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import { AppBar, Grid, Paper, Toolbar, Typography } from '@material-ui/core'

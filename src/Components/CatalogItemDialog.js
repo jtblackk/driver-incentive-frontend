@@ -1,16 +1,12 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
-import MuiDialogActions from '@material-ui/core/DialogActions'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
-import { Divider, Grid, Paper } from '@material-ui/core'
-
-import parse from 'html-react-parser'
+import { Grid } from '@material-ui/core'
 
 const styles = (theme) => ({
   root: {
@@ -115,30 +111,6 @@ export default function CatalogItemDialog(props) {
                   ) : null}
                 </Grid>
               </Grid>
-
-              {/* <Grid item xs={12}>
-                <Divider />
-              </Grid> */}
-
-              {/* <Grid item container xs={12}>
-                <Grid item xs={12} align="center">
-                  <Typography>
-                    <b>Ebay Description</b>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  {parse(props.dialogProps.selectedCatalogEntry.Description)}
-                </Grid>
-              </Grid> */}
-
-              {/* <Grid item xs={12}>
-                <Divider />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>
-                  put item controls here (remove item button)
-                </Typography>
-              </Grid> */}
             </Grid>
           </DialogContent>
         </Dialog>

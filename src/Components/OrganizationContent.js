@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from '@material-ui/core'
-import { toLower } from 'lodash'
+import { Box, Grid, Paper, Typography } from '@material-ui/core'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'

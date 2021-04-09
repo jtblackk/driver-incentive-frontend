@@ -1,100 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import React, { useEffect, useState } from 'react'
+
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
-import MuiDialogTitle from '@material-ui/core/DialogTitle'
-import MuiDialogContent from '@material-ui/core/DialogContent'
-import MuiDialogActions from '@material-ui/core/DialogActions'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
-import {
-  Divider,
-  Grid,
-  Input,
-  ownerDocument,
-  Paper,
-  TextField,
-} from '@material-ui/core'
-import getUserDetails from '../Helpers/CommonFunctions'
-import { UserContext } from '../Helpers/UserContext'
+import { Divider, Grid, TextField } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 import { useHistory } from 'react-router'
 
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-})
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  )
-})
-
 export default function CartDialog(props) {
   let history = useHistory()
-  const userData = useContext(UserContext).user
-  const setUserData = useContext(UserContext).setUser
 
-  const handleClickOpen = () => {
-    props.dialogProps.setDialogIsOpenState(true)
-  }
   const handleClose = () => {
     props.dialogProps.setDialogIsOpenState(false)
   }
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const [cartCost, setCartCost] = useState(null)
-
-  useEffect(() => {
-    //   setIsLoading(true)
-    //   ;(async () => {
-    //     let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-    //     let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
-    //     let partnered_sponsors_data = await partnered_sponsors_response.json()
-    //     let partnered_sponsors_array = await JSON.parse(
-    //       partnered_sponsors_data.body.toString(),
-    //     ).Items
-    //     let active_sponsors_array = partnered_sponsors_array.filter(
-    //       (element) =>
-    //         parseInt(element.Status.N) === 2 &&
-    //         parseInt(element.AccountStatus.N) === 1,
-    //     )
-    //     let active_sponsors_formatted = active_sponsors_array.map((element) => {
-    //       return {
-    //         SponsorID: element.SponsorID.S,
-    //         SponsorName: element.FirstName.S + ' ' + element.LastName.S,
-    //         Points: parseInt(element.Points.N),
-    //         SponsorOrganization: element.Organization.S,
-    //         PointToDollarRatio: parseFloat(element.PointDollarRatio.N),
-    //       }
-    //     })
-    //     setRegisteredSponsors(active_sponsors_formatted)
-    //   })()
-    //   setIsLoading(false)
-  }, [])
+  useEffect(() => {}, [])
 
   let cart_cost = props.dialogProps.cart.reduce((prev, curr) => {
     return (

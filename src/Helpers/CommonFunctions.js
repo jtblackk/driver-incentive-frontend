@@ -1,5 +1,4 @@
-import Amplify, { Auth } from 'aws-amplify'
-import awsconfig from '../aws-exports'
+import { Auth } from 'aws-amplify'
 
 export default async function getUserDetails(username) {
   let user_email = null

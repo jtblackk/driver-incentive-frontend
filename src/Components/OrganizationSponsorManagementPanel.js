@@ -1,6 +1,5 @@
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { UserContext } from '../Helpers/UserContext'
 import AddSponsorProfileDialog from './AddSponsorProfileDialog'
 import ViewSponsorProfileDialog from './ViewSponsorProfileDialog'
 import GenericTable from './GenericTable'

@@ -1,29 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { DRAWER_WIDTH } from '../Helpers/Constants'
+import React, { useEffect, useState } from 'react'
+
 import { Avatar, Button, Grid, Paper, Typography } from '@material-ui/core'
-import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from '../Components/LoadingIcon'
 import GenericTableSelectable from '../Components/GenericTableSelectable'
-import { useHistory } from 'react-router'
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: DRAWER_WIDTH,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}))
 
 export default function ChooseCatalogItemsPanel(props) {
-  const classes = useStyles()
-  const userData = useContext(UserContext).user
   const [isLoading, setIsLoading] = useState(true)
 
   const [table1HeadCells, setTable1HeadCells] = useState(null)
@@ -33,12 +14,6 @@ export default function ChooseCatalogItemsPanel(props) {
     setIsLoading(false)
 
     setTable1HeadCells([
-      // {
-      //   id: 'ItemKey',
-      //   label: 'Product ID',
-      //   isDate: false,
-      //   width: 125,
-      // },
       {
         id: 'Photo',
         label: 'Photo',

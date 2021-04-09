@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Auth } from 'aws-amplify'
 import Typography from '@material-ui/core/Typography'
 import LeftDrawer from '../Components/LeftDrawer'
 import TopAppBar from '../Components/TopAppBar'
-import WaitingForApplicationApprovalScreen from '../Components/WaitingForApplicationAprovalScreen'
 import { makeStyles } from '@material-ui/core/styles'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
-import getUserDetails from '../Helpers/CommonFunctions'
 import ProfileSelectionDialog from '../Components/ProfileSelectionDialog'
 
 // set up styling
@@ -32,7 +29,7 @@ function IndexPage() {
   const classes = useStyles()
   let history = useHistory()
   const userData = useContext(UserContext).user
-  const setUserData = useContext(UserContext).setUser
+  // const setUserData = useContext(UserContext).setUser
   const activeProfile = useContext(UserContext).activeProfile
   const setActiveProfile = useContext(UserContext).setActiveProfile
 
@@ -51,14 +48,6 @@ function IndexPage() {
     if (refresh) {
       setPageUpdate(pageUpdate + 1)
     }
-  }
-
-  async function getUserData() {
-    setIsLoading(true)
-    getUserDetails().then((newUserProfileDetails) => {
-      setUserData(newUserProfileDetails)
-      setIsLoading(false)
-    })
   }
 
   useEffect(() => {

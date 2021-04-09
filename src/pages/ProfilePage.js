@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { UserContext } from '../Helpers/UserContext'
 import { makeStyles } from '@material-ui/core/styles'
-import EditIcon from '@material-ui/icons/Edit'
+
 import TopAppBar from '../Components/TopAppBar'
 import UserProfileCard from '../Components/UserProfileCard'
 import { DRAWER_WIDTH } from '../Helpers/Constants'
@@ -9,7 +9,7 @@ import LeftDrawer from '../Components/LeftDrawer'
 import { Button, Grid, Paper, Typography } from '@material-ui/core'
 import EditAccountCard from '../Components/EditAccountCard'
 import LoadingIcon from '../Components/LoadingIcon'
-import Amplify, { Storage, Auth } from 'aws-amplify'
+import Amplify from 'aws-amplify'
 import aws_exports from '../aws-exports'
 
 Amplify.configure(aws_exports)

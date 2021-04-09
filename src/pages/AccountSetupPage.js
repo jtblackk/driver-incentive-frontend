@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Grid, Paper, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountSetupCard from '../Components/AccountSetupCard'
 import { Auth } from 'aws-amplify'

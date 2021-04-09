@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DeleteSponsorshipDialog from './DeleteSponsorshipDialog'
 
@@ -11,7 +10,6 @@ import {
   AppBar,
   Box,
   ButtonGroup,
-  Divider,
   Grid,
   IconButton,
   Paper,
@@ -21,9 +19,7 @@ import {
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import GenericTable from './GenericTable'
-import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
-import UserProfileCard from './UserProfileCard'
 require('datejs')
 
 function DriverManagementTab(props) {
@@ -586,8 +582,6 @@ function DriverPointsTab(props) {
     })
   }, [pageUpdate])
 
-  let LEFT_COL_WIDTH = 5
-  let RIGHT_COL_WIDTH = 6
   let COLUMN_SPACING = 1
 
   if (!isLoading) {

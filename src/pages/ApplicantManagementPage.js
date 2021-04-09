@@ -43,9 +43,6 @@ const ApplicantManagementPage = () => {
   }
 
   const [oldApplicants, setOldApplicants] = useState(null)
-  function setOldApplicantState(state) {
-    setOldApplicants(state)
-  }
 
   const [selectedApplicant, setSelectedApplicant] = useState(null)
   function setSelectedApplicantState(state) {
@@ -123,6 +120,8 @@ const ApplicantManagementPage = () => {
             AccountStatus: parseInt(val.AccountStatus.N),
             Bio: val.Bio.S,
           }
+        } else {
+          return null
         }
       })
 

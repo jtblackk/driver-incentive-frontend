@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -7,7 +7,6 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import { initial } from 'lodash'
 require('datejs')
 
 export default function ApplicationManagementDialog(props) {
