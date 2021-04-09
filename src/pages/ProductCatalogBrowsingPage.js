@@ -209,8 +209,6 @@ const ProductCatalogBrowsingPage = (props) => {
     return item_count
   }, 0)
 
-  console.log(cart_count)
-
   if (!isLoading) {
     return (
       <div className={classes.root}>

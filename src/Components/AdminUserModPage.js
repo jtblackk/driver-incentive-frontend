@@ -34,7 +34,6 @@ function AdminUserModPage(props) {
     fetch(apiUrl)
       .then((res) => res.json())
       .then((repos) => {
-        // console.log(repos)
         // addEntryData(repos)
         setAppState({ loading: false, repos: repos })
       })

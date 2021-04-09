@@ -334,11 +334,8 @@ const List = (props) => {
   for (x in repos) {
     // data.push(repos[x])
     if (repos[x].AccountType == 'Sponsor') {
-      console.log(repos[x])
-
       if (!repos[x].IsSuspended) {
         // repos[x].push({IsSuspended: "false"})
-        // console.log(repos[x].Email_id)
       }
 
       if (!rows.includes(repos[x])) {
@@ -347,19 +344,14 @@ const List = (props) => {
         repos[x].FirstName = repos[x].FirstName.toLowerCase()
         repos[x].LastName = repos[x].LastName.toLowerCase()
         repos[x].AccountType = repos[x].AccountType.toLowerCase()
-        // console.log(repos[x].Email_id.length)
 
         // repos[x].LastLogin = repos[x].LastLogin.toLowerCase();
 
         rows.push(repos[x])
         // repos[x].LastLogin.toString();
-        // console.log(rows[x])
       }
     }
-
-    // console.log(data)
   }
-  // console.log(rows[5])
 
   return (
     <div className={classes.root}>
@@ -448,6 +440,5 @@ const List = (props) => {
   )
 
   //   const { repos } = props;
-  //   if (!repos || repos.length === 0) return <p>No repos, sorry</p>; // <ul> //   <h2 className='list-head'>Available Public Repositories</h2> //   {repos.map((repo) => { //     if (!repo.TotalPoints) //     { //       console.log(0) //     }else{ //       console.log(repo.TotalPoints) //     } //     console.log(repo.Email_id + " " + repo.FirstName + " " + repo.LastName+ " " +repo.AccountType+ " " +repo.ApplicationType+ " " +repo.TotalPoints) //     return ( //       <li key={repo.Email_id} className='list'> //         {/* <span className='repo-text'>{repo.Email_id} </span> */} //         <span className='repo-description'>{repo.Email_id + " " + repo.FirstName + " " + repo.LastName+ " " +repo.AccountType+ " " +repo.ApplicationType+ " " +repo.TotalPoints}</span> //       </li> //     ); //   } //   )} // </ul> // );
 }
 export default List

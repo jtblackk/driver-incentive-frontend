@@ -189,9 +189,6 @@ export default function CartDialog(props) {
                             }),
                           }
                           fetch(MAKE_ORDER_URL, requestOptions).then(() => {
-                            // TODO: take the user to an order confirmation page
-                            console.log('order confirmation page needs to show')
-                            //for now, just redirect to 'My orders'
                             history.push('/orders')
                           })
                         }

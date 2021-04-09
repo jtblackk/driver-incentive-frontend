@@ -76,7 +76,6 @@ function AdminDelUser() {
                 AdminNotes: userDetails.AdminNotes,
               }),
             }
-            console.log(userDetails)
           }}
         >
           Submit

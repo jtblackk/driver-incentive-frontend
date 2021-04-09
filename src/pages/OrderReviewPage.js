@@ -132,8 +132,6 @@ export default function OrderReviewPage() {
       let user_orders_obj = JSON.parse(user_orders_json.body)
       let user_orders_arr = user_orders_obj.Items
 
-      console.log(user_orders_arr)
-
       let all_orders_parsed = user_orders_arr.map((element) => {
         return {
           OrderID: element.OrderID.S,
