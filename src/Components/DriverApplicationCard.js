@@ -7,7 +7,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 import ApplyAgainDialog from './ApplyAgainDialog'
