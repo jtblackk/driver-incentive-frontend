@@ -38,7 +38,7 @@ export default function GenericTable(props) {
     let dataList = props.data
     setRows(dataList)
     setIsLoading(false)
-  }, [])
+  }, [props.data])
 
   if (!isLoading) {
     return (
