@@ -92,10 +92,16 @@ const LeftDrawer = (props) => {
       reqAccTypes: ['Driver'],
     },
     {
-      name: 'My Orders',
+      name: 'My orders',
       route: '/orders',
       icon: <ReceiptIcon />,
       reqAccTypes: ['Driver'],
+    },
+    {
+      name: 'User management',
+      route: '/user-management',
+      icon: <GroupIcon />,
+      reqAccTypes: ['Admin'],
     },
     {
       name: 'My logs',

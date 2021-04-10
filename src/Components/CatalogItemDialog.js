@@ -86,7 +86,8 @@ export default function CatalogItemDialog(props) {
                 >
                   <Grid item xs={12} align="left">
                     {props.dialogProps.selectedCatalogEntry.Stock} in stock | $
-                    {props.dialogProps.selectedCatalogEntry.Price} each
+                    {props.dialogProps.selectedCatalogEntry.Price.toFixed(2)}{' '}
+                    each
                   </Grid>
                   <Grid item xs={12} align="left"></Grid>
 

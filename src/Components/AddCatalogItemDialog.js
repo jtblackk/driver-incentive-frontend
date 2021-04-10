@@ -72,7 +72,7 @@ export default function AddCatalogItemDialog(props) {
             ItemKey: element.ItemID,
             ItemName: element.ItemName,
             ItemPhotoURL: element.PhotoURL ? element.PhotoURL : null,
-            Price: element.Price,
+            Price: element.Price ? parseFloat(element.Price).toFixed(2) : null,
           }
         })
         .filter(

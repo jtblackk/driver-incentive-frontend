@@ -92,16 +92,17 @@ function IndexPage() {
         {/* layout stuff */}
         <TopAppBar pageTitle="Home"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
-
-        <ProfileSelectionDialog
-          dialogProps={{
-            profileSelectionDialogIsOpen: profileSelectionDialogIsOpen,
-            setProfileSelectionDialogIsOpenState: setProfileSelectionDialogIsOpenState,
-            fullPageUpdateState: fullPageUpdateState,
-            activeProfile: activeProfile,
-            setActiveProfile: setActiveProfile,
-          }}
-        />
+        {userData.AccountType === 'Sponsor' ? (
+          <ProfileSelectionDialog
+            dialogProps={{
+              profileSelectionDialogIsOpen: profileSelectionDialogIsOpen,
+              setProfileSelectionDialogIsOpenState: setProfileSelectionDialogIsOpenState,
+              fullPageUpdateState: fullPageUpdateState,
+              activeProfile: activeProfile,
+              setActiveProfile: setActiveProfile,
+            }}
+          />
+        ) : null}
 
         {/* page content (starts after first div) */}
         <main className={classes.content}>
