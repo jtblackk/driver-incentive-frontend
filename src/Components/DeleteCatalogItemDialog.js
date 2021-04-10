@@ -59,8 +59,8 @@ export default function DeleteCatalogItemDialog(props) {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    SponsorID: userData.Username,
-                    ProductIDs: new_item_list,
+                    SponsorID: userData.Username.replaceAll("'", "''"),
+                    ProductIDs: new_item_list.replaceAll("'", "''"),
                   }),
                 }
 

@@ -92,8 +92,8 @@ const OrganizationSetupCard = () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      Username: userData.Username,
-                      Organization: organizationName,
+                      Username: userData.Username.replaceAll("'", "''"),
+                      Organization: organizationName.replaceAll("'", "''"),
                     }),
                   }
                   await fetch(SAVE_USER_PROFILE_URL, requestOptions)

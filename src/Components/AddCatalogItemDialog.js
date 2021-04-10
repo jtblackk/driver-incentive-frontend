@@ -167,7 +167,7 @@ export default function AddCatalogItemDialog(props) {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          SponsorID: userData.Username,
+                          SponsorID: userData.Username.replaceAll("'", "''"),
                           ProductIDs: new_list_of_ids,
                         }),
                       }

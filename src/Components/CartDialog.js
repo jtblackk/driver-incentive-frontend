@@ -177,9 +177,14 @@ export default function CartDialog(props) {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                              SponsorID:
-                                props.dialogProps.activeSponsor.SponsorID,
-                              DriverID: props.dialogProps.activeDriver.Username,
+                              SponsorID: props.dialogProps.activeSponsor.SponsorID.replaceAll(
+                                "'",
+                                "''",
+                              ),
+                              DriverID: props.dialogProps.activeDriver.Username.replaceAll(
+                                "'",
+                                "''",
+                              ),
                               ProductIDs: ordered_products,
                               Cost: Math.ceil(
                                 cart_cost *

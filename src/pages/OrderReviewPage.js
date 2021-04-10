@@ -123,7 +123,7 @@ export default function OrderReviewPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          DriverID: userData.Username,
+          DriverID: userData.Username.replaceAll("'", "''"),
         }),
       }
 

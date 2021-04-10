@@ -49,8 +49,14 @@ export default function DeleteSponsorshipDialog(props) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  SponsorID: props.parentProps.selectedDriverData.SponsorID,
-                  DriverID: props.parentProps.selectedDriverData.DriverID,
+                  SponsorID: props.parentProps.selectedDriverData.SponsorID.replaceAll(
+                    "'",
+                    "''",
+                  ),
+                  DriverID: props.parentProps.selectedDriverData.DriverID.replaceAll(
+                    "'",
+                    "''",
+                  ),
                   Status: 3,
                 }),
               }

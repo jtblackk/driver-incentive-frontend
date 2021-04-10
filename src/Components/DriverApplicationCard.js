@@ -178,8 +178,8 @@ const DriverApplicationCard = (props) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  DriverID: applicationDetails.Username,
-                  SponsorID: applicationDetails.Sponsor,
+                  DriverID: applicationDetails.Username.replaceAll("'", "''"),
+                  SponsorID: applicationDetails.Sponsor.replaceAll("'", "''"),
                   AppComments: applicationDetails.Comments.replaceAll(
                     "'",
                     "''",

@@ -177,14 +177,14 @@ const AccountSetupCard = (props) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  Username: userDetails.Username,
-                  FirstName: userDetails.FirstName,
-                  LastName: userDetails.LastName,
+                  Username: userDetails.Username.replaceAll("'", "''"),
+                  FirstName: userDetails.FirstName.replaceAll("'", "''"),
+                  LastName: userDetails.LastName.replaceAll("'", "''"),
                   AccountType: !userData.Organization
                     ? userDetails.AccountType
                     : 'Sponsor',
                   AccountStatus: 1,
-                  Bio: userDetails.Bio,
+                  Bio: userDetails.Bio.replaceAll("'", "''"),
                   IsInitialSignup: true,
                 }),
               }

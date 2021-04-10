@@ -96,8 +96,8 @@ function RenameOrganizationPanel(props) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      Org: userData.Organization,
-                      NewOrgName: organizationName,
+                      Org: userData.Organization.replaceAll("'", "''"),
+                      NewOrgName: organizationName.replaceAll("'", "''"),
                     }),
                   }
                   fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {

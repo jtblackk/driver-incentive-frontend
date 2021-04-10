@@ -140,10 +140,10 @@ function ProfilePageContent(props) {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          Username: newData.Username,
-                          FirstName: newData.FirstName,
-                          LastName: newData.LastName,
-                          Bio: newData.Bio,
+                          Username: newData.Username.replaceAll("'", "''"),
+                          FirstName: newData.FirstName.replaceAll("'", "''"),
+                          LastName: newData.LastName.replaceAll("'", "''"),
+                          Bio: newData.Bio.replaceAll("'", "''"),
                           AccountType: newData.AccountType,
                         }),
                       }

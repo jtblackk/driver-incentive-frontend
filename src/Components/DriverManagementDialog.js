@@ -207,8 +207,14 @@ function DriverManagementTab(props) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: props.selectedDriverData.SponsorID,
-                      DriverID: props.selectedDriverData.DriverID,
+                      SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      DriverID: props.selectedDriverData.DriverID.replaceAll(
+                        "'",
+                        "''",
+                      ),
                       Status: 2,
                     }),
                   }
@@ -296,8 +302,14 @@ function EditPointDollarRatioMenu(props) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  SponsorID: props.selectedDriverData.SponsorID,
-                  DriverID: props.selectedDriverData.DriverID,
+                  SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                    "'",
+                    "''",
+                  ),
+                  DriverID: props.selectedDriverData.DriverID.replaceAll(
+                    "'",
+                    "''",
+                  ),
                   PointDollarRatio: parseFloat(newPointDollarRatio),
                 }),
               }
@@ -403,12 +415,18 @@ function EditDriverPointsMenu(props) {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    SponsorID: props.selectedDriverData.SponsorID,
-                    DriverID: props.selectedDriverData.DriverID,
+                    SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                      "'",
+                      "''",
+                    ),
+                    DriverID: props.selectedDriverData.DriverID.replaceAll(
+                      "'",
+                      "''",
+                    ),
                     Points:
                       parseInt(props.selectedDriverData.Points) -
                       parseInt(pointQuantity),
-                    PointChangeReason: reason,
+                    PointChangeReason: reason.replaceAll("'", "''"),
                   }),
                 }
 
@@ -468,13 +486,18 @@ function EditDriverPointsMenu(props) {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    SponsorID: props.selectedDriverData.SponsorID,
-                    DriverID: props.selectedDriverData.DriverID,
+                    SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                      "'",
+                      "''",
+                    ),
+                    DriverID: props.selectedDriverData.DriverID.replaceAll(
+                      "'",
+                      "''",
+                    ),
                     Points:
                       parseInt(props.selectedDriverData.Points) +
                       parseInt(pointQuantity),
-                    PointChangeReason: reason,
-                    // TODO: provide reason for point change. waiting on api/table for this
+                    PointChangeReason: reason.replaceAll("'", "''"),
                   }),
                 }
 

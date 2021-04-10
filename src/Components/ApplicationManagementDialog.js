@@ -116,9 +116,15 @@ export default function ApplicationManagementDialog(props) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: props.applicationDetails.SponsorID,
-                      DriverID: props.applicationDetails.DriverID,
-                      AppDecisionReason: decisionReason,
+                      SponsorID: props.applicationDetails.SponsorID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      DriverID: props.applicationDetails.DriverID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      AppDecisionReason: decisionReason.replaceAll("'", "''"),
                       Status: 1,
                       PointDollarRatio: 0.01,
                       Points: 0,
@@ -155,9 +161,15 @@ export default function ApplicationManagementDialog(props) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: props.applicationDetails.SponsorID,
-                      DriverID: props.applicationDetails.DriverID,
-                      AppDecisionReason: decisionReason,
+                      SponsorID: props.applicationDetails.SponsorID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      DriverID: props.applicationDetails.DriverID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      AppDecisionReason: decisionReason.replaceAll("'", "''"),
                       Status: 2,
                       PointDollarRatio: 0.01,
                       Points: 0,

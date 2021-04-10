@@ -180,7 +180,10 @@ const OrganizationSponsorManagementPanel = (props) => {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          Username: selectedEntry.Username,
+                          Username: selectedEntry.Username.replaceAll(
+                            "'",
+                            "''",
+                          ),
                           AccountStatus: 2,
                         }),
                       }
@@ -217,7 +220,7 @@ const OrganizationSponsorManagementPanel = (props) => {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
-                        Username: selectedEntry.Username,
+                        Username: selectedEntry.Username.replaceAll("'", "''"),
                         AccountStatus: 1,
                       }),
                     }

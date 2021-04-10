@@ -114,7 +114,7 @@ export default function SetAllPointRatiosDialog(props) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: userData.Username,
+                      SponsorID: userData.Username.replaceAll("'", "''"),
                       PointDollarRatio: parseFloat(newPointDollarRatio),
                     }),
                   }
