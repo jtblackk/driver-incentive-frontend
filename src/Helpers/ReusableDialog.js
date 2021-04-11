@@ -24,7 +24,7 @@ export default function ReusableDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'User information'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Dialog title'}</DialogTitle>
         <DialogContent>
           {props.dialogProps ? (
             <Grid

@@ -82,8 +82,8 @@ export default function ApplicationManagementDialog(props) {
     },
   ]
 
-  let LEFT_COL_WIDTH = 5
-  let RIGHT_COL_WIDTH = 6
+  let LEFT_COL_WIDTH = 4
+  let RIGHT_COL_WIDTH = 7
   let COLUMN_SPACING = 1
 
   function ResponseForm() {
@@ -302,7 +302,7 @@ export default function ApplicationManagementDialog(props) {
                 >
                   <Grid item xs={7} align="center">
                     <TextField
-                      variant="outlined"
+                      variant="filled"
                       label="Decision reason"
                       placeholder="Provide a reason for your decision"
                       multiline

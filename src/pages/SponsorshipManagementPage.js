@@ -44,7 +44,6 @@ export default function SponsorshipManagementPage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      // TODO: get all the sponsors in the app w/ their organization name
       let GET_SPONSORS_URL =
         'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
       let sponsors_response = await fetch(GET_SPONSORS_URL)

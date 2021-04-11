@@ -21,7 +21,7 @@ let func = () => {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      // TODO: make api call to get all the users in the database
+
       let mock_data = [
         {
           Username: {

@@ -84,7 +84,7 @@ const DriverApplicationCard = (props) => {
         justify="center"
         direct="column"
         alignItems="center"
-        spacing={2}
+        spacing={1}
       >
         <ApplyAgainDialog
           dialogIsOpen={dialogIsOpen}
@@ -103,6 +103,7 @@ const DriverApplicationCard = (props) => {
                 fullWidth
                 labelId="SponsorLabel"
                 id="Sponsor"
+                variant="filled"
                 onChange={(event) => {
                   // update sponsor
                   let newApplicationDetails = applicationDetails
@@ -129,13 +130,12 @@ const DriverApplicationCard = (props) => {
 
         {/* additional comments */}
         <Grid item xs={7} align="center">
-          <br></br>
           <TextField
             id="additional-comments"
             label="Comments"
             type="text"
             placeholder="Any comments?"
-            variant="outlined"
+            variant="filled"
             multiline
             fullWidth
             rows={4}
@@ -150,7 +150,7 @@ const DriverApplicationCard = (props) => {
 
         {/* submit button */}
         <Grid item xs={7} align="center">
-          <br></br>
+          <br />
           <Button
             fullWidth
             variant="contained"

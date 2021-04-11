@@ -107,8 +107,6 @@ export default function AddCatalogItemDialog(props) {
     })
   }, [])
 
-  // TODO: need to add dialog for viewing more of an item's info (table row drop-down thing? or a dialog?)
-
   return (
     <div>
       <Dialog

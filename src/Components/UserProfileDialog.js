@@ -7,7 +7,6 @@ import { Box, Button, Grid, Paper, Typography } from '@material-ui/core'
 import EditUserDialog from './EditUserDialog'
 
 export default function UserProfileDialog(props) {
-  //   console.log(props)
   let user_username = props.dialogProps.selectedUser.Username
 
   const handleClose = () => {
@@ -27,9 +26,6 @@ export default function UserProfileDialog(props) {
         (element) => element.Username === user_username,
       )
     : null
-
-  //   console.log(active_profile)
-  //   console.log(editUserDialogIsOpen)
 
   return (
     <div>
@@ -54,7 +50,7 @@ export default function UserProfileDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'User information'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'User profile'}</DialogTitle>
         <DialogContent>
           {props.dialogProps.allUsers && props.dialogProps.selectedUser ? (
             <Grid
@@ -145,13 +141,12 @@ export default function UserProfileDialog(props) {
                   style={{ padding: 20 }}
                 >
                   {props.dialogProps.action}
-                  {/* TODO: may have to conditionally render this. maybe not show for account status 0 */}
+
                   <Grid item>
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => {
-                        // TODO: set the edit user dialog to open
                         setEditUserDialogIsOpen(true)
                       }}
                     >

@@ -39,8 +39,6 @@ AWS.config.update({
 //
 
 export default function AddUserDialog(props) {
-  console.log(props)
-
   const handleClose = () => {
     setCreatedUserDetails({
       AccountType: '',
@@ -116,7 +114,7 @@ export default function AddUserDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'User information'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'User info'}</DialogTitle>
         <DialogContent>
           {props.dialogProps ? (
             <Grid
@@ -194,7 +192,6 @@ export default function AddUserDialog(props) {
                         onChange={(event) => {
                           setUnameHelperText(null)
                           setIsNewOrganization(event.target.value)
-                          console.log(event.target.value)
                         }}
                       >
                         <FormControlLabel
@@ -451,8 +448,6 @@ export default function AddUserDialog(props) {
 
                           if (invalid_flag) return
 
-                          console.log('success?')
-
                           // update local state
                           let new_users = [...props.dialogProps.data.allUsers]
                           new_users.push({
@@ -465,7 +460,7 @@ export default function AddUserDialog(props) {
                             Organization: createdUserDetails.Organization,
                             SignupDate: new Date(Date.now()).toISOString(),
                           })
-                          console.log(new_users)
+
                           props.dialogProps.dataSetters.setAllUsers(new_users)
 
                           //   make api call

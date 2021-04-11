@@ -19,12 +19,20 @@ const EditAccountCard = (props) => {
         spacing={2}
       >
         {/* name row */}
-        <Grid container spacing={1} justify="center" direction="row">
+        <Grid
+          item
+          xs={10}
+          container
+          spacing={2}
+          justify="space-between"
+          direction="row"
+        >
           {/* first name */}
-          <Grid item xs={4} align="center">
+          <Grid item xs={6} align="center">
             <TextField
               id="FirstName"
               label="First name"
+              variant="filled"
               defaultValue={userDetails.FirstName}
               onChange={(event) => {
                 // update first name in state
@@ -36,11 +44,12 @@ const EditAccountCard = (props) => {
           </Grid>
 
           {/* last name */}
-          <Grid item xs={4} align="center">
+          <Grid item xs={6} align="center">
             <TextField
               id="LastName"
               label="Last name"
               defaultValue={userDetails.LastName}
+              variant="filled"
               onChange={(event) => {
                 // update last name in state
                 let newUserDetails = userDetails
@@ -52,15 +61,15 @@ const EditAccountCard = (props) => {
         </Grid>
 
         {/* bio */}
-        <Grid item xs={8} align="center">
-          <br></br>
+        <Grid item xs={10} align="center">
+          {/* <br></br> */}
           <TextField
             id="user-bio"
             label="Bio"
             type="text"
             placeholder="Write a short bio"
             defaultValue={userDetails.Bio}
-            variant="outlined"
+            variant="filled"
             multiline
             fullWidth
             rows={4}

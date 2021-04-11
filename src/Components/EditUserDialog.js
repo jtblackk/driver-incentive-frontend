@@ -53,11 +53,19 @@ export default function EditUserDialog(props) {
                 spacing={2}
               >
                 {/* name row */}
-                <Grid container spacing={1} justify="center" direction="row">
+                <Grid
+                  item
+                  container
+                  xs={8}
+                  spacing={2}
+                  justify="space-between"
+                  direction="row"
+                >
                   {/* first name */}
-                  <Grid item xs={4} align="center">
+                  <Grid item xs={6} align="center">
                     <TextField
                       id="FirstName"
+                      variant="filled"
                       label="First name"
                       defaultValue={editedProfileState.FirstName}
                       onChange={(event) => {
@@ -72,9 +80,10 @@ export default function EditUserDialog(props) {
                   </Grid>
 
                   {/* last name */}
-                  <Grid item xs={4} align="center">
+                  <Grid item xs={6} align="center">
                     <TextField
                       id="LastName"
+                      variant="filled"
                       label="Last name"
                       defaultValue={editedProfileState.LastName}
                       onChange={(event) => {
@@ -91,13 +100,13 @@ export default function EditUserDialog(props) {
 
                 {/* bio */}
                 <Grid item xs={8} align="center">
-                  <br></br>
+                  {/* <br></br> */}
                   <TextField
                     id="user-bio"
                     label="Bio"
                     type="text"
                     placeholder="Write a short bio"
-                    variant="outlined"
+                    variant="filled"
                     multiline
                     fullWidth
                     rows={4}
@@ -122,13 +131,11 @@ export default function EditUserDialog(props) {
               {/* action section */}
               <Grid item container xs={8} justify="flex-end">
                 {props.dialogProps.action}
-                {/* TODO: may have to conditionally render this. maybe not show for account status 0 */}
                 <Grid item>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                      //   console.log(editedProfileState)
                       let new_users = props.dialogProps.data.allUserData.map(
                         (element) => {
                           if (
