@@ -151,7 +151,21 @@ const ProductCatalogManagementPage = () => {
   }, [pageUpdate])
 
   if (isLoading) {
-    return <LoadingIcon />
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Catalog management"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
+        </main>
+      </div>
+    )
   } else {
     return (
       <div className={classes.root}>
@@ -227,7 +241,7 @@ const ProductCatalogManagementPage = () => {
             }}
           />
 
-          <Grid container justify="center">
+          <Grid container justify="flex-start">
             <Grid item sm={12} md={11} lg={9} xl={7}>
               <ChooseCatalogItemsPanel
                 tableProps={{

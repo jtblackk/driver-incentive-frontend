@@ -95,10 +95,16 @@ function OrganizationPage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Your organization"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )
@@ -112,7 +118,7 @@ function OrganizationPage() {
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Grid container justify="center">
+          <Grid container justify="flex-start">
             <Grid item container xs={10} xl={6}>
               <OrganizationContent
                 orgProps={{

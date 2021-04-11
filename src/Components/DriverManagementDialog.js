@@ -706,10 +706,137 @@ function DriverPointsTab(props) {
                     showKey={false}
                     initialSortedColumn="Date"
                     initialSortedDirection="desc"
-                    selectedRow={selectedEntry}
-                    setSelectedRow={setSelectedEntryState}
-                    dialogIsOpen={props.dialogIsOpen}
-                    setDialogIsOpenState={props.setDialogIsOpenState}
+                    // selectedRow={selectedEntry}
+                    // setSelectedRow={setSelectedEntryState}
+                    // dialogIsOpen={props.dialogIsOpen}
+                    // setDialogIsOpenState={props.setDialogIsOpenState}
+                  ></GenericTable>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                {' '}
+                <br />
+              </Grid>
+            </Grid>
+          </DialogContent>
+        </Grid>
+      </div>
+    )
+  } else {
+    return <LoadingIcon />
+  }
+}
+
+function OrdersTab(props) {
+  const [isLoading, setIsLoading] = useState(true)
+
+  // point history table
+  const table1HeadCells = [
+    {
+      id: 'Cost',
+      label: 'Cost',
+      isDate: true,
+      width: 50,
+    },
+
+    {
+      id: 'Status',
+      label: 'Status',
+      isDate: false,
+      width: 50,
+    },
+    {
+      id: 'OrderDate',
+      label: 'Ordered on',
+      isDate: false,
+      width: 75,
+    },
+  ]
+
+  const [table1Data, setTable1Data] = useState(null)
+  function setTable1DataState(state) {
+    setTable1Data(state)
+  }
+
+  const [selectedEntry, setSelectedEntry] = useState(null)
+  function setSelectedEntryState(state) {
+    setSelectedEntry(state)
+  }
+
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function triggerPageUpdate() {
+    setPageUpdate(pageUpdate + 1)
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    ;(async () => {
+      // point change api
+
+      setTable1Data([
+        {
+          Cost: 1500,
+          Status: 'Processing',
+          OrderDate: '2021-03-11 23:08:19.748211',
+        },
+        {
+          Cost: 1450,
+          Status: 'Delivered',
+          OrderDate: '2021-03-11 23:08:19.748211',
+        },
+      ])
+    })().then(() => {
+      setIsLoading(false)
+    })
+  }, [pageUpdate])
+
+  let COLUMN_SPACING = 1
+
+  if (!isLoading) {
+    return (
+      <div>
+        <Grid container item component={Paper} xs={12}>
+          <DialogContent>
+            <Grid
+              item
+              container
+              direction="row"
+              spacing={COLUMN_SPACING}
+              justify="center"
+            >
+              <Grid item xs={12}>
+                <br />
+              </Grid>
+
+              {/* point history table */}
+              <Grid
+                item
+                container
+                xs={9}
+                spacing={2}
+                justify="center"
+                component={Paper}
+                style={{ padding: 20 }}
+              >
+                <Grid item container xs={12} alignItems="center">
+                  <Grid item xs={6} align="left">
+                    <Typography variant="h6">Order history</Typography>
+
+                    <Typography>View the driver's order history</Typography>
+                  </Grid>
+
+                  <GenericTable
+                    headCells={table1HeadCells}
+                    data={table1Data}
+                    setDataState={setTable1DataState}
+                    tableKey="Date"
+                    showKey={false}
+                    initialSortedColumn="Date"
+                    initialSortedDirection="desc"
+                    // selectedRow={selectedEntry}
+                    // setSelectedRow={setSelectedEntryState}
+                    // dialogIsOpen={props.dialogIsOpen}
+                    // setDialogIsOpenState={props.setDialogIsOpenState}
                   ></GenericTable>
                 </Grid>
               </Grid>
@@ -794,6 +921,7 @@ export default function DriverManagementDialog(props) {
         <AppBar position="static">
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="Points"></Tab>
+            <Tab label="Orders"></Tab>
             <Tab label="Manage"></Tab>
           </Tabs>
         </AppBar>
@@ -811,6 +939,15 @@ export default function DriverManagementDialog(props) {
             setAllDriverDataState={props.setAllDriverDataState}
           />
         ) : currentTab === 1 ? (
+          <OrdersTab
+            selectedDriverData={props.selectedDriverData}
+            allDriverData={props.allDriverData}
+            setAllDriverDataState={props.setAllDriverDataState}
+            handleClose={handleClose}
+            fullPageUpdate={props.fullPageUpdate}
+            setDialogIsOpenState={props.setDialogIsOpenState}
+          />
+        ) : currentTab === 2 ? (
           <DriverManagementTab
             selectedDriverData={props.selectedDriverData}
             allDriverData={props.allDriverData}

@@ -202,10 +202,16 @@ export default function UserManagementPage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Users"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )
@@ -234,7 +240,7 @@ export default function UserManagementPage() {
           {!isLoading ? (
             <Grid
               container
-              justify="center"
+              justify="flex-start"
               alignContent="center"
               direction="row"
               spacing={4}

@@ -110,12 +110,12 @@ const LeftDrawer = (props) => {
       icon: <LocalShippingIcon />,
       reqAccTypes: ['Admin'],
     },
-    {
-      name: 'My logs',
-      route: '/logs',
-      icon: <StorageIcon />,
-      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
-    },
+    // {
+    //   name: 'My logs',
+    //   route: '/logs',
+    //   icon: <StorageIcon />,
+    //   reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    // },
   ]
 
   let bottom_pages = [

@@ -227,7 +227,7 @@ const ApplicantManagementPage = () => {
           ) : null}
           <Grid
             container
-            justify="center"
+            justify="flex-start"
             alignContent="center"
             direction="row"
             spacing={4}
@@ -294,9 +294,16 @@ const ApplicantManagementPage = () => {
   } else {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Applicants"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )

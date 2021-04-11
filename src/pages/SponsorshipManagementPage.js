@@ -69,10 +69,28 @@ export default function SponsorshipManagementPage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar
+          pageTitle="Sponsorships"
+          customItem={
+            <Grid item xs={12} container justify="space-between">
+              <Grid item align="left">
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  variant="standard"
+                  style={{ color: 'white' }}
+                  fullWidth
+                ></Select>
+              </Grid>
+            </Grid>
+          }
+        ></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Grid container justify="center">
-            <Grid item xs={3}>
+            <Grid item xs={12}>
               <LoadingIcon />
             </Grid>
           </Grid>
@@ -132,7 +150,7 @@ export default function SponsorshipManagementPage() {
               </Grid>
             ) : (
               <Grid container justify="center">
-                <Grid item container xs={12} justify="center">
+                <Grid item container xs={12} justify="flex-start">
                   <CreateNewSponsorshipCard
                     SponsorID={currentSponsor.Username}
                     updatePage={{

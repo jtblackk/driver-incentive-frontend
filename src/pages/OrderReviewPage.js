@@ -204,10 +204,16 @@ export default function OrderReviewPage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Your orders"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )
@@ -218,20 +224,10 @@ export default function OrderReviewPage() {
         <TopAppBar pageTitle="Your orders"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
 
-        {/* <ProfileSelectionDialog
-          dialogProps={{
-            profileSelectionDialogIsOpen: profileSelectionDialogIsOpen,
-            setProfileSelectionDialogIsOpenState: setProfileSelectionDialogIsOpenState,
-            fullPageUpdateState: fullPageUpdateState,
-            activeProfile: activeProfile,
-            setActiveProfile: setActiveProfile,
-          }}
-        /> */}
-
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Grid item container justify="center">
+          <Grid item container justify="flex-start">
             {/* <Grid item xs={12}> */}
             <Grid item xs={10} xl={6}>
               <Paper>

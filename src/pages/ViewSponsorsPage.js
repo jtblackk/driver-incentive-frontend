@@ -225,7 +225,7 @@ const ViewSponsorsPage = () => {
 
           <Grid
             container
-            justify="center"
+            justify="flex-start"
             alignContent="center"
             direction="row"
             spacing={4}
@@ -304,9 +304,16 @@ const ViewSponsorsPage = () => {
   } else {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Sponsors"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )

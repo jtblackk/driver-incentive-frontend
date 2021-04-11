@@ -290,7 +290,7 @@ const SponsorshipManagementView = (props) => {
 
         <Grid
           container
-          justify="center"
+          justify="flex-start"
           alignContent="center"
           direction="row"
           spacing={4}

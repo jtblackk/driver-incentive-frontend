@@ -273,7 +273,9 @@ const ProductCatalogBrowsingPage = (props) => {
                 justify="flex-end"
                 alignItems="center"
               >
-                <Grid item>{activeSponsor.Points} points</Grid>
+                <Grid item>
+                  {activeSponsor.Points ? activeSponsor.Points : 0} points
+                </Grid>
                 <Grid item>
                   <IconButton
                     onClick={() => {
@@ -390,7 +392,54 @@ const ProductCatalogBrowsingPage = (props) => {
       </div>
     )
   } else {
-    return <LoadingIcon />
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar
+          pageTitle="Product catalog"
+          customItem={
+            <Grid item xs={12} container justify="space-between">
+              <Grid item align="left">
+                <Select
+                  variant="standard"
+                  style={{ color: 'white' }}
+                  fullWidth
+                ></Select>
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                container
+                spacing={1}
+                justify="flex-end"
+                alignItems="center"
+              >
+                <Grid item>0 points</Grid>
+                <Grid item>
+                  <IconButton
+                    onClick={() => {
+                      setCartDialogIsOpenState(true)
+                    }}
+                  >
+                    <ShoppingCartIcon style={{ color: 'white' }} />
+                  </IconButton>
+                  {cart_count}
+                </Grid>
+              </Grid>
+            </Grid>
+          }
+        ></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
+        </main>
+      </div>
+    )
   }
 }
 
