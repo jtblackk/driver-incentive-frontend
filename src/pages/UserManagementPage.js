@@ -13,6 +13,7 @@ import getUserDetails from '../Helpers/CommonFunctions'
 import { Button, Grid, Paper } from '@material-ui/core'
 import GenericTable from '../Components/GenericTable'
 import UserProfileDialog from '../Components/UserProfileDialog'
+import AddUserDialog from '../Components/AddUserDialog/AddUserDialog'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -49,10 +50,16 @@ export default function UserManagementPage() {
     setSelectedUser(state)
   }
 
-  const [userDialogIsOpen, setUserDialogIsOpen] = useState(null)
+  const [userDialogIsOpen, setUserDialogIsOpen] = useState(false)
   let setUserDialogIsOpenState = (state) => {
     setUserDialogIsOpen(state)
   }
+
+  const [addUserDialogIsOpen, setAddUserDialogIsOpen] = useState(null)
+  let setAddUserDialogIsOpenState = (state) => {
+    setAddUserDialogIsOpen(state)
+  }
+
   useEffect(() => {
     ;(async () => {
       // start loading animation
@@ -70,7 +77,7 @@ export default function UserManagementPage() {
           Username: element.Username.S,
           AccountStatus: parseInt(element.AccountStatus.N),
           Bio: element.Bio.S,
-          Organization: element.organization ? element.Organization.S : null,
+          Organization: element.Organization ? element.Organization.S : null,
           SignupDate: element.SignupDate.S,
           FirstName: element.FirstName.S,
           AccountType: element.AccountType.S,
@@ -203,6 +210,18 @@ export default function UserManagementPage() {
         {/* layout stuff */}
         <TopAppBar pageTitle="Users"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
+        <AddUserDialog
+          dialogProps={{
+            dialogIsOpen: addUserDialogIsOpen,
+            setDialogIsOpen: setAddUserDialogIsOpenState,
+            data: {
+              allUsers: allUsers,
+            },
+            dataSetters: {
+              setAllUsers: setAllUserState,
+            },
+          }}
+        />
 
         {/* page content (starts after first div) */}
         <main className={classes.content}>
@@ -347,7 +366,13 @@ export default function UserManagementPage() {
                   <br />
                 </Grid>
                 <Grid item xs={12} align="right">
-                  <Button variant="contained" color="primary">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      setAddUserDialogIsOpen(true)
+                    }}
+                  >
                     Add user
                   </Button>
                 </Grid>

@@ -172,7 +172,7 @@ const AccountSetupCard = (props) => {
 
               // save the profile information
               let SAVE_USER_PROFILE_URL =
-                'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
