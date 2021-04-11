@@ -1,9 +1,37 @@
 /* eslint-disable*/
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { Box, Grid, Typography } from '@material-ui/core'
+import { Box, Divider, Grid, Paper, Typography } from '@material-ui/core'
+import GenericTable from './GenericTable'
+
+const table1HeadCells = [
+  {
+    id: 'Date',
+    label: 'Date',
+    isDate: true,
+    width: 200,
+  },
+  {
+    id: 'Reason',
+    label: 'Reason',
+    isDate: false,
+    width: 150,
+  },
+  {
+    id: 'TotalPoints',
+    label: 'Total points',
+    isDate: false,
+    width: 50,
+  },
+  {
+    id: 'PointsChange',
+    label: 'Difference',
+    isDate: false,
+    width: 50,
+  },
+]
 
 export default function ViewSponsorAsDriverDialog(props) {
   const handleClose = () => {
@@ -17,6 +45,35 @@ export default function ViewSponsorAsDriverDialog(props) {
             element.SponsorID === props.dialogProps.selectedEntry.SponsorID,
         )
       : null
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [table1Data, setTable1Data] = useState(null)
+  let setTable1DataState = (state) => {
+    setTable1Data(state)
+  }
+  const [pageUpdate, setPageUpdate] = useState(0)
+
+  useEffect(() => {
+    setIsLoading(true)
+    ;(async () => {
+      setTable1Data([
+        {
+          Date: '2021-03-11 23:08:19.748211',
+          Reason: '<a really good reason>',
+          TotalPoints: 1650,
+          PointsChange: (150 > 0 ? '+' : '-') + 150,
+        },
+        {
+          Date: '2021-03-11 23:08:50.891743',
+          Reason: '<please replace me with an actual api call please>',
+          TotalPoints: 1500,
+          PointsChange: (-150 > 0 ? '+' : null) + -150,
+        },
+      ])
+    })().then(() => {
+      setIsLoading(false)
+    })
+  }, [pageUpdate])
 
   const left_col_width = 4
   const right_col_width = 6
@@ -43,10 +100,7 @@ export default function ViewSponsorAsDriverDialog(props) {
         <DialogContent>
           {props.dialogProps.allSponsorshipsData &&
           props.dialogProps.selectedEntry ? (
-            <Grid container spacing="2">
-              <Grid item xs={12}>
-                <Typography>{JSON.stringify(sponsorshipInfo)}</Typography>
-              </Grid>
+            <Grid container>
               <Grid item container xs={12} justify="center" spacing={2}>
                 <Grid item xs={left_col_width} align="right">
                   <Typography>
@@ -57,9 +111,8 @@ export default function ViewSponsorAsDriverDialog(props) {
                   <Typography>{sponsorshipInfo.Bio}</Typography>
                 </Grid>
               </Grid>
-
               {/* sponsored since*/}
-              {sponsorshipInfo.Status > 1 ? (
+              {sponsorshipInfo.Status === 2 ? (
                 <Grid item container xs={12} justify="center" spacing={2}>
                   <Grid item xs={left_col_width} align="right">
                     <Typography>
@@ -74,34 +127,108 @@ export default function ViewSponsorAsDriverDialog(props) {
                     </Typography>
                   </Grid>
                 </Grid>
-              ) : null}
+              ) : (
+                <Grid item container xs={12} justify="center" spacing={2}>
+                  <Grid item xs={left_col_width} align="right">
+                    <Typography>
+                      <Box fontWeight="bold">Applied on: </Box>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={right_col_width} align="left">
+                    <Typography>
+                      {Date.parse(
+                        sponsorshipInfo.AppSubmissionDate,
+                      ).toUTCString()}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              )}
+              <Grid item container xs={12} justify="center" spacing={2}>
+                <Grid item xs={left_col_width} align="right">
+                  <Typography>
+                    <Box fontWeight="bold">App comments: </Box>
+                  </Typography>
+                </Grid>
+                <Grid item xs={right_col_width} align="left">
+                  <Typography>{sponsorshipInfo.AppComments}</Typography>
+                </Grid>
+              </Grid>
 
               {/* sponsored because */}
-
-              <Grid item container xs={12} justify="center" spacing={2}>
-                <Grid item xs={left_col_width} align="right">
-                  <Typography>
-                    <Box fontWeight="bold">Sponsored because: </Box>
-                  </Typography>
+              {sponsorshipInfo.Status === 2 ? (
+                <Grid item container xs={12} justify="center" spacing={2}>
+                  <Grid item xs={left_col_width} align="right">
+                    <Typography>
+                      <Box fontWeight="bold">Sponsored because: </Box>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={right_col_width} align="left">
+                    <Typography>{sponsorshipInfo.AppDecisionReason}</Typography>
+                  </Grid>
                 </Grid>
-                <Grid item xs={right_col_width} align="left">
-                  <Typography>{sponsorshipInfo.AppDecisionReason}</Typography>
-                </Grid>
-              </Grid>
-
+              ) : null}
               {/* total points */}
+              {sponsorshipInfo.Status === 2 ? (
+                <Grid item container xs={12} justify="center" spacing={2}>
+                  <Grid item xs={left_col_width} align="right">
+                    <Typography>
+                      <Box fontWeight="bold">Total points: </Box>
+                    </Typography>
+                  </Grid>
 
-              <Grid item container xs={12} justify="center" spacing={2}>
-                <Grid item xs={left_col_width} align="right">
-                  <Typography>
-                    <Box fontWeight="bold">Total points: </Box>
-                  </Typography>
+                  <Grid item xs={right_col_width} align="left">
+                    <Typography>{sponsorshipInfo.Points}</Typography>
+                  </Grid>
+                </Grid>
+              ) : null}
+
+              {sponsorshipInfo.Status === 2 ? (
+                <Grid item xs={12}>
+                  <br />
+                  <Divider />
+                  <br />
+                </Grid>
+              ) : null}
+
+              <Grid item container xs={12} alignItems="center">
+                {sponsorshipInfo.Status === 2 ? (
+                  <Grid item container justify="space-between">
+                    <Grid item xs={12}>
+                      <Typography variant="h6">Points</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      {' '}
+                      <Typography>View and edit the driver's points</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h6">
+                        {sponsorshipInfo.Points} points total
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ) : null}
+
+                <Grid item xs={12}>
+                  {/* <br /> */}
                 </Grid>
 
-                <Grid item xs={right_col_width} align="left">
-                  <Typography>{sponsorshipInfo.Points}</Typography>
-                </Grid>
+                {sponsorshipInfo.Status === 2 ? (
+                  <GenericTable
+                    headCells={table1HeadCells}
+                    data={table1Data}
+                    setDataState={setTable1DataState}
+                    tableKey="Date"
+                    showKey={false}
+                    initialSortedColumn="Date"
+                    initialSortedDirection="desc"
+                    // selectedRow={selectedEntry}
+                    // setSelectedRow={setSelectedEntryState}
+                    // dialogIsOpen={props.dialogIsOpen}
+                    // setDialogIsOpenState={props.setDialogIsOpenState}
+                  ></GenericTable>
+                ) : null}
               </Grid>
+              {/* </Grid> */}
             </Grid>
           ) : null}
         </DialogContent>

@@ -52,25 +52,25 @@ const SponsorshipManagementView = (props) => {
       id: 'Username',
       label: 'Username',
       isDate: false,
-      width: 100,
+      width: 125,
     },
     {
       id: 'FirstName',
       label: 'First name',
       isDate: false,
-      width: 100,
+      width: 75,
     },
     {
       id: 'LastName',
       label: 'Last name',
       isDate: false,
-      width: 115,
+      width: 75,
     },
     {
       id: 'TotalPoints',
       label: 'Total points',
       isDate: false,
-      width: 100,
+      width: 75,
     },
     {
       id: 'PointValue',
@@ -306,14 +306,13 @@ const SponsorshipManagementView = (props) => {
                   spacing={2}
                 >
                   <Grid item xs={12}>
-                    <Typography variant="h6">Your drivers</Typography>
+                    <Typography variant="h6">Active drivers</Typography>
                     <Typography>
-                      A list of the drivers you're sponsoring. Click on an entry
-                      for more information.
+                      A list of the sponsor's active drivers.
                     </Typography>
                   </Grid>
                 </Grid>
-                <br></br>
+                {/* <br></br> */}
                 <Grid item container xs={12} justify="flex-end">
                   {/* set all point values button */}
                   <Grid item align="right">
@@ -359,10 +358,9 @@ const SponsorshipManagementView = (props) => {
                   spacing={2}
                 >
                   <Grid item xs={12}>
-                    <Typography variant="h6">Past drivers</Typography>
+                    <Typography variant="h6">Inactive drivers</Typography>
                     <Typography>
-                      A list of your past drivers (i.e., any driver whos
-                      sponsorship has been terminated)
+                      A list of the drivers that the sponsor no longer sponsors.
                     </Typography>
                   </Grid>
                 </Grid>

@@ -65,7 +65,6 @@ const CreateNewSponsorshipCard = (props) => {
             ),
         )
       setValidDriverChoices(user_data_formatted)
-      console.log(user_data_formatted)
     })().then(() => {
       setIsLoading(false)
     })
@@ -126,34 +125,21 @@ const CreateNewSponsorshipCard = (props) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              // DriverID: selectedDriver
-              // SponsorID: props.SponsorID
-              // AppComments: CREATED BY ADMIN
-              // AppDecisionReason: ACCEPTED BY ADMIN
-              // Points: set to 0 by lambda function
-              // AppSubmissionDate: handled by lambda function
-              // AppDecisionDate: handled by lambda function
-              // Status: set to 1 by lambda function
-              let body = {
-                DriverID: selectedDriver,
-                SponsorID: props.SponsorID,
-                AppComments: 'CREATED BY ADMIN',
-                AppDecisionReason: 'ACCEPTED BY ADMIN',
-              }
-
-              let SAVE_USER_PROFILE_URL =
+              let CREATE_SPONSORSHIP_URL =
                 'https://nrpwjk1izl.execute-api.us-east-1.amazonaws.com/dev/createnewsponsorship'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
+                body: JSON.stringify({
+                  DriverID: selectedDriver,
+                  SponsorID: props.SponsorID,
+                  AppComments: 'CREATED BY ADMIN',
+                  AppDecisionReason: 'ACCEPTED BY ADMIN',
+                }),
               }
-              fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+              fetch(CREATE_SPONSORSHIP_URL, requestOptions).then(() => {
                 props.updatePage.setPageUpdate(props.updatePage.updateCount + 1)
               })
-              // https://oltkr6y764.execute-api.us-east-1.amazonaws.com/dev/createnewsponsorship
-
-              // console.log(stuff)
             }}
           >
             Register driver

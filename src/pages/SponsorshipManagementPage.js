@@ -38,7 +38,6 @@ export default function SponsorshipManagementPage() {
   function fullPageUpdateState() {
     setPageUpdate(pageUpdate + 1)
   }
-  console.log(pageUpdate)
 
   const [allSponsors, setAllSponsors] = useState(null)
   const [currentSponsor, setCurrentSponsor] = useState(null)

@@ -259,7 +259,7 @@ function EditPointDollarRatioMenu(props) {
       <Grid item xs={12}>
         <Typography variant="h6">Point value</Typography>
         <Typography>
-          View and edit the point to dollar value ratio for your driver. For
+          View and edit the point to dollar value ratio for The driver. For
           example, typing in .005 would mean that 1 point is worth .005 USD for
           this particular driver.
         </Typography>
@@ -589,6 +589,8 @@ function DriverPointsTab(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
+      // point change api
+
       setTable1Data([
         {
           Date: '2021-03-11 23:08:19.748211',
@@ -674,9 +676,11 @@ function DriverPointsTab(props) {
                       <Typography>View the driver's point history</Typography>
                     )}
                   </Grid>
-
+                  <Grid item xs={12}>
+                    {/* <br /> */}
+                  </Grid>
                   {props.selectedDriverData.Status < 3 ? (
-                    <Grid item xs={6} align="right">
+                    <Grid item xs={12} align="right">
                       <Typography variant="h6">
                         {props.selectedDriverData.Points} points total
                       </Typography>
