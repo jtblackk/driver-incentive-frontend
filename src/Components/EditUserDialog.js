@@ -158,9 +158,15 @@ export default function EditUserDialog(props) {
                         body: JSON.stringify({
                           Username:
                             props.dialogProps.data.selectedUserData.Username,
-                          FirstName: editedProfileState.FirstName,
-                          LastName: editedProfileState.LastName,
-                          Bio: editedProfileState.Bio,
+                          FirstName: editedProfileState.FirstName.replaceAll(
+                            "'",
+                            "''",
+                          ),
+                          LastName: editedProfileState.LastName.replaceAll(
+                            "'",
+                            "''",
+                          ),
+                          Bio: editedProfileState.Bio.replaceAll("'", "''"),
                         }),
                       }
                       fetch(UPDATE_PROFILE_URL, requestOptions).then(() => {
