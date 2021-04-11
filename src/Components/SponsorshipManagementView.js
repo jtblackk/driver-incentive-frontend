@@ -243,7 +243,7 @@ const SponsorshipManagementView = (props) => {
     })().then(() => {
       setIsLoading(false)
     })
-  }, [pageUpdate, props.SponsorID])
+  }, [pageUpdate, props.SponsorID, props.updatePage.updateCount])
 
   const [pointRatioDialogIsOpen, setPointRatioDialogIsOpen] = useState(false)
   function setPointRatioDialogIsOpenState(state, refresh) {
@@ -393,7 +393,11 @@ const SponsorshipManagementView = (props) => {
       <div className={classes.root}>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <LoadingIcon />
+          <Grid container justify="space-between">
+            <Grid item xs={12} align="right">
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )

@@ -10,8 +10,9 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
 import getUserDetails from '../Helpers/CommonFunctions'
-import { Grid, MenuItem, Select } from '@material-ui/core'
+import { Grid, MenuItem, Paper, Select } from '@material-ui/core'
 import SponsorshipManagementView from '../Components/SponsorshipManagementView'
+import CreateNewSponsorshipCard from '../Components/CreateNewSponsorshipCard'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +38,7 @@ export default function SponsorshipManagementPage() {
   function fullPageUpdateState() {
     setPageUpdate(pageUpdate + 1)
   }
+  console.log(pageUpdate)
 
   const [allSponsors, setAllSponsors] = useState(null)
   const [currentSponsor, setCurrentSponsor] = useState(null)
@@ -70,8 +72,11 @@ export default function SponsorshipManagementPage() {
       <div className={classes.root}>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={3}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )
@@ -127,10 +132,36 @@ export default function SponsorshipManagementPage() {
                 </Grid>
               </Grid>
             ) : (
-              <SponsorshipManagementView SponsorID={currentSponsor.Username} />
+              <Grid container justify="center">
+                <Grid item container xs={12} justify="center">
+                  <CreateNewSponsorshipCard
+                    SponsorID={currentSponsor.Username}
+                    updatePage={{
+                      updateCount: pageUpdate,
+                      setPageUpdate: (state) => setPageUpdate(state),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <br />
+                </Grid>
+                <Grid item container xs={12} justify="center">
+                  <SponsorshipManagementView
+                    SponsorID={currentSponsor.Username}
+                    updatePage={{
+                      updateCount: pageUpdate,
+                      setPageUpdate: (state) => setPageUpdate(state),
+                    }}
+                  />
+                </Grid>
+              </Grid>
             )
           ) : (
-            <LoadingIcon />
+            <Grid container justify="center">
+              <Grid item xs={3}>
+                <LoadingIcon />
+              </Grid>
+            </Grid>
           )}
         </main>
       </div>
