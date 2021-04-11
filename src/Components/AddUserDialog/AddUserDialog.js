@@ -353,16 +353,13 @@ export default function AddUserDialog(props) {
                     // component={Paper}
                   >
                     {props.dialogProps.action}
-                    {/* TODO: may have to conditionally render this. maybe not show for account status 0 */}
+
                     <Grid item xs={8} align="right">
                       <Button
                         variant="contained"
                         color="primary"
                         onClick={() => {
                           let invalid_flag = false
-                          // TODO: validate forms
-                          console.log(createdUserDetails)
-
                           //   validate account type (existence)
                           if (createdUserDetails.AccountType.length < 2) {
                             setAccTypeHelperText('required')

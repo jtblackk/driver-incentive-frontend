@@ -73,48 +73,52 @@ export default function ChooseCatalogSponsorDialog(props) {
             <LoadingIcon />
           ) : (
             <Grid container justify="center" spacing={3}>
-              {registeredSponsors.map((element) => {
-                return (
-                  <Grid
-                    key={element.SponsorID}
-                    item
-                    container
-                    spacing={2}
-                    xs={4}
-                    component={Paper}
-                    style={{ cursor: 'pointer', margin: 10 }}
-                    onClick={(event) => {
-                      props.dialogProps.setActiveSponsor({
-                        ...element,
-                      })
+              {registeredSponsors.length > 0 ? (
+                registeredSponsors.map((element) => {
+                  return (
+                    <Grid
+                      key={element.SponsorID}
+                      item
+                      container
+                      spacing={2}
+                      xs={4}
+                      component={Paper}
+                      style={{ cursor: 'pointer', margin: 10 }}
+                      onClick={(event) => {
+                        props.dialogProps.setActiveSponsor({
+                          ...element,
+                        })
 
-                      handleClose()
-                    }}
-                  >
-                    {/* <Paper style={{ padding: 20, cursor: 'pointer' }}> */}
-                    <Grid item align="center" xs={12}>
-                      <br />
-                    </Grid>
-                    <Grid item align="center" xs={12}>
-                      {element.SponsorID}
-                    </Grid>
-                    <Grid item align="center" xs={12}>
-                      {element.SponsorName}
-                    </Grid>
-                    <Grid item align="center" xs={12}>
-                      {element.SponsorOrganization}
-                    </Grid>
+                        handleClose()
+                      }}
+                    >
+                      {/* <Paper style={{ padding: 20, cursor: 'pointer' }}> */}
+                      <Grid item align="center" xs={12}>
+                        <br />
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        {element.SponsorID}
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        {element.SponsorName}
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        {element.SponsorOrganization}
+                      </Grid>
 
-                    <Grid item align="center" xs={12}>
-                      {element.Points} points
+                      <Grid item align="center" xs={12}>
+                        {element.Points} points
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        <br />
+                      </Grid>
+                      {/* </Paper> */}
                     </Grid>
-                    <Grid item align="center" xs={12}>
-                      <br />
-                    </Grid>
-                    {/* </Paper> */}
-                  </Grid>
-                )
-              })}
+                  )
+                })
+              ) : (
+                <p>You are not currently registered to any sponsors</p>
+              )}
             </Grid>
           )}
 

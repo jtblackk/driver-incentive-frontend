@@ -9,6 +9,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   TextField,
 } from '@material-ui/core'
@@ -38,19 +39,20 @@ const AccountSetupCard = (props) => {
       item
       container
       justify="center"
-      direct="column"
+      direct="row"
       alignItems="center"
       spacing={2}
     >
       {!userData.Username.includes('@') ? null : (
-        <Grid item container fullWidth justify="center">
+        <Grid item container justify="center">
           {/* account type */}
-          <Grid item xs={4}>
+          <Grid item xs={12} md={8} lg={6}>
             <InputLabel id="AccountTypeLabel">Account Type</InputLabel>
             <Select
               labelId="AccountTypeLabel"
               id="AccountType"
               fullWidth
+              variant="filled"
               error={accTypeHelperText}
               helperText={accTypeHelperText}
               onChange={(event) => {
@@ -69,12 +71,24 @@ const AccountSetupCard = (props) => {
       )}
 
       {/* name row */}
-      <Grid item container xs={12} spacing={1} justify="center" direction="row">
+      <Grid
+        item
+        container
+        xs={12}
+        md={8}
+        lg={6}
+        spacing={1}
+        justify="space-between"
+        direction="row"
+        component={Paper}
+      >
         {/* first name */}
-        <Grid item xs={2} align="center">
+        <Grid item xs={6}>
           <TextField
             id="FirstName"
             label="First name"
+            fullWidth
+            variant="filled"
             error={fnameHelperText}
             helperText={fnameHelperText}
             onChange={(event) => {
@@ -88,10 +102,13 @@ const AccountSetupCard = (props) => {
         </Grid>
 
         {/* last name */}
-        <Grid item xs={2} align="center">
+        <Grid item xs={6}>
           <TextField
+            fullWidth
+            variant="filled"
             id="LastName"
             label="Last name"
+            align="right"
             error={lnameHelperText}
             helperText={lnameHelperText}
             onChange={(event) => {
@@ -105,15 +122,17 @@ const AccountSetupCard = (props) => {
         </Grid>
       </Grid>
 
+      <Grid container></Grid>
+
       {/* bio */}
-      <Grid item xs={4} align="center">
+      <Grid item xs={12} md={8} lg={6} align="center">
         <br></br>
         <TextField
           id="user-bio"
           label="Bio"
           type="text"
           placeholder="Write a short bio"
-          variant="outlined"
+          variant="filled"
           multiline
           fullWidth
           rows={4}
@@ -131,7 +150,7 @@ const AccountSetupCard = (props) => {
 
       {/* submit button */}
       <Grid item container justify="center">
-        <Grid item xs={4} align="center">
+        <Grid item xs={12} md={8} lg={6} align="center">
           <br></br>
           <Button
             fullWidth

@@ -49,7 +49,7 @@ export default function ReusableDialog(props) {
                   style={{ padding: 20 }}
                 >
                   {props.dialogProps.action}
-                  {/* TODO: may have to conditionally render this. maybe not show for account status 0 */}
+
                   <Grid item>
                     <Button variant="contained" color="primary">
                       do something

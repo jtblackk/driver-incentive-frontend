@@ -187,7 +187,12 @@ export default function UserManagementPage() {
             FirstName: element.FirstName,
             LastName: element.LastName,
             AccType: element.AccountType,
-            AccStatus: element.AccountStatus,
+            AccStatus:
+              element.AccountStatus === 2
+                ? 'Deleted'
+                : element.AccountStatus === 0
+                ? 'Pending setup'
+                : element.AccountStatus,
             // SignupDate: element.SignupDate,
           }
         })
@@ -287,7 +292,7 @@ export default function UserManagementPage() {
                           delete user
                         </Button>
                       </Grid>
-                    ) : selectedUser.AccStatus > 0 ? (
+                    ) : selectedUser.AccStatus === 'Deleted' ? (
                       <Grid item>
                         <Button
                           variant="contained"
