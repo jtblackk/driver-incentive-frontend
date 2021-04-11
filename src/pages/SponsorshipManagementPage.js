@@ -11,6 +11,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
 import getUserDetails from '../Helpers/CommonFunctions'
 import { Grid, MenuItem, Select } from '@material-ui/core'
+import SponsorshipManagementView from '../Components/SponsorshipManagementView'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -126,11 +127,7 @@ export default function SponsorshipManagementPage() {
                 </Grid>
               </Grid>
             ) : (
-              <Grid container>
-                <Grid item>
-                  <p>render the sponsorship's data</p>
-                </Grid>
-              </Grid>
+              <SponsorshipManagementView SponsorID={currentSponsor.Username} />
             )
           ) : (
             <LoadingIcon />

@@ -21,7 +21,8 @@ export default function SetAllPointRatiosDialog(props) {
   const [pointDollarRatio, setPointDollarRatio] = useState(null)
   const [helperText, setHelperText] = useState(null)
 
-  const userData = useContext(UserContext).user
+  // const userData = useContext(UserContext).user
+  const userData = { Username: props.SponsorID }
 
   const handleClose = (resp) => {
     props.setDialogIsOpen(false)
