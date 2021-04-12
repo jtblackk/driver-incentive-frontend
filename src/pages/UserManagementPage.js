@@ -75,7 +75,9 @@ export default function UserManagementPage() {
       let user_data_formatted = mock_data.map((element) => {
         return {
           Username: element.Username.S,
-          AccountStatus: parseInt(element.AccountStatus.N),
+          AccountStatus: element.AccountStatus
+            ? parseInt(element.AccountStatus.N)
+            : 5,
           Bio: element.Bio.S,
           Organization: element.Organization ? element.Organization.S : null,
           SignupDate: element.SignupDate.S,

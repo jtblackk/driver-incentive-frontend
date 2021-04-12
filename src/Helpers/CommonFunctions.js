@@ -22,7 +22,9 @@ export default async function getUserDetails(username) {
     Bio: parsed_details.Items[0].Bio.S,
     AccountType: parsed_details.Items[0].AccountType.S,
     AccountStatus: parseInt(parsed_details.Items[0].AccountStatus.N),
-    Organization: parsed_details.Items[0].Organization.S,
+    Organization: parsed_details.Items[0].Organization
+      ? parsed_details.Items[0].Organization.S
+      : null,
   }
 
   return profile_details

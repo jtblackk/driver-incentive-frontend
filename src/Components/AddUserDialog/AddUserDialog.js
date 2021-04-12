@@ -502,6 +502,20 @@ export default function AddUserDialog(props) {
 
                           if (createdUserDetails.Username.includes('@')) {
                             // TODO: call api to create an account in cognito
+                            let CREATE_IDENTITY_URL =
+                              'https://t4jjmnr8e5.execute-api.us-east-1.amazonaws.com/dev/createuser'
+                            let requestOptions = {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                Username: createdUserDetails.Username.replaceAll(
+                                  "'",
+                                  "''",
+                                ),
+                              }),
+                            }
+
+                            fetch(CREATE_IDENTITY_URL, requestOptions)
                           }
                         }}
                       >
