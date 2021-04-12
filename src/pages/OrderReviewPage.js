@@ -56,6 +56,12 @@ const currentOrdersTableHeadCells = [
     isDate: true,
     width: 50,
   },
+  {
+    id: 'ShippingAddress',
+    label: 'Destination',
+    isDate: false,
+    width: 200,
+  },
 ]
 
 const previousOrdersTableHeadCells = [
@@ -80,6 +86,12 @@ const previousOrdersTableHeadCells = [
   {
     id: 'OrderDate',
     label: 'Ordered on',
+    isDate: false,
+    width: 200,
+  },
+  {
+    id: 'ShippingAddress',
+    label: 'Destination',
     isDate: false,
     width: 200,
   },
@@ -139,9 +151,10 @@ export default function OrderReviewPage() {
           SponsorID: element.SponsorID.S,
           Organization: element.Organization.S,
           Status: parseInt(element.Status.N),
-          Cost: Math.ceil(parseFloat(element.Cost.N)),
+          Cost: parseFloat(element.Cost.N),
           PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
           OrderDate: element.OrderSubmitted.S,
+          ShippingAddress: element.ShippingAddress.S,
           Products: element.M
             ? element.ProductIDs.L.map((element) => {
                 return {
@@ -177,6 +190,7 @@ export default function OrderReviewPage() {
               : element.Status === 3
               ? 'Delivered'
               : 'Unknown status',
+          ShippingAddress: element.ShippingAddress,
         }
       })
 
@@ -187,6 +201,7 @@ export default function OrderReviewPage() {
           SponsorID: element.SponsorID,
           Cost: element.Cost / element.PointDollarRatio,
           OrderDate: element.OrderDate,
+          ShippingAddress: element.ShippingAddress,
         }
       })
 

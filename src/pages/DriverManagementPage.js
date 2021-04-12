@@ -120,7 +120,7 @@ const DriverManagementPage = () => {
   }
 
   useEffect(() => {
-    setIsLoading(true)
+    // setIsLoading(true)
     ;(async () => {
       // fetch and parse sponsor's driver's profiles
       const driver_profile_data_endpoint = `https://rb6nqfuvvg.execute-api.us-east-1.amazonaws.com/dev/driverdatabysponsor?SponsorUsername=${userData.Username}`

@@ -17,6 +17,11 @@ export default function CartDialog(props) {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [shippingAddress, setShippingAddress] = useState(null)
+  const [shippingAddressHelperText, setShippingAddressHelperText] = useState(
+    null,
+  )
+
   useEffect(() => {}, [])
 
   let cart_cost = props.dialogProps.cart.reduce((prev, curr) => {
@@ -162,19 +167,16 @@ export default function CartDialog(props) {
                       id="user-bio"
                       label="Address"
                       type="text"
+                      error={shippingAddressHelperText}
+                      helperText={shippingAddressHelperText}
                       placeholder="Enter the shipping address"
                       variant="filled"
                       fullWidth
-
-                      // defaultValue={editedProfileState.Bio}
-                      // onChange={(event) => {
-                      //   // update state
-                      //   let newUserDetails = {
-                      //     ...editedProfileState,
-                      //     Bio: event.target.value,
-                      //   }
-                      //   setEditedProfileState(newUserDetails)
-                      // }}
+                      onChange={(event) => {
+                        setShippingAddressHelperText(null)
+                        // update state
+                        setShippingAddress(event.target.value)
+                      }}
                     />
                   </Grid>
                   <Grid item container align="right" justify="flex-end" xs={4}>
@@ -183,6 +185,12 @@ export default function CartDialog(props) {
                         variant="contained"
                         color="primary"
                         onClick={() => {
+                          console.log(shippingAddress)
+                          if (!shippingAddress || shippingAddress === '') {
+                            setShippingAddressHelperText('Required')
+                            return
+                          }
+
                           if (
                             cart_cost > 0 &&
                             cart_cost < props.dialogProps.activeSponsor.Points
@@ -219,6 +227,7 @@ export default function CartDialog(props) {
                                     props.dialogProps.activeSponsor
                                       .PointToDollarRatio,
                                 ),
+                                ShippingAddress: shippingAddress,
                               }),
                             }
                             fetch(MAKE_ORDER_URL, requestOptions).then(() => {

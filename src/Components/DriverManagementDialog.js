@@ -259,7 +259,7 @@ function EditPointDollarRatioMenu(props) {
       <Grid item xs={12}>
         <Typography variant="h6">Point value</Typography>
         <Typography>
-          View and edit the point to dollar value ratio for The driver. For
+          View and edit the point to dollar value ratio for the driver. For
           example, typing in .005 would mean that 1 point is worth .005 USD for
           this particular driver.
         </Typography>
@@ -450,7 +450,7 @@ function EditDriverPointsMenu(props) {
                     )
 
                     props.setAllDriverDataState(newDriverDataState)
-                    props.triggerPageUpdate()
+                    // props.triggerPageUpdate()
                   },
                 )
 
@@ -521,7 +521,7 @@ function EditDriverPointsMenu(props) {
                     )
 
                     props.setAllDriverDataState(newDriverDataState)
-                    props.triggerPageUpdate()
+                    // props.triggerPageUpdate()
                   },
                 )
 
@@ -546,26 +546,26 @@ function DriverPointsTab(props) {
   // point history table
   const table1HeadCells = [
     {
-      id: 'Date',
+      id: 'ChangeDate',
       label: 'Date',
       isDate: true,
       width: 200,
     },
     {
-      id: 'Reason',
+      id: 'ChangeReason',
       label: 'Reason',
       isDate: false,
       width: 150,
     },
     {
-      id: 'TotalPoints',
-      label: 'Total points',
+      id: 'ChangeAmount',
+      label: 'Change',
       isDate: false,
       width: 50,
     },
     {
-      id: 'PointsChange',
-      label: 'Difference',
+      id: 'TotalPoints',
+      label: 'Total points',
       isDate: false,
       width: 50,
     },
@@ -587,28 +587,38 @@ function DriverPointsTab(props) {
   }
 
   useEffect(() => {
-    setIsLoading(true)
+    // setIsLoading(true)
     ;(async () => {
-      // point change api
+      // point change api data
+      let POINT_HISTORY_URL =
+        'https://b428t56xa7.execute-api.us-east-1.amazonaws.com/dev/getpointhistorybysponsorship'
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          SponsorID: props.selectedDriverData.SponsorID.replaceAll("'", "''"),
+          DriverID: props.selectedDriverData.DriverID.replaceAll("'", "''"),
+        }),
+      }
+      let point_history_resp = await fetch(POINT_HISTORY_URL, requestOptions)
+      let point_history_json = await point_history_resp.json()
 
-      setTable1Data([
-        {
-          Date: '2021-03-11 23:08:19.748211',
-          Reason: '<a really good reason>',
-          TotalPoints: 1650,
-          PointsChange: (150 > 0 ? '+' : '-') + 150,
-        },
-        {
-          Date: '2021-03-11 23:08:50.891743',
-          Reason: '<please replace me with an actual api call please>',
-          TotalPoints: 1500,
-          PointsChange: (-150 > 0 ? '+' : null) + -150,
-        },
-      ])
+      let point_history_array = point_history_json.body.map((element) => {
+        return {
+          ChangeID: element.ChangeID.S,
+          ChangeDate: element.TimeStamp.S.replace(' ', 'T').split('.')[0],
+          ChangeReason: element.PointChangeReason.S,
+          ChangeAmount: parseInt(element.PointDifference.N),
+          TotalPoints: parseInt(element.TotalPoints.N),
+        }
+      })
+      console.log(point_history_array)
+
+      setTable1Data(point_history_array)
     })().then(() => {
       setIsLoading(false)
     })
-  }, [pageUpdate])
+  }, [pageUpdate, props.allDriverData])
 
   let COLUMN_SPACING = 1
 
@@ -702,9 +712,9 @@ function DriverPointsTab(props) {
                     headCells={table1HeadCells}
                     data={table1Data}
                     setDataState={setTable1DataState}
-                    tableKey="Date"
+                    tableKey="ChangeID"
                     showKey={false}
-                    initialSortedColumn="Date"
+                    initialSortedColumn="ChangeDate"
                     initialSortedDirection="desc"
                     // selectedRow={selectedEntry}
                     // setSelectedRow={setSelectedEntryState}
@@ -723,7 +733,43 @@ function DriverPointsTab(props) {
       </div>
     )
   } else {
-    return <LoadingIcon />
+    return (
+      <div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <LoadingIcon />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+      </div>
+    )
   }
 }
 
@@ -734,9 +780,9 @@ function OrdersTab(props) {
   const table1HeadCells = [
     {
       id: 'Cost',
-      label: 'Cost',
+      label: 'Cost (points)',
       isDate: true,
-      width: 50,
+      width: 30,
     },
 
     {
@@ -749,7 +795,13 @@ function OrdersTab(props) {
       id: 'OrderDate',
       label: 'Ordered on',
       isDate: false,
-      width: 75,
+      width: 250,
+    },
+    {
+      id: 'ShippingAddress',
+      label: 'Destination',
+      isDate: false,
+      width: 250,
     },
   ]
 
@@ -771,20 +823,63 @@ function OrdersTab(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      // point change api
+      // order history api
+      let USER_ORDERS_URL =
+        'https://45mkccncmi.execute-api.us-east-1.amazonaws.com/dev/getorder'
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          DriverID: props.selectedDriverData.Username.replaceAll("'", "''"),
+        }),
+      }
 
-      setTable1Data([
-        {
-          Cost: 1500,
-          Status: 'Processing',
-          OrderDate: '2021-03-11 23:08:19.748211',
-        },
-        {
-          Cost: 1450,
-          Status: 'Delivered',
-          OrderDate: '2021-03-11 23:08:19.748211',
-        },
-      ])
+      let user_orders_resp = await fetch(USER_ORDERS_URL, requestOptions)
+      let user_orders_json = await user_orders_resp.json()
+      let user_orders_obj = JSON.parse(user_orders_json.body)
+      let user_orders_arr = user_orders_obj.Items
+
+      let all_orders_parsed = user_orders_arr.map((element) => {
+        return {
+          OrderID: element.OrderID.S,
+          DriverID: element.DriverID.S,
+          SponsorID: element.SponsorID.S,
+          Organization: element.Organization.S,
+          Status: parseInt(element.Status.N),
+          Cost: parseFloat(element.Cost.N),
+          PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
+          OrderDate: element.OrderSubmitted.S,
+          ShippingAddress: element.ShippingAddress.S,
+          Products: element.M
+            ? element.ProductIDs.L.map((element) => {
+                return {
+                  ProductID: element.M.ProductID.S,
+                  Quantity: parseInt(element.M.Quantity.N),
+                  PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(2),
+                }
+              })
+            : [],
+        }
+      })
+
+      let all_orders_table_data = all_orders_parsed.map((element) => {
+        return {
+          OrderID: element.OrderID,
+          Cost: Math.ceil(element.Cost / element.PointDollarRatio),
+          Status:
+            element.Status === 1
+              ? 'Processing'
+              : element.Status === 2
+              ? 'In transit'
+              : element.Status === 3
+              ? 'Delivered'
+              : 'Unknown status',
+          OrderDate: element.OrderDate,
+          ShippingAddress: element.ShippingAddress,
+        }
+      })
+
+      setTable1Data(all_orders_table_data)
     })().then(() => {
       setIsLoading(false)
     })
@@ -829,7 +924,7 @@ function OrdersTab(props) {
                     headCells={table1HeadCells}
                     data={table1Data}
                     setDataState={setTable1DataState}
-                    tableKey="Date"
+                    tableKey="OrderID"
                     showKey={false}
                     initialSortedColumn="Date"
                     initialSortedDirection="desc"
@@ -882,7 +977,7 @@ export default function DriverManagementDialog(props) {
       <Dialog
         open={props.dialogIsOpen}
         onClose={() => {
-          handleClose(false)
+          handleClose(true)
         }}
         aria-labelledby="form-dialog-title"
         fullWidth

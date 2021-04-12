@@ -214,14 +214,17 @@ const ViewSponsorsPage = () => {
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <ViewSponsorAsDriverDialog
-            dialogProps={{
-              dialogIsOpen: dialogIsOpen,
-              setDialogIsOpen: setDialogIsOpenState,
-              selectedEntry: selectedEntry,
-              allSponsorshipsData: allSponsorshipsData,
-            }}
-          />
+
+          {allSponsorshipsData && selectedEntry ? (
+            <ViewSponsorAsDriverDialog
+              dialogProps={{
+                dialogIsOpen: dialogIsOpen,
+                setDialogIsOpen: setDialogIsOpenState,
+                selectedEntry: selectedEntry,
+                allSponsorshipsData: allSponsorshipsData,
+              }}
+            />
+          ) : null}
 
           <Grid
             container
@@ -236,9 +239,7 @@ const ViewSponsorsPage = () => {
                   <Grid container justify="space-between" alignItems="center">
                     <Grid item>
                       <Typography variant="h6">Your sponsors</Typography>
-                      <Typography>
-                        A list of the sponsors you're registered to
-                      </Typography>
+                      <Typography>A list of your sponsors</Typography>
                     </Grid>
                   </Grid>
                   <br></br>

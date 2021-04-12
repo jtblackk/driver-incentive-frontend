@@ -7,6 +7,10 @@ const EditAccountCard = (props) => {
   const userDetails = props.userProfile
   const [isLoading, setIsLoading] = useState(false)
 
+  const [firstNameHelperText, setFirstNameHelperText] = useState(null)
+  const [lastNameHelperText, setLastNameHelperText] = useState(null)
+  const [bioHelperText, setBioHelperText] = useState(null)
+
   if (isLoading) {
     return <div></div>
   } else {
@@ -33,8 +37,11 @@ const EditAccountCard = (props) => {
               id="FirstName"
               label="First name"
               variant="filled"
+              error={firstNameHelperText}
+              helperText={firstNameHelperText}
               defaultValue={userDetails.FirstName}
               onChange={(event) => {
+                setFirstNameHelperText(null)
                 // update first name in state
                 let newUserDetails = userDetails
                 newUserDetails.FirstName = event.target.value
@@ -48,9 +55,12 @@ const EditAccountCard = (props) => {
             <TextField
               id="LastName"
               label="Last name"
+              error={lastNameHelperText}
+              helperText={lastNameHelperText}
               defaultValue={userDetails.LastName}
               variant="filled"
               onChange={(event) => {
+                setLastNameHelperText(null)
                 // update last name in state
                 let newUserDetails = userDetails
                 newUserDetails.LastName = event.target.value
@@ -67,6 +77,8 @@ const EditAccountCard = (props) => {
             id="user-bio"
             label="Bio"
             type="text"
+            error={bioHelperText}
+            helperText={bioHelperText}
             placeholder="Write a short bio"
             defaultValue={userDetails.Bio}
             variant="filled"
@@ -74,6 +86,7 @@ const EditAccountCard = (props) => {
             fullWidth
             rows={4}
             onChange={(event) => {
+              setBioHelperText(null)
               // update UserBio in state
               let newUserDetails = userDetails
               newUserDetails.Bio = event.target.value

@@ -5,19 +5,26 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, Paper, Typography } from '@material-ui/core'
 import GenericTable from './GenericTable'
-
+import LoadingIcon from './LoadingIcon'
+// point history table
 const table1HeadCells = [
   {
-    id: 'Date',
+    id: 'ChangeDate',
     label: 'Date',
     isDate: true,
+    width: 150,
+  },
+  {
+    id: 'ChangeReason',
+    label: 'Reason',
+    isDate: false,
     width: 200,
   },
   {
-    id: 'Reason',
-    label: 'Reason',
+    id: 'ChangeAmount',
+    label: 'Change',
     isDate: false,
-    width: 150,
+    width: 50,
   },
   {
     id: 'TotalPoints',
@@ -25,14 +32,7 @@ const table1HeadCells = [
     isDate: false,
     width: 50,
   },
-  {
-    id: 'PointsChange',
-    label: 'Difference',
-    isDate: false,
-    width: 50,
-  },
 ]
-
 export default function ViewSponsorAsDriverDialog(props) {
   const handleClose = () => {
     props.dialogProps.setDialogIsOpen(false)
@@ -56,24 +56,36 @@ export default function ViewSponsorAsDriverDialog(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      setTable1Data([
-        {
-          Date: '2021-03-11 23:08:19.748211',
-          Reason: '<a really good reason>',
-          TotalPoints: 1650,
-          PointsChange: (150 > 0 ? '+' : '-') + 150,
-        },
-        {
-          Date: '2021-03-11 23:08:50.891743',
-          Reason: '<please replace me with an actual api call please>',
-          TotalPoints: 1500,
-          PointsChange: (-150 > 0 ? '+' : null) + -150,
-        },
-      ])
+      // point change api data
+      let POINT_HISTORY_URL =
+        'https://b428t56xa7.execute-api.us-east-1.amazonaws.com/dev/getpointhistorybysponsorship'
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          SponsorID: sponsorshipInfo.SponsorID.replaceAll("'", "''"),
+          DriverID: sponsorshipInfo.DriverID.replaceAll("'", "''"),
+        }),
+      }
+      let point_history_resp = await fetch(POINT_HISTORY_URL, requestOptions)
+      let point_history_json = await point_history_resp.json()
+
+      let point_history_array = point_history_json.body.map((element) => {
+        return {
+          ChangeID: element.ChangeID.S,
+          ChangeDate: element.TimeStamp.S.replace(' ', 'T').split('.')[0],
+          ChangeReason: element.PointChangeReason.S,
+          ChangeAmount: parseInt(element.PointDifference.N),
+          TotalPoints: parseInt(element.TotalPoints.N),
+        }
+      })
+      console.log(point_history_array)
+
+      setTable1Data(point_history_array)
     })().then(() => {
       setIsLoading(false)
     })
-  }, [pageUpdate])
+  }, [pageUpdate, sponsorshipInfo])
 
   const left_col_width = 4
   const right_col_width = 6
@@ -85,6 +97,8 @@ export default function ViewSponsorAsDriverDialog(props) {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth="md"
       >
         <DialogTitle id="alert-dialog-title">
           {'Sponsorship information: ' +
@@ -198,7 +212,7 @@ export default function ViewSponsorAsDriverDialog(props) {
                     </Grid>
                     <Grid item xs={6}>
                       {' '}
-                      <Typography>View and edit the driver's points</Typography>
+                      <Typography>View your point history</Typography>
                     </Grid>
                     <Grid item>
                       <Typography variant="h6">
@@ -212,20 +226,60 @@ export default function ViewSponsorAsDriverDialog(props) {
                   {/* <br /> */}
                 </Grid>
 
-                {sponsorshipInfo.Status === 2 ? (
+                {sponsorshipInfo.Status === 2 && !isLoading ? (
                   <GenericTable
                     headCells={table1HeadCells}
                     data={table1Data}
                     setDataState={setTable1DataState}
-                    tableKey="Date"
+                    tableKey="ChangeID"
                     showKey={false}
-                    initialSortedColumn="Date"
+                    initialSortedColumn="ChangeDate"
                     initialSortedDirection="desc"
                     // selectedRow={selectedEntry}
                     // setSelectedRow={setSelectedEntryState}
                     // dialogIsOpen={props.dialogIsOpen}
                     // setDialogIsOpenState={props.setDialogIsOpenState}
                   ></GenericTable>
+                ) : sponsorshipInfo.Status === 2 ? (
+                  <Grid container justify="center">
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <LoadingIcon />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <br />
+                    </Grid>
+                  </Grid>
                 ) : null}
               </Grid>
               {/* </Grid> */}
