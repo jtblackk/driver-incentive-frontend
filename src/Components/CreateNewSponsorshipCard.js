@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import _ from 'lodash'
 
 const CreateNewSponsorshipCard = (props) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -71,7 +72,16 @@ const CreateNewSponsorshipCard = (props) => {
   }, [props.SponsorID, props.updatePage.updateCount])
 
   return (
-    <Grid item container xs={10} component={Paper} style={{ padding: 20 }}>
+    <Grid
+      item
+      container
+      xs={10}
+      md={9}
+      lg={8}
+      xl={6}
+      component={Paper}
+      style={{ padding: 20 }}
+    >
       <Grid item xs={12}>
         <Typography variant="h6">Add new drivers</Typography>
       </Grid>
@@ -110,13 +120,16 @@ const CreateNewSponsorshipCard = (props) => {
             }}
           >
             {validDriverChoices
-              ? validDriverChoices.map((element) => {
-                  return (
-                    <MenuItem value={element.Username}>
-                      {element.Username}
-                    </MenuItem>
-                  )
-                })
+              ? _.sortBy(validDriverChoices, ['Username', 'Name'], ['asc']).map(
+                  (element) => {
+                    return (
+                      <MenuItem value={element.Username}>
+                        {element.Username}: {element.FirstName}{' '}
+                        {element.LastName}
+                      </MenuItem>
+                    )
+                  },
+                )
               : null}
           </Select>
         </Grid>

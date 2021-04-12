@@ -13,6 +13,7 @@ import getUserDetails from '../Helpers/CommonFunctions'
 import { Grid, MenuItem, Paper, Select } from '@material-ui/core'
 import SponsorshipManagementView from '../Components/SponsorshipManagementView'
 import CreateNewSponsorshipCard from '../Components/CreateNewSponsorshipCard'
+import _ from 'lodash'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +61,7 @@ export default function SponsorshipManagementPage() {
         }
       }).filter((element) => element.AccountStatus === 1)
       setAllSponsors(sponsors_list)
+      // setCurrentSponsor(sponsors_list[0])
     })().then(() => {
       setIsLoading(false)
     })
@@ -74,12 +76,16 @@ export default function SponsorshipManagementPage() {
           pageTitle="Sponsorships"
           customItem={
             <Grid item xs={12} container justify="space-between">
-              <Grid item align="left">
+              <Grid item xs={4} align="left" style={{ paddingBottom: 10 }}>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  variant="standard"
-                  style={{ color: 'white' }}
+                  // variant="filled"
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
                   fullWidth
                 ></Select>
               </Grid>
@@ -105,7 +111,7 @@ export default function SponsorshipManagementPage() {
           pageTitle="Sponsorships"
           customItem={
             <Grid item xs={12} container justify="space-between">
-              <Grid item align="left">
+              <Grid item xs={4} align="left" style={{ paddingBottom: 10 }}>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -115,11 +121,20 @@ export default function SponsorshipManagementPage() {
                       : null
                   }
                   variant="standard"
-                  style={{ color: 'white' }}
+                  color="primary"
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
                   fullWidth
                 >
                   {allSponsors
-                    ? allSponsors.map((element) => (
+                    ? _.sortBy(
+                        allSponsors,
+                        ['Organization', 'Name'],
+                        ['asc'],
+                      ).map((element) => (
                         <MenuItem
                           onClick={() => {
                             setCurrentSponsor(element)
@@ -149,8 +164,14 @@ export default function SponsorshipManagementPage() {
                 </Grid>
               </Grid>
             ) : (
-              <Grid container justify="center">
-                <Grid item container xs={12} justify="flex-start">
+              <Grid container justify="flex-start">
+                <Grid
+                  item
+                  container
+                  xs={12}
+                  justify="flex-start"
+                  // component={Paper}
+                >
                   <CreateNewSponsorshipCard
                     SponsorID={currentSponsor.Username}
                     updatePage={{
@@ -162,7 +183,13 @@ export default function SponsorshipManagementPage() {
                 <Grid item xs={12}>
                   <br />
                 </Grid>
-                <Grid item container xs={12} justify="center">
+                <Grid
+                  item
+                  container
+                  xs={11}
+                  justify="flex-start"
+                  // component={Paper}
+                >
                   <SponsorshipManagementView
                     SponsorID={currentSponsor.Username}
                     updatePage={{
