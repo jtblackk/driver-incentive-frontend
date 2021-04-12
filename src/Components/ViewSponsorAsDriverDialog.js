@@ -79,7 +79,6 @@ export default function ViewSponsorAsDriverDialog(props) {
           TotalPoints: parseInt(element.TotalPoints.N),
         }
       })
-      console.log(point_history_array)
 
       setTable1Data(point_history_array)
     })().then(() => {

@@ -453,8 +453,6 @@ function EditDriverPointsMenu(props) {
                     // props.triggerPageUpdate()
                   },
                 )
-
-                // TODO: make sure that the point history table reflects points changes. Waiting on api for point history logs.
               }}
             >
               Deduct
@@ -524,9 +522,6 @@ function EditDriverPointsMenu(props) {
                     // props.triggerPageUpdate()
                   },
                 )
-
-                // props.triggerPageUpdate()
-                // TODO: make sure that the point history table reflects points changes. if it doesn't, fix it. waiting on api.
               }}
             >
               Add
@@ -612,7 +607,6 @@ function DriverPointsTab(props) {
           TotalPoints: parseInt(element.TotalPoints.N),
         }
       })
-      console.log(point_history_array)
 
       setTable1Data(point_history_array)
     })().then(() => {

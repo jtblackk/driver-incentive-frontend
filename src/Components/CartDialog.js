@@ -185,7 +185,6 @@ export default function CartDialog(props) {
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                          console.log(shippingAddress)
                           if (!shippingAddress || shippingAddress === '') {
                             setShippingAddressHelperText('Required')
                             return
