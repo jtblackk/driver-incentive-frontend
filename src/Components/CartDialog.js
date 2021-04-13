@@ -27,8 +27,10 @@ export default function CartDialog(props) {
   let cart_cost = props.dialogProps.cart.reduce((prev, curr) => {
     return (
       prev +
-      (curr.FullItemDetails.Price * curr.Quantity) /
-        props.dialogProps.activeSponsor.PointToDollarRatio
+      Math.ceil(
+        (curr.FullItemDetails.Price * curr.Quantity) /
+          props.dialogProps.activeSponsor.PointToDollarRatio,
+      )
     )
   }, 0)
 
@@ -116,14 +118,17 @@ export default function CartDialog(props) {
                           ></TextField>
                         </Grid>
                         <Grid item>
-                          {element.FullItemDetails.Price /
-                            props.dialogProps.activeSponsor
-                              .PointToDollarRatio}{' '}
+                          {Math.ceil(
+                            element.FullItemDetails.Price /
+                              props.dialogProps.activeSponsor
+                                .PointToDollarRatio,
+                          )}{' '}
                           pts x {element.Quantity} ={' '}
-                          {(element.FullItemDetails.Price /
-                            props.dialogProps.activeSponsor
-                              .PointToDollarRatio) *
-                            element.Quantity}{' '}
+                          {Math.ceil(
+                            element.FullItemDetails.Price /
+                              props.dialogProps.activeSponsor
+                                .PointToDollarRatio,
+                          ) * element.Quantity}{' '}
                           pts
                         </Grid>
 
@@ -200,8 +205,8 @@ export default function CartDialog(props) {
                                 return {
                                   ProductID: element.ProductID,
                                   Quantity: parseInt(element.Quantity),
-                                  CostPerItem: Math.ceil(
-                                    parseFloat(element.FullItemDetails.Price),
+                                  CostPerItem: parseFloat(
+                                    element.FullItemDetails.Price,
                                   ),
                                 }
                               })
@@ -221,11 +226,11 @@ export default function CartDialog(props) {
                                   "''",
                                 ),
                                 ProductIDs: ordered_products,
-                                Cost: Math.ceil(
+                                Cost:
                                   cart_cost *
-                                    props.dialogProps.activeSponsor
-                                      .PointToDollarRatio,
-                                ),
+                                  props.dialogProps.activeSponsor
+                                    .PointToDollarRatio,
+
                                 ShippingAddress: shippingAddress,
                               }),
                             }
