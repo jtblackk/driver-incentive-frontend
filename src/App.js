@@ -26,6 +26,7 @@ import OrganizationPage from './pages/OrganizationPage'
 import OrderReviewPage from './pages/OrderReviewPage'
 import UserManagementPage from './pages/UserManagementPage'
 import SponsorshipManagementPage from './pages/SponsorshipManagementPage'
+import SponsorInvoicePage from './pages/SponsorInvoicePage'
 
 Amplify.configure(awsconfig)
 
@@ -92,6 +93,11 @@ function App() {
                 exact
                 path="/sponsorship-management"
                 component={SponsorshipManagementPage}
+              />
+              <Route
+                exact
+                path="/sponsor-invoice"
+                component={SponsorInvoicePage}
               />
 
               <Route component={PageNotFoundPage} />

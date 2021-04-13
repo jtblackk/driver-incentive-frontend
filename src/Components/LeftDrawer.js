@@ -24,6 +24,7 @@ import StorageIcon from '@material-ui/icons/Storage'
 import GroupIcon from '@material-ui/icons/Group'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import ReceiptIcon from '@material-ui/icons/Receipt'
+import PaymentIcon from '@material-ui/icons/Payment'
 
 import { UserContext } from '../Helpers/UserContext'
 
@@ -110,6 +111,13 @@ const LeftDrawer = (props) => {
       icon: <LocalShippingIcon />,
       reqAccTypes: ['Admin'],
     },
+    {
+      name: 'Invoices',
+      route: '/sponsor-invoice',
+      icon: <PaymentIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
+
     // {
     //   name: 'My logs',
     //   route: '/logs',
