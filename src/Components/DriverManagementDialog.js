@@ -769,6 +769,7 @@ function DriverPointsTab(props) {
 
 function OrdersTab(props) {
   const [isLoading, setIsLoading] = useState(true)
+  console.log(props)
 
   // point history table
   const table1HeadCells = [
@@ -833,28 +834,34 @@ function OrdersTab(props) {
       let user_orders_obj = JSON.parse(user_orders_json.body)
       let user_orders_arr = user_orders_obj.Items
 
-      let all_orders_parsed = user_orders_arr.map((element) => {
-        return {
-          OrderID: element.OrderID.S,
-          DriverID: element.DriverID.S,
-          SponsorID: element.SponsorID.S,
-          Organization: element.Organization.S,
-          Status: parseInt(element.Status.N),
-          Cost: parseFloat(element.Cost.N),
-          PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
-          OrderDate: element.OrderSubmitted.S,
-          ShippingAddress: element.ShippingAddress.S,
-          Products: element.M
-            ? element.ProductIDs.L.map((element) => {
-                return {
-                  ProductID: element.M.ProductID.S,
-                  Quantity: parseInt(element.M.Quantity.N),
-                  PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(2),
-                }
-              })
-            : [],
-        }
-      })
+      let all_orders_parsed = user_orders_arr
+        .map((element) => {
+          return {
+            OrderID: element.OrderID.S,
+            DriverID: element.DriverID.S,
+            SponsorID: element.SponsorID.S,
+            Organization: element.Organization.S,
+            Status: parseInt(element.Status.N),
+            Cost: parseFloat(element.Cost.N),
+            PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
+            OrderDate: element.OrderSubmitted.S,
+            ShippingAddress: element.ShippingAddress.S,
+            Products: element.M
+              ? element.ProductIDs.L.map((element) => {
+                  return {
+                    ProductID: element.M.ProductID.S,
+                    Quantity: parseInt(element.M.Quantity.N),
+                    PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(
+                      2,
+                    ),
+                  }
+                })
+              : [],
+          }
+        })
+        .filter(
+          (element) => element.SponsorID === props.selectedDriverData.SponsorID,
+        )
 
       let all_orders_table_data = all_orders_parsed.map((element) => {
         return {
