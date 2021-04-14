@@ -56,40 +56,36 @@ const OrganizationInvoiceContent = (props) => {
       <Grid item xs={12}>
         <br />
       </Grid>
-      <Grid item xs={12} container justify="space-between" alignItems="center">
+      <Grid item container justify="flex-start" spacing={2} alignItems="center">
         <Grid item>
-          <Typography variant="h5">
-            Sponsor invoices: {selectedSponsor}
-          </Typography>
+          <Typography variant="h5">Sponsor invoices:</Typography>
         </Grid>
-        <Grid item xs={12}>
-          <br />
-        </Grid>
-      </Grid>
-      <Grid item container item xs={10} xl={6}>
-        <Grid item xs={12}>
-          <Select
-            fullWidth
-            labelId="SponsorLabel"
-            id="Sponsor"
-            variant="filled"
-            value={selectedSponsor}
-            onChange={(event) => {
-              // update sponsor
-              setSelectedSponsor(event.target.value)
-            }}
-          >
-            {_.sortBy(orgSponsors, ['Organization', 'Name'], ['asc']).map(
-              (sponsor) => (
-                <MenuItem value={sponsor.Username}>
-                  {' '}
-                  {sponsor.Username + ': ' + sponsor.Name}
-                </MenuItem>
-              ),
-            )}
-          </Select>
+        <Grid item container item xs={4} xl={6}>
+          <Grid item xs={12}>
+            <Select
+              fullWidth
+              labelId="SponsorLabel"
+              id="Sponsor"
+              variant="filled"
+              value={selectedSponsor}
+              onChange={(event) => {
+                // update sponsor
+                setSelectedSponsor(event.target.value)
+              }}
+            >
+              {_.sortBy(orgSponsors, ['Organization', 'Name'], ['asc']).map(
+                (sponsor) => (
+                  <MenuItem value={sponsor.Username}>
+                    {' '}
+                    {sponsor.Username + ': ' + sponsor.Name}
+                  </MenuItem>
+                ),
+              )}
+            </Select>
+          </Grid>
         </Grid>
       </Grid>
+
       <Grid item xs={12}>
         <br />
       </Grid>

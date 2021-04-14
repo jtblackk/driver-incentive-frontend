@@ -112,7 +112,7 @@ const LeftDrawer = (props) => {
       reqAccTypes: ['Admin'],
     },
     {
-      name: 'Invoices',
+      name: 'My invoices',
       route: '/sponsor-invoice',
       icon: <PaymentIcon />,
       reqAccTypes: ['Sponsor'],
