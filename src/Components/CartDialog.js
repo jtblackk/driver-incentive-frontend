@@ -231,7 +231,10 @@ export default function CartDialog(props) {
                                   props.dialogProps.activeSponsor
                                     .PointToDollarRatio,
 
-                                ShippingAddress: shippingAddress,
+                                ShippingAddress: shippingAddress.replaceAll(
+                                  "'",
+                                  "''",
+                                ),
                               }),
                             }
                             fetch(MAKE_ORDER_URL, requestOptions).then(() => {

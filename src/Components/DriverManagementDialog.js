@@ -769,7 +769,6 @@ function DriverPointsTab(props) {
 
 function OrdersTab(props) {
   const [isLoading, setIsLoading] = useState(true)
-  console.log(props)
 
   // point history table
   const table1HeadCells = [

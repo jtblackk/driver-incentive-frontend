@@ -117,6 +117,12 @@ const LeftDrawer = (props) => {
       icon: <PaymentIcon />,
       reqAccTypes: ['Sponsor'],
     },
+    {
+      name: 'Invoices',
+      route: '/invoices',
+      icon: <PaymentIcon />,
+      reqAccTypes: ['Admin'],
+    },
 
     // {
     //   name: 'My logs',
