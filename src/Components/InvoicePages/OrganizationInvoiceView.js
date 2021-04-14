@@ -121,7 +121,9 @@ const OrganizationInvoiceView = (props) => {
 
       <Grid item xs={12} container justify="space-between" alignItems="center">
         <Grid item>
-          <Typography variant="h5">Organization invoices</Typography>
+          <Typography variant="h5">
+            Organization invoices: {sponsorData.Organization}
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <br />
