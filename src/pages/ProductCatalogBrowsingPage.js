@@ -354,12 +354,6 @@ const ProductCatalogBrowsingPage = (props) => {
                                 justify="flex-end"
                                 // component={Paper}
                               >
-                                {/* <Grid item xs={6}>
-                                  {' '}
-                                  <Typography>
-                                    {element.Description.slice(0, 250)}
-                                  </Typography>
-                                </Grid> */}
                                 <Grid
                                   item
                                   xs={3}
@@ -368,31 +362,33 @@ const ProductCatalogBrowsingPage = (props) => {
                                   alignItems="center"
                                   // component={Paper}
                                 >
-                                  <Grid item xs={12} align="right">
-                                    <Typography>
-                                      {element.Stock} in stock
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={12} align="right">
-                                    <Typography>
-                                      {Math.ceil(
-                                        element.Price /
-                                          activeSponsor.PointToDollarRatio,
-                                      )}{' '}
-                                      Points
-                                    </Typography>
-                                  </Grid>
+                                  <Grid item container spacing={1}>
+                                    <Grid item xs={12} align="right">
+                                      <Typography>
+                                        {element.Stock} in stock
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} align="right">
+                                      <Typography>
+                                        {Math.ceil(
+                                          element.Price /
+                                            activeSponsor.PointToDollarRatio,
+                                        )}{' '}
+                                        Points
+                                      </Typography>
+                                    </Grid>
 
-                                  <Grid item xs={12} align="right">
-                                    <Button
-                                      variant="contained"
-                                      color="primary"
-                                      onClick={() => {
-                                        addItemToCart(element, 1)
-                                      }}
-                                    >
-                                      Add to cart
-                                    </Button>
+                                    <Grid item xs={12} align="right">
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                          addItemToCart(element, 1)
+                                        }}
+                                      >
+                                        Add to cart
+                                      </Button>
+                                    </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
