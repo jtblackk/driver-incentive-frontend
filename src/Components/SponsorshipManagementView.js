@@ -11,6 +11,7 @@ import GenericTable from '../Components/GenericTable'
 import DriverManagementDialog from '../Components/DriverManagementDialog'
 import SetAllPointRatiosDialog from '../Components/SetAllPointRatiosDialog'
 import getUserDetails from '../Helpers/CommonFunctions'
+import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,9 +126,9 @@ const SponsorshipManagementView = (props) => {
     setIsLoading(true)
     ;(async () => {
       // fetch and parse sponsor's driver's profiles
-      const driver_profile_data_endpoint = `https://rb6nqfuvvg.execute-api.us-east-1.amazonaws.com/dev/driverdatabysponsor?SponsorUsername=${userData.Username}`
+
       const driver_profile_data_response = await fetch(
-        driver_profile_data_endpoint,
+        apis.GetDriverDataBySponsor + userData.Username,
       )
       const driver_profile_data_json = await driver_profile_data_response.json()
       const driver_profile_data_parsed = JSON.parse(
@@ -151,8 +152,10 @@ const SponsorshipManagementView = (props) => {
         .filter((element) => element.AccountStatus === 1)
 
       //  fetch applicant list
-      let sponsorship_list_api = `https://unmqqiwf1a.execute-api.us-east-1.amazonaws.com/dev/applist?Username=${userData.Username}`
-      const sponsorship_list_response = await fetch(sponsorship_list_api)
+
+      const sponsorship_list_response = await fetch(
+        apis.GetApplicationsBySponsor + userData.Username,
+      )
       const sponsorship_list_json = await sponsorship_list_response.json()
 
       // parse the applicant data

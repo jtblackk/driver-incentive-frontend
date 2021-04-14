@@ -9,6 +9,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
 import { Grid, Paper } from '@material-ui/core'
 import GenericTable from '../Components/GenericTable'
+import apis from '../Helpers/api_endpoints'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -129,8 +130,7 @@ export default function OrderReviewPage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      let USER_ORDERS_URL =
-        'https://45mkccncmi.execute-api.us-east-1.amazonaws.com/dev/getorder'
+
       let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -139,7 +139,7 @@ export default function OrderReviewPage() {
         }),
       }
 
-      let user_orders_resp = await fetch(USER_ORDERS_URL, requestOptions)
+      let user_orders_resp = await fetch(apis.GetOrder, requestOptions)
       let user_orders_json = await user_orders_resp.json()
       let user_orders_obj = JSON.parse(user_orders_json.body)
       let user_orders_arr = user_orders_obj.Items

@@ -9,6 +9,7 @@ import LoadingIcon from './LoadingIcon'
 
 import GenericTableSelectableSpecial from './GenericTableSelectableSpecial'
 import { UserContext } from '../Helpers/UserContext'
+import apis from '../Helpers/api_endpoints'
 
 export default function AddCatalogItemDialog(props) {
   let userData = useContext(UserContext).activeProfile
@@ -60,9 +61,7 @@ export default function AddCatalogItemDialog(props) {
         },
       ])
 
-      const FETCH_EBAY_ITEMS_URL =
-        'https://0hcub33ona.execute-api.us-east-1.amazonaws.com/dev/ebay'
-      let ebay_items_raw = await fetch(FETCH_EBAY_ITEMS_URL)
+      let ebay_items_raw = await fetch(apis.GetItemsFromEbay)
       let ebay_items_json = await ebay_items_raw.json()
       let ebay_items_array = ebay_items_json
 
@@ -160,7 +159,6 @@ export default function AddCatalogItemDialog(props) {
                         ...checked_ids,
                       ]
 
-                      let SET_CATALOG_URL = `https://4hw5o2emwe.execute-api.us-east-1.amazonaws.com/dev/setcatalogitems`
                       let requestOptions = {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -170,7 +168,7 @@ export default function AddCatalogItemDialog(props) {
                         }),
                       }
 
-                      fetch(SET_CATALOG_URL, requestOptions).then(() => {
+                      fetch(apis.SetCatalogItems, requestOptions).then(() => {
                         props.dialogProps.setAddItemDialogIsOpenState(
                           false,
                           true,

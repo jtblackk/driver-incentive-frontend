@@ -15,6 +15,7 @@ import {
 import { UserContext } from '../Helpers/UserContext'
 
 import CloseIcon from '@material-ui/icons/Close'
+import apis from '../Helpers/api_endpoints'
 
 export default function SetAllPointRatiosDialog(props) {
   const [newPointDollarRatio, setNewPointDollarRatio] = useState(null)
@@ -109,8 +110,6 @@ export default function SetAllPointRatiosDialog(props) {
                     setHelperText(null)
                   }
 
-                  let UPDATE_POINT_VALUE_URL =
-                    'https://q8z2hne254.execute-api.us-east-1.amazonaws.com/dev/updatesponsorship'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -119,7 +118,7 @@ export default function SetAllPointRatiosDialog(props) {
                       PointDollarRatio: parseFloat(newPointDollarRatio),
                     }),
                   }
-                  fetch(UPDATE_POINT_VALUE_URL, requestOptions).then(() => {
+                  fetch(apis.UpdateSponsorshipPDR, requestOptions).then(() => {
                     props.setDialogIsOpen(false, true)
                   })
                 }}

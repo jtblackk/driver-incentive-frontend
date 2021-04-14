@@ -14,6 +14,7 @@ import { Button, Grid, Paper } from '@material-ui/core'
 import GenericTable from '../Components/GenericTable'
 import UserProfileDialog from '../Components/UserProfileDialog'
 import AddUserDialog from '../Components/AddUserDialog/AddUserDialog'
+import apis from '../Helpers/api_endpoints'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -64,9 +65,8 @@ export default function UserManagementPage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      let GET_ALL_USERDATA_URL =
-        'https://wdukos3oed.execute-api.us-east-1.amazonaws.com/dev/getalluserdata'
-      let userdata_response = await fetch(GET_ALL_USERDATA_URL)
+
+      let userdata_response = await fetch(apis.GetAllUserData)
       let userdata_json = await userdata_response.json()
       let userdata_array = userdata_json.body.Items
 

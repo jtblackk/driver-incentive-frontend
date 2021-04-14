@@ -12,6 +12,7 @@ import {
 import LoadingIcon from './LoadingIcon'
 import ApplyAgainDialog from './ApplyAgainDialog'
 import { sortBy } from 'lodash'
+import apis from '../Helpers/api_endpoints'
 
 const DriverApplicationCard = (props) => {
   const userData = useContext(UserContext).user
@@ -38,9 +39,7 @@ const DriverApplicationCard = (props) => {
     setIsLoading(true)
     ;(async () => {
       // get all the potential sponsors
-      let GET_SPONSORLIST_URL =
-        'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
-      let sponsorlist_response = await fetch(GET_SPONSORLIST_URL)
+      let sponsorlist_response = await fetch(apis.GetAllSponsorData)
       let sponsorlist_data = await sponsorlist_response.json()
       let sponsorlist_array = JSON.parse(sponsorlist_data.body.toString()).Items
       let sponsorlist_formatted = sponsorlist_array
@@ -55,8 +54,9 @@ const DriverApplicationCard = (props) => {
         })
         .filter((element) => element.AccountStatus === 1)
 
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = JSON.parse(
         partnered_sponsors_data.body.toString(),
@@ -172,8 +172,6 @@ const DriverApplicationCard = (props) => {
               }
 
               // fetch -> save application in application table
-              let SEND_APPLICATION_URL =
-                'https://z8yu8acjwj.execute-api.us-east-1.amazonaws.com/dev/submitapplication'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -186,7 +184,7 @@ const DriverApplicationCard = (props) => {
                   ),
                 }),
               }
-              fetch(SEND_APPLICATION_URL, requestOptions).then(() => {
+              fetch(apis.SubmitApplication, requestOptions).then(() => {
                 setDialogIsOpen(true)
               })
             }}

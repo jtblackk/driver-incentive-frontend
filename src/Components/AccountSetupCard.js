@@ -13,6 +13,7 @@ import {
   Select,
   TextField,
 } from '@material-ui/core'
+import apis from '../Helpers/api_endpoints'
 
 const AccountSetupCard = (props) => {
   const userData = useContext(UserContext).user
@@ -190,8 +191,6 @@ const AccountSetupCard = (props) => {
               })
 
               // save the profile information
-              let SAVE_USER_PROFILE_URL =
-                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -207,7 +206,7 @@ const AccountSetupCard = (props) => {
                   IsInitialSignup: true,
                 }),
               }
-              fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+              fetch(apis.UserSignup, requestOptions).then(() => {
                 // route user to appropriate page
                 if (userDetails.AccountType === 'Driver') {
                   history.push('/application')

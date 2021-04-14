@@ -8,6 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Divider, Grid, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
+import apis from '../Helpers/api_endpoints'
 
 export default function DeleteCatalogItemDialog(props) {
   const userData = useContext(UserContext).user
@@ -54,7 +55,6 @@ export default function DeleteCatalogItemDialog(props) {
             </Button>
             <Button
               onClick={() => {
-                let SET_CATALOG_URL = `https://4hw5o2emwe.execute-api.us-east-1.amazonaws.com/dev/setcatalogitems`
                 let requestOptions = {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -64,7 +64,7 @@ export default function DeleteCatalogItemDialog(props) {
                   }),
                 }
 
-                fetch(SET_CATALOG_URL, requestOptions).then(() => {
+                fetch(apis.SetCatalogItems, requestOptions).then(() => {
                   props.dialogProps.setDeleteItemCatalogIsOpenState(false, true)
                 })
               }}

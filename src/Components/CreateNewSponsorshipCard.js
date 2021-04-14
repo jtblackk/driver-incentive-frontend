@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
+import apis from '../Helpers/api_endpoints'
 
 const CreateNewSponsorshipCard = (props) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -26,8 +27,9 @@ const CreateNewSponsorshipCard = (props) => {
 
       // get all of the active sponsor's drivers
 
-      let GET_CURRENT_SPONSORSHIPS_URL = `https://rb6nqfuvvg.execute-api.us-east-1.amazonaws.com/dev/driverdatabysponsor?SponsorUsername=${props.SponsorID}`
-      let sponsorships_response = await fetch(GET_CURRENT_SPONSORSHIPS_URL)
+      let sponsorships_response = await fetch(
+        apis.GetDriverDataBySponsor + props.SponsorID,
+      )
       let sponsorships_json = await sponsorships_response.json()
       let sponsorships_array = JSON.parse(sponsorships_json.body).map(
         (element) => {
@@ -36,9 +38,8 @@ const CreateNewSponsorshipCard = (props) => {
       )
 
       // get all drivers, filter out any invalid entries (anyone not e adriver, inactive accounts, pre-existing sponsorships)
-      let GET_ALL_USERDATA_URL =
-        'https://wdukos3oed.execute-api.us-east-1.amazonaws.com/dev/getalluserdata'
-      let userdata_response = await fetch(GET_ALL_USERDATA_URL)
+
+      let userdata_response = await fetch(apis.GetAllUserData)
       let userdata_json = await userdata_response.json()
       let userdata_array = userdata_json.body.Items
 
@@ -129,8 +130,6 @@ const CreateNewSponsorshipCard = (props) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              let CREATE_SPONSORSHIP_URL =
-                'https://nrpwjk1izl.execute-api.us-east-1.amazonaws.com/dev/createnewsponsorship'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -141,7 +140,7 @@ const CreateNewSponsorshipCard = (props) => {
                   AppDecisionReason: 'ACCEPTED BY ADMIN',
                 }),
               }
-              fetch(CREATE_SPONSORSHIP_URL, requestOptions).then(() => {
+              fetch(apis.CreateNewSponsorship, requestOptions).then(() => {
                 props.updatePage.setPageUpdate(props.updatePage.updateCount + 1)
               })
             }}

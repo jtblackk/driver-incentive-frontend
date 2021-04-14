@@ -21,6 +21,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close'
 import GenericTable from './GenericTable'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 require('datejs')
 
 function DriverManagementTab(props) {
@@ -201,8 +202,6 @@ function DriverManagementTab(props) {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  let UPDATE_SPONSORSHIP_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -218,7 +217,7 @@ function DriverManagementTab(props) {
                       Status: 2,
                     }),
                   }
-                  fetch(UPDATE_SPONSORSHIP_URL, requestOptions)
+                  fetch(apis.ChangeSponsorshipInfo, requestOptions)
 
                   props.handleClose(true)
                 }}
@@ -295,9 +294,6 @@ function EditPointDollarRatioMenu(props) {
                 return
               }
 
-              let SAVE_APPLICATION_RESPONSE_URL =
-                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -314,7 +310,7 @@ function EditPointDollarRatioMenu(props) {
                 }),
               }
 
-              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(() => {
+              fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
                 let newDriverDataState = props.allDriverData.map((element) => {
                   if (element.Username === props.selectedDriverData.DriverID) {
                     return {
@@ -408,9 +404,6 @@ function EditDriverPointsMenu(props) {
                 }
                 if (exit) return
 
-                let SAVE_APPLICATION_RESPONSE_URL =
-                  'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
                 let requestOptions = {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -430,29 +423,27 @@ function EditDriverPointsMenu(props) {
                   }),
                 }
 
-                fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                  () => {
-                    let newDriverDataState = props.allDriverData.map(
-                      (element) => {
-                        if (
-                          element.Username === props.selectedDriverData.DriverID
-                        ) {
-                          return {
-                            ...element,
-                            Points:
-                              parseInt(props.selectedDriverData.Points) -
-                              parseInt(pointQuantity),
-                          }
-                        } else {
-                          return element
+                fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                  let newDriverDataState = props.allDriverData.map(
+                    (element) => {
+                      if (
+                        element.Username === props.selectedDriverData.DriverID
+                      ) {
+                        return {
+                          ...element,
+                          Points:
+                            parseInt(props.selectedDriverData.Points) -
+                            parseInt(pointQuantity),
                         }
-                      },
-                    )
+                      } else {
+                        return element
+                      }
+                    },
+                  )
 
-                    props.setAllDriverDataState(newDriverDataState)
-                    // props.triggerPageUpdate()
-                  },
-                )
+                  props.setAllDriverDataState(newDriverDataState)
+                  // props.triggerPageUpdate()
+                })
               }}
             >
               Deduct
@@ -477,9 +468,6 @@ function EditDriverPointsMenu(props) {
                 }
                 if (exit) return
 
-                let SAVE_APPLICATION_RESPONSE_URL =
-                  'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
                 let requestOptions = {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -499,29 +487,27 @@ function EditDriverPointsMenu(props) {
                   }),
                 }
 
-                fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                  () => {
-                    let newDriverDataState = props.allDriverData.map(
-                      (element) => {
-                        if (
-                          element.Username === props.selectedDriverData.DriverID
-                        ) {
-                          return {
-                            ...element,
-                            Points:
-                              parseInt(props.selectedDriverData.Points) +
-                              parseInt(pointQuantity),
-                          }
-                        } else {
-                          return element
+                fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                  let newDriverDataState = props.allDriverData.map(
+                    (element) => {
+                      if (
+                        element.Username === props.selectedDriverData.DriverID
+                      ) {
+                        return {
+                          ...element,
+                          Points:
+                            parseInt(props.selectedDriverData.Points) +
+                            parseInt(pointQuantity),
                         }
-                      },
-                    )
+                      } else {
+                        return element
+                      }
+                    },
+                  )
 
-                    props.setAllDriverDataState(newDriverDataState)
-                    // props.triggerPageUpdate()
-                  },
-                )
+                  props.setAllDriverDataState(newDriverDataState)
+                  // props.triggerPageUpdate()
+                })
               }}
             >
               Add
@@ -585,8 +571,6 @@ function DriverPointsTab(props) {
     // setIsLoading(true)
     ;(async () => {
       // point change api data
-      let POINT_HISTORY_URL =
-        'https://b428t56xa7.execute-api.us-east-1.amazonaws.com/dev/getpointhistorybysponsorship'
       let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -595,7 +579,10 @@ function DriverPointsTab(props) {
           DriverID: props.selectedDriverData.DriverID.replaceAll("'", "''"),
         }),
       }
-      let point_history_resp = await fetch(POINT_HISTORY_URL, requestOptions)
+      let point_history_resp = await fetch(
+        apis.GetPointHistoryBySonsorship,
+        requestOptions,
+      )
       let point_history_json = await point_history_resp.json()
 
       let point_history_array = point_history_json.body.map((element) => {
@@ -818,8 +805,7 @@ function OrdersTab(props) {
     setIsLoading(true)
     ;(async () => {
       // order history api
-      let USER_ORDERS_URL =
-        'https://45mkccncmi.execute-api.us-east-1.amazonaws.com/dev/getorder'
+
       let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -828,7 +814,7 @@ function OrdersTab(props) {
         }),
       }
 
-      let user_orders_resp = await fetch(USER_ORDERS_URL, requestOptions)
+      let user_orders_resp = await fetch(apis.GetOrder, requestOptions)
       let user_orders_json = await user_orders_resp.json()
       let user_orders_obj = JSON.parse(user_orders_json.body)
       let user_orders_arr = user_orders_obj.Items

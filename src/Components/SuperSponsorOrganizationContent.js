@@ -2,6 +2,7 @@
 import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core'
 import { toLower } from 'lodash'
 import { useContext, useState } from 'react'
+import apis from '../Helpers/api_endpoints'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
 import OrganizationSponsorManagementPanel from './OrganizationSponsorManagementPanel'
@@ -68,9 +69,7 @@ function RenameOrganizationPanel(props) {
             size="large"
             onClick={() => {
               //   get list of sponsors
-              let GET_SPONSORDATA_URL =
-                'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
-              fetch(GET_SPONSORDATA_URL)
+              fetch(apis.GetAllSponsorData)
                 .then((response) => response.json())
                 .then((data) => {
                   let clean_sonsor_list = []
@@ -89,9 +88,6 @@ function RenameOrganizationPanel(props) {
                     return
                   }
 
-                  // save the profile information
-                  let SAVE_USER_PROFILE_URL =
-                    'https://waza1dohpl.execute-api.us-east-1.amazonaws.com/dev/updateorgname'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -100,7 +96,7 @@ function RenameOrganizationPanel(props) {
                       NewOrgName: organizationName.replaceAll("'", "''"),
                     }),
                   }
-                  fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                  fetch(apis.UpdateOrgName, requestOptions).then(() => {
                     window.location.reload()
                   })
                 })

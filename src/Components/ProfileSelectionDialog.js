@@ -7,6 +7,7 @@ import { Grid, Paper } from '@material-ui/core'
 import getUserDetails from '../Helpers/CommonFunctions'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 
 export default function ProfileSelectionDialog(props) {
   const userData = useContext(UserContext).user
@@ -22,11 +23,9 @@ export default function ProfileSelectionDialog(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_ORG_SPONSORS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorgsponsors?Organization=${userData.Organization.replace(
-        ' ',
-        '%20',
-      )}`
-      let org_sponsors_raw = await fetch(GET_ORG_SPONSORS_URL)
+      let org_sponsors_raw = await fetch(
+        apis.GetOrgSponsors + userData.Organization.replace(' ', '%20'),
+      )
       let org_sponsors_json = await org_sponsors_raw.json()
       let org_sponsors_parsed = JSON.parse(org_sponsors_json.body.toString())
       let org_sponsors_formatted = org_sponsors_parsed.Items.filter(

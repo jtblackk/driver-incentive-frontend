@@ -9,6 +9,7 @@ import { UserContext } from '../Helpers/UserContext'
 import { Grid } from '@material-ui/core'
 import SuperSponsorContent from '../Components/SuperSponsorOrganizationContent'
 import OrganizationContent from '../Components/OrganizationContent'
+import apis from '../Helpers/api_endpoints'
 // set up styling
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,8 +43,10 @@ function OrganizationPage() {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
-      let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      // let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
+      let org_users_raw = await fetch(
+        apis.GetOrgUserData + userData.Organization,
+      )
       let org_users_json = await org_users_raw.json()
       let org_users_array = await JSON.parse(org_users_json.body.toString())
 

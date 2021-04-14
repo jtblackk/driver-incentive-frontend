@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, Paper, Typography } from '@material-ui/core'
 import GenericTable from './GenericTable'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 // point history table
 const table1HeadCells = [
   {
@@ -57,8 +58,6 @@ export default function ViewSponsorAsDriverDialog(props) {
     setIsLoading(true)
     ;(async () => {
       // point change api data
-      let POINT_HISTORY_URL =
-        'https://b428t56xa7.execute-api.us-east-1.amazonaws.com/dev/getpointhistorybysponsorship'
       let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -67,7 +66,10 @@ export default function ViewSponsorAsDriverDialog(props) {
           DriverID: sponsorshipInfo.DriverID.replaceAll("'", "''"),
         }),
       }
-      let point_history_resp = await fetch(POINT_HISTORY_URL, requestOptions)
+      let point_history_resp = await fetch(
+        apis.GetPointHistoryBySonsorship,
+        requestOptions,
+      )
       let point_history_json = await point_history_resp.json()
 
       let point_history_array = point_history_json.body.map((element) => {

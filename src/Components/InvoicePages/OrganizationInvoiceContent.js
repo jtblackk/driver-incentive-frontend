@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import OrganizationInvoiceView from './OrganizationInvoiceView'
 import SponsorInvoiceView from './SponsorInvoiceView'
 import _ from 'lodash'
+import apis from '../../Helpers/api_endpoints'
 
 const OrganizationInvoiceContent = (props) => {
   const [isLoading, setIsLoading] = useState(null)
@@ -17,11 +18,9 @@ const OrganizationInvoiceContent = (props) => {
       // start loading animation
       setIsLoading(true)
 
-      let GET_ORG_SPONSORS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorgsponsors?Organization=${props.Organization.replace(
-        ' ',
-        '%20',
-      )}`
-      let org_sponsors_raw = await fetch(GET_ORG_SPONSORS_URL)
+      let org_sponsors_raw = await fetch(
+        apis.GetOrgSponsors + props.Organization.replace(' ', '%20'),
+      )
       let org_sponsors_json = await org_sponsors_raw.json()
       let org_sponsors_parsed = JSON.parse(org_sponsors_json.body.toString())
       let org_sponsors_formatted = org_sponsors_parsed.Items.filter(

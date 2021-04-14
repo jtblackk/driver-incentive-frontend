@@ -23,6 +23,7 @@ import awsconfig from '../../aws-exports'
 import Amplify, { Auth, API } from 'aws-amplify'
 Amplify.configure(awsconfig)
 import AWS from 'aws-sdk'
+import apis from '../../Helpers/api_endpoints'
 require('datejs')
 
 if (!AWS.config.region || !AWS.config.credenetials) {
@@ -463,9 +464,7 @@ export default function AddUserDialog(props) {
 
                           props.dialogProps.dataSetters.setAllUsers(new_users)
 
-                          //   make api call
-                          let CREATE_USER_PROFILE_URL =
-                            'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+                          //   create user table entry
                           let requestOptions = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -494,16 +493,12 @@ export default function AddUserDialog(props) {
                             }),
                           }
 
-                          fetch(CREATE_USER_PROFILE_URL, requestOptions).then(
-                            () => {
-                              handleClose()
-                            },
-                          )
+                          fetch(apis.UserSignup, requestOptions).then(() => {
+                            handleClose()
+                          })
 
+                          // create cognito identity
                           if (createdUserDetails.Username.includes('@')) {
-                            // TODO: call api to create an account in cognito
-                            let CREATE_IDENTITY_URL =
-                              'https://t4jjmnr8e5.execute-api.us-east-1.amazonaws.com/dev/createuser'
                             let requestOptions = {
                               method: 'POST',
                               headers: { 'Content-Type': 'application/json' },
@@ -514,8 +509,7 @@ export default function AddUserDialog(props) {
                                 ),
                               }),
                             }
-
-                            fetch(CREATE_IDENTITY_URL, requestOptions)
+                            fetch(apis.CreateCognitoIdentity, requestOptions)
                           }
                         }}
                       >

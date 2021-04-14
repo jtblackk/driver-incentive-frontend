@@ -14,6 +14,7 @@ import { Grid, MenuItem, Paper, Select } from '@material-ui/core'
 import SponsorshipManagementView from '../Components/SponsorshipManagementView'
 import CreateNewSponsorshipCard from '../Components/CreateNewSponsorshipCard'
 import _ from 'lodash'
+import apis from '../Helpers/api_endpoints'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -47,9 +48,8 @@ export default function SponsorshipManagementPage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      let GET_SPONSORS_URL =
-        'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
-      let sponsors_response = await fetch(GET_SPONSORS_URL)
+
+      let sponsors_response = await fetch(apis.GetAllSponsorData)
       let sponsors_json = await sponsors_response.json()
       let sponsors_parsed = JSON.parse(sponsors_json.body)
       let sponsors_list = sponsors_parsed.Items.map((element) => {

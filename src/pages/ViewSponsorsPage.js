@@ -10,6 +10,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import GenericTable from '../Components/GenericTable'
 import { useHistory } from 'react-router'
 import ViewSponsorAsDriverDialog from '../Components/ViewSponsorAsDriverDialog'
+import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,8 +94,9 @@ const ViewSponsorsPage = () => {
     setIsLoading(true)
     ;(async () => {
       // get the sponsors that the driver is partnered to
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = JSON.parse(
         partnered_sponsors_data.body.toString(),

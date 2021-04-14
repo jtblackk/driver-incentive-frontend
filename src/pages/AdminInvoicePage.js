@@ -14,6 +14,7 @@ import { Divider, Grid, MenuItem, Paper, Select } from '@material-ui/core'
 import SponsorInvoiceView from '../Components/InvoicePages/SponsorInvoiceView'
 import OrganizationInvoiceView from '../Components/InvoicePages/OrganizationInvoiceView'
 import OrganizationInvoiceContent from '../Components/InvoicePages/OrganizationInvoiceContent'
+import apis from '../Helpers/api_endpoints'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -49,11 +50,7 @@ export default function AdminInvoicePage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-
-      // TODO: get all org names
-      let GET_ORG_NAMES_URL =
-        'https://asellofio4.execute-api.us-east-1.amazonaws.com/dev/getorganizationnames'
-      let org_names_response = await fetch(GET_ORG_NAMES_URL)
+      let org_names_response = await fetch(apis.GetOrganizationNames)
       let org_names_json = await org_names_response.json()
       let org_names = org_names_json.body
       setAllOrganizations(org_names)

@@ -8,6 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+import apis from '../Helpers/api_endpoints'
 require('datejs')
 
 export default function ApplicationManagementDialog(props) {
@@ -109,9 +110,6 @@ export default function ApplicationManagementDialog(props) {
                     setHelperText(null)
                   }
 
-                  let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -131,11 +129,9 @@ export default function ApplicationManagementDialog(props) {
                     }),
                   }
 
-                  fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                    () => {
-                      handleClose(true)
-                    },
-                  )
+                  fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                    handleClose(true)
+                  })
                 }}
               >
                 Reject
@@ -155,8 +151,6 @@ export default function ApplicationManagementDialog(props) {
                     setHelperText(null)
                   }
 
-                  let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -175,11 +169,9 @@ export default function ApplicationManagementDialog(props) {
                       Points: 0,
                     }),
                   }
-                  fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                    () => {
-                      handleClose(true)
-                    },
-                  )
+                  fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                    handleClose(true)
+                  })
                 }}
               >
                 Accept

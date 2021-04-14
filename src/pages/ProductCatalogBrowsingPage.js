@@ -19,6 +19,7 @@ import ChooseCatalogSponsorDialog from '../Components/ChooseCatalogSponsorDialog
 import CartDialog from '../Components/CartDialog'
 import LoadingIcon from '../Components/LoadingIcon'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,8 +133,7 @@ const ProductCatalogBrowsingPage = (props) => {
     setIsLoading(true)
     setActiveSponsor(state)
 
-    let CATALOG_ITEMS_URL = `https://bfv61oiy3h.execute-api.us-east-1.amazonaws.com/dev/getcatalogitems?SponsorID=${state.SponsorID}`
-    let catalog_items_raw = await fetch(CATALOG_ITEMS_URL)
+    let catalog_items_raw = await fetch(apis.GetCatalogItems + state.SponsorID)
     let catalog_items_json = await catalog_items_raw.json()
     let catalog_items_array = await JSON.parse(
       catalog_items_json.body.toString(),
@@ -143,8 +143,6 @@ const ProductCatalogBrowsingPage = (props) => {
       (element) => element.S,
     )
 
-    let GET_EBAY_ITEMS_URL =
-      'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
     let requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -152,7 +150,7 @@ const ProductCatalogBrowsingPage = (props) => {
         ProductIDs: catalog_items_formatted,
       }),
     }
-    let item_data_raw = await fetch(GET_EBAY_ITEMS_URL, requestOptions)
+    let item_data_raw = await fetch(apis.GetEbayItemsByIDs, requestOptions)
     let item_data_json = await item_data_raw.json()
     let item_data_parsed = JSON.parse(item_data_json.body)
 
@@ -175,8 +173,9 @@ const ProductCatalogBrowsingPage = (props) => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = await JSON.parse(
         partnered_sponsors_data.body.toString(),

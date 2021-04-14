@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { Divider, Grid, Paper, TextField } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 import { useHistory } from 'react-router'
+import apis from '../Helpers/api_endpoints'
 
 export default function CartDialog(props) {
   let history = useHistory()
@@ -211,8 +212,6 @@ export default function CartDialog(props) {
                                 }
                               })
 
-                            let MAKE_ORDER_URL =
-                              'https://jbcqty2yxb.execute-api.us-east-1.amazonaws.com/dev/createorder'
                             let requestOptions = {
                               method: 'POST',
                               headers: { 'Content-Type': 'application/json' },
@@ -237,7 +236,7 @@ export default function CartDialog(props) {
                                 ),
                               }),
                             }
-                            fetch(MAKE_ORDER_URL, requestOptions).then(() => {
+                            fetch(apis.CreateOrder, requestOptions).then(() => {
                               history.push('/orders')
                             })
                           }

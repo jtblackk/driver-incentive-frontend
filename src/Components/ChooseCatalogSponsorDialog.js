@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import { Grid, Paper } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 
 export default function ChooseCatalogSponsorDialog(props) {
   const userData = useContext(UserContext).user
@@ -19,8 +20,9 @@ export default function ChooseCatalogSponsorDialog(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = await JSON.parse(
         partnered_sponsors_data.body.toString(),
