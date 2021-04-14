@@ -72,16 +72,7 @@ const CreateNewSponsorshipCard = (props) => {
   }, [props.SponsorID, props.updatePage.updateCount])
 
   return (
-    <Grid
-      item
-      container
-      xs={10}
-      md={9}
-      lg={8}
-      xl={6}
-      component={Paper}
-      style={{ padding: 20 }}
-    >
+    <Grid item container component={Paper} style={{ padding: 20 }}>
       <Grid item xs={12}>
         <Typography variant="h6">Add new drivers</Typography>
       </Grid>

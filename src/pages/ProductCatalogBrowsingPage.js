@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   MenuItem,
+  Paper,
   Select,
   Typography,
 } from '@material-ui/core'
@@ -239,13 +240,18 @@ const ProductCatalogBrowsingPage = (props) => {
           pageTitle="Product catalog"
           customItem={
             <Grid item xs={12} container justify="space-between">
-              <Grid item align="left">
+              <Grid item xs={2} align="left">
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={activeSponsor.SponsorID}
                   variant="standard"
-                  style={{ color: 'white' }}
+                  color="primary"
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
                   fullWidth
                 >
                   {registeredSponsors
@@ -341,35 +347,58 @@ const ProductCatalogBrowsingPage = (props) => {
                                 </Typography>
                               </Grid>
 
-                              <Grid item xs={12} align="right">
-                                <Typography>
-                                  {element.Stock} in stock
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} align="right">
-                                <Typography>
-                                  {Math.ceil(
-                                    element.Price /
-                                      activeSponsor.PointToDollarRatio,
-                                  )}{' '}
-                                  Points
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} align="right">
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() => {
-                                    addItemToCart(element, 1)
-                                  }}
+                              <Grid
+                                item
+                                xs={12}
+                                container
+                                justify="flex-end"
+                                // component={Paper}
+                              >
+                                {/* <Grid item xs={6}>
+                                  {' '}
+                                  <Typography>
+                                    {element.Description.slice(0, 250)}
+                                  </Typography>
+                                </Grid> */}
+                                <Grid
+                                  item
+                                  xs={3}
+                                  container
+                                  justify="center"
+                                  alignItems="center"
+                                  // component={Paper}
                                 >
-                                  Add to cart
-                                </Button>
+                                  <Grid item xs={12} align="right">
+                                    <Typography>
+                                      {element.Stock} in stock
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={12} align="right">
+                                    <Typography>
+                                      {Math.ceil(
+                                        element.Price /
+                                          activeSponsor.PointToDollarRatio,
+                                      )}{' '}
+                                      Points
+                                    </Typography>
+                                  </Grid>
+
+                                  <Grid item xs={12} align="right">
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      onClick={() => {
+                                        addItemToCart(element, 1)
+                                      }}
+                                    >
+                                      Add to cart
+                                    </Button>
+                                  </Grid>
+                                </Grid>
                               </Grid>
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid item xs={10}>
                               <Divider />
                             </Grid>
                           </Grid>
@@ -399,11 +428,16 @@ const ProductCatalogBrowsingPage = (props) => {
           pageTitle="Product catalog"
           customItem={
             <Grid item xs={12} container justify="space-between">
-              <Grid item align="left">
+              <Grid item xs={2} align="left">
                 <Select
                   variant="standard"
-                  style={{ color: 'white' }}
+                  color="primary"
                   fullWidth
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
                 ></Select>
               </Grid>
               <Grid

@@ -67,7 +67,7 @@ const OrganizationInvoiceContent = (props) => {
           <br />
         </Grid>
       </Grid>
-      <Grid item container xs={10}>
+      <Grid item container item xs={10} xl={6}>
         <Grid item xs={12}>
           <Select
             fullWidth

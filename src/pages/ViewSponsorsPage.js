@@ -259,6 +259,8 @@ const ViewSponsorsPage = () => {
                 </div>
               </Paper>
             </Grid>
+
+            <Grid item xs={12}></Grid>
             <Grid item xs={10} xl={6}>
               <Paper>
                 <div style={{ padding: 20 }}>

@@ -263,7 +263,13 @@ const SponsorshipManagementView = (props) => {
 
   if (!isLoading) {
     return (
-      <div>
+      <Grid
+        container
+        justify="flex-start"
+        alignContent="center"
+        direction="row"
+        // spacing={4}
+      >
         <SetAllPointRatiosDialog
           dialogIsOpen={pointRatioDialogIsOpen}
           setDialogIsOpen={setPointRatioDialogIsOpenState}
@@ -288,90 +294,44 @@ const SponsorshipManagementView = (props) => {
           />
         ) : null}
 
-        <Grid
-          container
-          justify="flex-start"
-          alignContent="center"
-          direction="row"
-          // spacing={4}
-        >
-          {/* active drivers */}
-          <Grid item xs={10} component={Paper} style={{ padding: 20 }}>
-            {/* <Paper>
+        {/* active drivers */}
+        <Grid item xs={12} component={Paper} style={{ padding: 20 }}>
+          {/* <Paper>
               <div style={{ padding: 20 }}> */}
-            <Grid
-              container
-              justify="space-between"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <Typography variant="h6">Active drivers</Typography>
-                <Typography>A list of the sponsor's active drivers.</Typography>
-              </Grid>
-            </Grid>
-            {/* <br></br> */}
-            <Grid item container xs={12} justify="flex-end">
-              {/* set all point values button */}
-              <Grid item align="right">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    // bring up dialog to set all point ratios
-                    setPointRatioDialogIsOpen(true)
-                  }}
-                >
-                  SET ALL POINT VALUES
-                </Button>
-              </Grid>
-            </Grid>
-
-            <br></br>
+          <Grid
+            container
+            justify="space-between"
+            alignItems="center"
+            spacing={2}
+          >
             <Grid item xs={12}>
-              <GenericTable
-                headCells={table1HeadCells}
-                data={table1Data}
-                setDataState={setTable1DataState}
-                tableKey="Username"
-                showKey={true}
-                initialSortedColumn="LastName"
-                initialSortedDirection="asc"
-                selectedRow={selectedEntry}
-                setSelectedRow={setSelectedEntryState}
-                dialogIsOpen={dialogIsOpen}
-                setDialogIsOpenState={setDialogIsOpenState}
-              />
+              <Typography variant="h6">Active drivers</Typography>
+              <Typography>A list of the sponsor's active drivers.</Typography>
             </Grid>
           </Grid>
+          {/* <br></br> */}
+          <Grid item container xs={12} justify="flex-end">
+            {/* set all point values button */}
+            <Grid item align="right">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  // bring up dialog to set all point ratios
+                  setPointRatioDialogIsOpen(true)
+                }}
+              >
+                SET ALL POINT VALUES
+              </Button>
+            </Grid>
+          </Grid>
+
+          <br></br>
           <Grid item xs={12}>
-            <br></br>
-          </Grid>
-
-          {/* inactive drivers */}
-          <Grid item xs={10} component={Paper} style={{ padding: 20 }}>
-            {/* <Paper> */}
-            {/* <div style={{ padding: 20 }}> */}
-
-            <Grid
-              container
-              justify="space-between"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <Typography variant="h6">Inactive drivers</Typography>
-                <Typography>
-                  A list of the drivers that the sponsor no longer sponsors.
-                </Typography>
-              </Grid>
-            </Grid>
-            <br></br>
-
             <GenericTable
-              headCells={table2HeadCells}
-              data={table2Data}
-              setDataState={setTable2DataState}
+              headCells={table1HeadCells}
+              data={table1Data}
+              setDataState={setTable1DataState}
               tableKey="Username"
               showKey={true}
               initialSortedColumn="LastName"
@@ -381,25 +341,57 @@ const SponsorshipManagementView = (props) => {
               dialogIsOpen={dialogIsOpen}
               setDialogIsOpenState={setDialogIsOpenState}
             />
-            {/* </div> */}
-            {/* </Paper> */}
           </Grid>
         </Grid>
-        {/* </main> */}
-      </div>
+        <Grid item xs={12}>
+          <br></br>
+        </Grid>
+
+        {/* inactive drivers */}
+        <Grid item xs={12} component={Paper} style={{ padding: 20 }}>
+          <Grid
+            container
+            justify="space-between"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item xs={12}>
+              <Typography variant="h6">Inactive drivers</Typography>
+              <Typography>
+                A list of the drivers that the sponsor no longer sponsors.
+              </Typography>
+            </Grid>
+          </Grid>
+          <br></br>
+
+          <GenericTable
+            headCells={table2HeadCells}
+            data={table2Data}
+            setDataState={setTable2DataState}
+            tableKey="Username"
+            showKey={true}
+            initialSortedColumn="LastName"
+            initialSortedDirection="asc"
+            selectedRow={selectedEntry}
+            setSelectedRow={setSelectedEntryState}
+            dialogIsOpen={dialogIsOpen}
+            setDialogIsOpenState={setDialogIsOpenState}
+          />
+          {/* </div> */}
+          {/* </Paper> */}
+        </Grid>
+      </Grid>
     )
   } else {
     return (
-      // <div className={classes.root}>
-      //   <main className={classes.content}>
-      //     <div className={classes.toolbar} />
       <Grid container justify="center">
+        <Grid item xs={12}>
+          <br />
+        </Grid>
         <Grid item align="left">
           <LoadingIcon />
         </Grid>
       </Grid>
-      //   </main>
-      // </div>
     )
   }
 }

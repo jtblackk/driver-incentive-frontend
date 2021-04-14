@@ -164,14 +164,8 @@ export default function SponsorshipManagementPage() {
                 </Grid>
               </Grid>
             ) : (
-              <Grid container justify="flex-start">
-                <Grid
-                  item
-                  container
-                  xs={12}
-                  justify="flex-start"
-                  // component={Paper}
-                >
+              <Grid container>
+                <Grid item xs={10} lg={6}>
                   <CreateNewSponsorshipCard
                     SponsorID={currentSponsor.Username}
                     updatePage={{
@@ -180,16 +174,12 @@ export default function SponsorshipManagementPage() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={12}>
                   <br />
                 </Grid>
-                <Grid
-                  item
-                  container
-                  xs={11}
-                  justify="flex-start"
-                  // component={Paper}
-                >
+
+                <Grid item xs={10} lg={6}>
                   <SponsorshipManagementView
                     SponsorID={currentSponsor.Username}
                     updatePage={{
