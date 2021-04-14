@@ -18,6 +18,7 @@ let apis = {
   // triggers lambda function: GetAllUserData
   GetAllUserData:
     'https://wdukos3oed.execute-api.us-east-1.amazonaws.com/dev/getalluserdata',
+
   // triggers lambda function: sponsorList
   GetAllSponsorData:
     'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist',
