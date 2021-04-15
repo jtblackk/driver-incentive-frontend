@@ -81,7 +81,7 @@ const AccountSetupCard = (props) => {
         spacing={1}
         justify="space-between"
         direction="row"
-        component={Paper}
+        // component={Paper}
       >
         {/* first name */}
         <Grid item xs={6}>

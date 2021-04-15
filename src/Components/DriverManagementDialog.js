@@ -931,7 +931,37 @@ function OrdersTab(props) {
       </div>
     )
   } else {
-    return <LoadingIcon />
+    return (
+      <div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <br />
+        <br />
+        <br />
+        <LoadingIcon />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+      </div>
+    )
   }
 }
 

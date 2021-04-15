@@ -61,19 +61,25 @@ const ApplicantManagementPage = () => {
       id: 'Username',
       label: 'Username',
       isDate: false,
-      width: 200,
+      width: 215,
     },
     {
-      id: 'DriverName',
-      label: 'Name',
+      id: 'FirstName',
+      label: 'First name',
       isDate: false,
-      width: 200,
+      width: 50,
     },
     {
-      id: 'AppSubmissionDate',
+      id: 'LastName',
+      label: 'Last name',
+      isDate: false,
+      width: 50,
+    },
+    {
+      id: 'SubmissionDate',
       label: 'Submission date',
       isDate: true,
-      width: 250,
+      width: 50,
     },
   ]
 
@@ -85,22 +91,34 @@ const ApplicantManagementPage = () => {
       width: 100,
     },
     {
+      id: 'FirstName',
+      label: 'First name',
+      isDate: false,
+      width: 50,
+    },
+    {
+      id: 'LastName',
+      label: 'Last name',
+      isDate: false,
+      width: 50,
+    },
+    {
       id: 'Response',
       label: 'Decision',
       isDate: true,
-      width: 100,
+      width: 50,
     },
     {
       id: 'SubmissionDate',
       label: 'Submission date',
       isDate: true,
-      width: 250,
+      width: 50,
     },
     {
       id: 'ResponseDate',
       label: 'Response date',
       isDate: true,
-      width: 250,
+      width: 50,
     },
   ]
 
@@ -167,8 +185,13 @@ const ApplicantManagementPage = () => {
       // format applicant data into table-friendly format
       let applicantTableData = allApplicants.map((val) => {
         if (val.Status > 0) {
+          let user_profile = driverdata_reformatted.find((val2) => {
+            return val2.Username === val.DriverID
+          })
           return {
             Username: val.DriverID,
+            FirstName: user_profile.FirstName,
+            LastName: user_profile.LastName,
             Response:
               val.Status === 1
                 ? 'Denied'
@@ -185,7 +208,9 @@ const ApplicantManagementPage = () => {
 
           return {
             Username: val.DriverID,
-            Name: user_profile.FirstName + ' ' + user_profile.LastName,
+            // Name: user_profile.FirstName + ' ' + user_profile.LastName,
+            FirstName: user_profile.FirstName,
+            LastName: user_profile.LastName,
             SubmissionDate: val.AppSubmissionDate,
           }
         }
@@ -253,7 +278,7 @@ const ApplicantManagementPage = () => {
                     setDataState={setApplicantState}
                     tableKey="Username"
                     showKey={true}
-                    initialSortedColumn="AppSubmissionDate"
+                    initialSortedColumn="SubmissionDate"
                     initialSortedDirection="desc"
                     selectedRow={selectedApplicant}
                     setSelectedRow={setSelectedApplicantState}

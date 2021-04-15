@@ -3,6 +3,9 @@ let apis = {
   ChangeUserInfo:
     'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails',
 
+  SendCheckoutEmail:
+    'https://mwsws12vm3.execute-api.us-east-1.amazonaws.com/dev/checkoutEmail',
+
   // triggers lambda function: CreateUser
   CreateCognitoIdentity:
     'https://t4jjmnr8e5.execute-api.us-east-1.amazonaws.com/dev/createuser',

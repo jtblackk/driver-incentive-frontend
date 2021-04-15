@@ -15,17 +15,28 @@ export default async function getUserDetails(username) {
   const response = await fetch(GET_USERDATA_URL)
   const data = await response.json()
   let parsed_details = JSON.parse(data.body)
-  let profile_details = {
-    Username: parsed_details.Items[0].Username.S,
-    FirstName: parsed_details.Items[0].FirstName.S,
-    LastName: parsed_details.Items[0].LastName.S,
-    Bio: parsed_details.Items[0].Bio.S,
-    AccountType: parsed_details.Items[0].AccountType.S,
-    AccountStatus: parseInt(parsed_details.Items[0].AccountStatus.N),
-    Organization: parsed_details.Items[0].Organization
-      ? parsed_details.Items[0].Organization.S
-      : null,
-  }
+
+  let profile_details = parsed_details.Items[0]
+    ? {
+        Username: parsed_details.Items[0].Username.S,
+        FirstName: parsed_details.Items[0].FirstName.S,
+        LastName: parsed_details.Items[0].LastName.S,
+        Bio: parsed_details.Items[0].Bio.S,
+        AccountType: parsed_details.Items[0].AccountType.S,
+        AccountStatus: parseInt(parsed_details.Items[0].AccountStatus.N),
+        Organization: parsed_details.Items[0].Organization
+          ? parsed_details.Items[0].Organization.S
+          : null,
+      }
+    : {
+        Username: user_email,
+        FirstName: null,
+        LastName: null,
+        Bio: null,
+        AccountType: null,
+        AccountStatus: 0,
+        Organization: null,
+      }
 
   return profile_details
 }

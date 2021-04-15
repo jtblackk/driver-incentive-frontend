@@ -236,9 +236,39 @@ export default function CartDialog(props) {
                                 ),
                               }),
                             }
+
                             fetch(apis.CreateOrder, requestOptions).then(() => {
                               history.push('/orders')
                             })
+
+                            // send checkout email
+                            let user_email = props.dialogProps.activeDriver.Username.replaceAll(
+                              "'",
+                              "''",
+                            )
+
+                            let product_id_list = ordered_products.map(
+                              (element) => {
+                                return element.ProductID
+                              },
+                            )
+
+                            let product_quantity_list = ordered_products.map(
+                              (element) => {
+                                return element.Quantity
+                              },
+                            )
+
+                            let requestOptions2 = {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                products: product_id_list,
+                                quantities: product_quantity_list,
+                                userEmail: user_email,
+                              }),
+                            }
+                            fetch(apis.SendCheckoutEmail, requestOptions2)
                           }
                         }}
                       >

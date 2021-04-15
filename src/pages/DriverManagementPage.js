@@ -334,7 +334,7 @@ const DriverManagementPage = () => {
                     spacing={2}
                   >
                     <Grid item xs={12}>
-                      <Typography variant="h6">Your drivers</Typography>
+                      <Typography variant="h6">Active drivers</Typography>
                       <Typography>
                         A list of the drivers you're sponsoring. Click on an
                         entry for more information.
