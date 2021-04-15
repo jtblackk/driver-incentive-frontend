@@ -60,7 +60,7 @@ const OrganizationInvoiceContent = (props) => {
         <Grid item>
           <Typography variant="h5">Sponsor invoices:</Typography>
         </Grid>
-        <Grid item container item xs={4} xl={6}>
+        <Grid item container xs={4} xl={2}>
           <Grid item xs={12}>
             <Select
               fullWidth
