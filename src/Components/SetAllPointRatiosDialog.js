@@ -15,13 +15,15 @@ import {
 import { UserContext } from '../Helpers/UserContext'
 
 import CloseIcon from '@material-ui/icons/Close'
+import apis from '../Helpers/api_endpoints'
 
 export default function SetAllPointRatiosDialog(props) {
   const [newPointDollarRatio, setNewPointDollarRatio] = useState(null)
   const [pointDollarRatio, setPointDollarRatio] = useState(null)
   const [helperText, setHelperText] = useState(null)
 
-  const userData = useContext(UserContext).user
+  // const userData = useContext(UserContext).user
+  const userData = { Username: props.SponsorID }
 
   const handleClose = (resp) => {
     props.setDialogIsOpen(false)
@@ -108,17 +110,15 @@ export default function SetAllPointRatiosDialog(props) {
                     setHelperText(null)
                   }
 
-                  let UPDATE_POINT_VALUE_URL =
-                    'https://q8z2hne254.execute-api.us-east-1.amazonaws.com/dev/updatesponsorship'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: userData.Username,
+                      SponsorID: userData.Username.replaceAll("'", "''"),
                       PointDollarRatio: parseFloat(newPointDollarRatio),
                     }),
                   }
-                  fetch(UPDATE_POINT_VALUE_URL, requestOptions).then(() => {
+                  fetch(apis.UpdateSponsorshipPDR, requestOptions).then(() => {
                     props.setDialogIsOpen(false, true)
                   })
                 }}

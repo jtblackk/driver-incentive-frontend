@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
 import { useHistory } from 'react-router-dom'
+import apis from '../Helpers/api_endpoints'
 
 const OrganizationSetupCard = () => {
   const [organizationName, setOrganizationName] = useState(null)
@@ -19,9 +20,7 @@ const OrganizationSetupCard = () => {
   useEffect(() => {
     setIsLoading(true)
 
-    let GET_SPONSORDATA_URL =
-      'https://2cw17jd576.execute-api.us-east-1.amazonaws.com/dev/sponsorlist'
-    fetch(GET_SPONSORDATA_URL)
+    fetch(apis.GetAllSponsorData)
       .then((response) => response.json())
       .then((data) => {
         let clean_sonsor_list = []
@@ -86,17 +85,16 @@ const OrganizationSetupCard = () => {
               } else {
                 ;(async () => {
                   setIsLoading(true)
-                  let SAVE_USER_PROFILE_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
+
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      Username: userData.Username,
-                      Organization: organizationName,
+                      Username: userData.Username.replaceAll("'", "''"),
+                      Organization: organizationName.replaceAll("'", "''"),
                     }),
                   }
-                  await fetch(SAVE_USER_PROFILE_URL, requestOptions)
+                  await fetch(apis.UserSignup, requestOptions)
 
                   await setUserData({
                     ...userData,

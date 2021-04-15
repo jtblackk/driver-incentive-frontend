@@ -8,6 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, IconButton, Paper } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
+import apis from '../Helpers/api_endpoints'
 require('datejs')
 
 export default function ApplicationManagementDialog(props) {
@@ -82,8 +83,8 @@ export default function ApplicationManagementDialog(props) {
     },
   ]
 
-  let LEFT_COL_WIDTH = 5
-  let RIGHT_COL_WIDTH = 6
+  let LEFT_COL_WIDTH = 4
+  let RIGHT_COL_WIDTH = 7
   let COLUMN_SPACING = 1
 
   function ResponseForm() {
@@ -109,27 +110,28 @@ export default function ApplicationManagementDialog(props) {
                     setHelperText(null)
                   }
 
-                  let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: props.applicationDetails.SponsorID,
-                      DriverID: props.applicationDetails.DriverID,
-                      AppDecisionReason: decisionReason,
+                      SponsorID: props.applicationDetails.SponsorID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      DriverID: props.applicationDetails.DriverID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      AppDecisionReason: decisionReason.replaceAll("'", "''"),
                       Status: 1,
                       PointDollarRatio: 0.01,
                       Points: 0,
                     }),
                   }
 
-                  fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                    () => {
-                      handleClose(true)
-                    },
-                  )
+                  fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                    handleClose(true)
+                  })
                 }}
               >
                 Reject
@@ -149,25 +151,27 @@ export default function ApplicationManagementDialog(props) {
                     setHelperText(null)
                   }
 
-                  let SAVE_APPLICATION_RESPONSE_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: props.applicationDetails.SponsorID,
-                      DriverID: props.applicationDetails.DriverID,
-                      AppDecisionReason: decisionReason,
+                      SponsorID: props.applicationDetails.SponsorID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      DriverID: props.applicationDetails.DriverID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      AppDecisionReason: decisionReason.replaceAll("'", "''"),
                       Status: 2,
                       PointDollarRatio: 0.01,
                       Points: 0,
                     }),
                   }
-                  fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                    () => {
-                      handleClose(true)
-                    },
-                  )
+                  fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                    handleClose(true)
+                  })
                 }}
               >
                 Accept
@@ -290,7 +294,7 @@ export default function ApplicationManagementDialog(props) {
                 >
                   <Grid item xs={7} align="center">
                     <TextField
-                      variant="outlined"
+                      variant="filled"
                       label="Decision reason"
                       placeholder="Provide a reason for your decision"
                       multiline

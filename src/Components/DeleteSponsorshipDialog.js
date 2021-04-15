@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Grid, Typography } from '@material-ui/core'
+import apis from '../Helpers/api_endpoints'
 
 export default function DeleteSponsorshipDialog(props) {
   const handleClose = () => {
@@ -43,18 +44,22 @@ export default function DeleteSponsorshipDialog(props) {
           </Button>
           <Button
             onClick={() => {
-              let SAVE_APPLICATION_RESPONSE_URL =
-                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  SponsorID: props.parentProps.selectedDriverData.SponsorID,
-                  DriverID: props.parentProps.selectedDriverData.DriverID,
+                  SponsorID: props.parentProps.selectedDriverData.SponsorID.replaceAll(
+                    "'",
+                    "''",
+                  ),
+                  DriverID: props.parentProps.selectedDriverData.DriverID.replaceAll(
+                    "'",
+                    "''",
+                  ),
                   Status: 3,
                 }),
               }
-              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions)
+              fetch(apis.ChangeSponsorshipInfo, requestOptions)
                 .then(() => {
                   let newDriverDataState = props.parentProps.allDriverData.map(
                     (element) => {

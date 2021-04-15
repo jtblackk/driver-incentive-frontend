@@ -6,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { Grid, TextField, Typography } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
+import apis from '../Helpers/api_endpoints'
 
 export default function AddSponsorProfileDialog(props) {
   const handleClose = () => {
@@ -27,9 +28,7 @@ export default function AddSponsorProfileDialog(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let get_usernames_url =
-        'https://hym6oy13e9.execute-api.us-east-1.amazonaws.com/dev/getusernames'
-      let usernames_raw = await fetch(get_usernames_url)
+      let usernames_raw = await fetch(apis.GetUsernames)
       let usernames_json = await usernames_raw.json()
       let username_array = usernames_json.body
       setUsernameList(username_array)
@@ -162,21 +161,23 @@ export default function AddSponsorProfileDialog(props) {
 
                     if (validationFailed) return
 
-                    let REGISTER_PROFILE_URL = `https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails`
                     let requestOptions = {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
-                        Username: username,
-                        Organization: userData.Organization,
-                        FirstName: firstName,
-                        LastName: lastName,
-                        Bio: bio,
+                        Username: username.replaceAll("'", "''"),
+                        Organization: userData.Organization.replaceAll(
+                          "'",
+                          "''",
+                        ),
+                        FirstName: firstName.replaceAll("'", "''"),
+                        LastName: lastName.replaceAll("'", "''"),
+                        Bio: bio.replaceAll("'", "''"),
                         AccountType: 'Sponsor',
                         AccountStatus: 1,
                       }),
                     }
-                    fetch(REGISTER_PROFILE_URL, requestOptions).then(() => {
+                    fetch(apis.UserSignup, requestOptions).then(() => {
                       props.dialogProps.setSelectionDialogIsOpenState(
                         false,
                         true,

@@ -10,7 +10,10 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
 import getUserDetails from '../Helpers/CommonFunctions'
-import { Grid } from '@material-ui/core'
+import { Divider, Grid, Paper } from '@material-ui/core'
+import SponsorInvoiceView from '../Components/InvoicePages/SponsorInvoiceView'
+import OrganizationInvoiceView from '../Components/InvoicePages/OrganizationInvoiceView'
+import OrganizationInvoiceContent from '../Components/InvoicePages/OrganizationInvoiceContent'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -27,9 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ReusablePage() {
+export default function SponsorInvoicePage() {
   const classes = useStyles()
-  const userData = useContext(UserContext).user
+  const userData = useContext(UserContext).activeProfile
+    ? useContext(UserContext).activeProfile
+    : useContext(UserContext).user
 
   const [isLoading, setIsLoading] = useState(true)
   const [pageUpdate, setPageUpdate] = useState(0)
@@ -61,17 +66,26 @@ export default function ReusablePage() {
     return (
       <div className={classes.root}>
         {/* layout stuff */}
-        <TopAppBar pageTitle="Your orders"></TopAppBar>
+        <TopAppBar pageTitle="Invoices"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
 
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {!isLoading ? (
-            <Grid container>
-              <Grid item>
-                <p>some stuff</p>
-              </Grid>
+            <Grid container justify="flex-start">
+              {userData.Username.includes('@') ? (
+                <Grid item container>
+                  <OrganizationInvoiceContent
+                    Organization={userData.Organization}
+                    SponsorID={userData.Username}
+                  />
+                </Grid>
+              ) : (
+                <Grid container>
+                  <SponsorInvoiceView SponsorID={userData.Username} />
+                </Grid>
+              )}
             </Grid>
           ) : (
             <LoadingIcon />

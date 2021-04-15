@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import { Grid, Paper } from '@material-ui/core'
 import { UserContext } from '../Helpers/UserContext'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 
 export default function ChooseCatalogSponsorDialog(props) {
   const userData = useContext(UserContext).user
@@ -19,8 +20,9 @@ export default function ChooseCatalogSponsorDialog(props) {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = await JSON.parse(
         partnered_sponsors_data.body.toString(),
@@ -73,48 +75,52 @@ export default function ChooseCatalogSponsorDialog(props) {
             <LoadingIcon />
           ) : (
             <Grid container justify="center" spacing={3}>
-              {registeredSponsors.map((element) => {
-                return (
-                  <Grid
-                    key={element.SponsorID}
-                    item
-                    container
-                    spacing={2}
-                    xs={4}
-                    component={Paper}
-                    style={{ cursor: 'pointer', margin: 10 }}
-                    onClick={(event) => {
-                      props.dialogProps.setActiveSponsor({
-                        ...element,
-                      })
+              {registeredSponsors.length > 0 ? (
+                registeredSponsors.map((element) => {
+                  return (
+                    <Grid
+                      key={element.SponsorID}
+                      item
+                      container
+                      spacing={2}
+                      xs={4}
+                      component={Paper}
+                      style={{ cursor: 'pointer', margin: 10 }}
+                      onClick={(event) => {
+                        props.dialogProps.setActiveSponsor({
+                          ...element,
+                        })
 
-                      handleClose()
-                    }}
-                  >
-                    {/* <Paper style={{ padding: 20, cursor: 'pointer' }}> */}
-                    <Grid item align="center" xs={12}>
-                      <br />
-                    </Grid>
-                    <Grid item align="center" xs={12}>
-                      {element.SponsorID}
-                    </Grid>
-                    <Grid item align="center" xs={12}>
-                      {element.SponsorName}
-                    </Grid>
-                    <Grid item align="center" xs={12}>
-                      {element.SponsorOrganization}
-                    </Grid>
+                        handleClose()
+                      }}
+                    >
+                      {/* <Paper style={{ padding: 20, cursor: 'pointer' }}> */}
+                      <Grid item align="center" xs={12}>
+                        <br />
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        {element.SponsorID}
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        {element.SponsorName}
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        {element.SponsorOrganization}
+                      </Grid>
 
-                    <Grid item align="center" xs={12}>
-                      {element.Points} points
+                      <Grid item align="center" xs={12}>
+                        {element.Points} points
+                      </Grid>
+                      <Grid item align="center" xs={12}>
+                        <br />
+                      </Grid>
+                      {/* </Paper> */}
                     </Grid>
-                    <Grid item align="center" xs={12}>
-                      <br />
-                    </Grid>
-                    {/* </Paper> */}
-                  </Grid>
-                )
-              })}
+                  )
+                })
+              ) : (
+                <p>You are not currently registered to any sponsors</p>
+              )}
             </Grid>
           )}
 

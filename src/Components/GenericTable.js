@@ -38,7 +38,7 @@ export default function GenericTable(props) {
     let dataList = props.data
     setRows(dataList)
     setIsLoading(false)
-  }, [])
+  }, [props.data])
 
   if (!isLoading) {
     return (
@@ -79,6 +79,7 @@ export default function GenericTable(props) {
           {/* Table content */}
           <TableBody>
             {/* map the data to the table rows */}
+
             {orderBy(rows, columnToSort, sortDirection).map((row) => (
               <TableRow
                 hover={true}
@@ -107,7 +108,9 @@ export default function GenericTable(props) {
                 {Object.entries(row).map((cell) => {
                   if (cell[0].toUpperCase().includes('DATE') && cell[1]) {
                     return (
-                      <TableCell>{Date.parse(cell[1]).toUTCString()}</TableCell>
+                      <TableCell>
+                        {Date.parse(cell[1]).toLocaleDateString()}
+                      </TableCell>
                     )
                   } else if (cell[0] !== props.tableKey) {
                     return <TableCell>{cell[1]}</TableCell>

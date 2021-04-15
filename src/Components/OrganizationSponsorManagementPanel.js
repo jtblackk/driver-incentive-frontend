@@ -6,6 +6,7 @@ import AddSponsorProfileDialog from './AddSponsorProfileDialog'
 import ViewSponsorProfileDialog from './ViewSponsorProfileDialog'
 import GenericTable from './GenericTable'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 require('datejs')
 
 const OrganizationSponsorManagementPanel = (props) => {
@@ -174,18 +175,19 @@ const OrganizationSponsorManagementPanel = (props) => {
                     variant="contained"
                     style={{ backgroundColor: '#444444', color: 'white' }}
                     onClick={() => {
-                      let SAVE_USER_PROFILE_URL =
-                        'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
                       let requestOptions = {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          Username: selectedEntry.Username,
+                          Username: selectedEntry.Username.replaceAll(
+                            "'",
+                            "''",
+                          ),
                           AccountStatus: 2,
                         }),
                       }
 
-                      fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                      fetch(apis.ChangeUserInfo, requestOptions).then(() => {
                         setViewSponsorProfileDialogIsOpenState(false, true)
                       })
                     }}
@@ -211,17 +213,15 @@ const OrganizationSponsorManagementPanel = (props) => {
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    let SAVE_USER_PROFILE_URL =
-                      'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
                     let requestOptions = {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({
-                        Username: selectedEntry.Username,
+                        Username: selectedEntry.Username.replaceAll("'", "''"),
                         AccountStatus: 1,
                       }),
                     }
-                    fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                    fetch(apis.ChangeUserInfo, requestOptions).then(() => {
                       setViewTerminatedProfileDialogIsOpenState(false, true)
                     })
                   }}

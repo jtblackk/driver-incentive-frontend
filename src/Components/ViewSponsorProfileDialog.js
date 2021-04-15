@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { Box, Divider, Grid, Typography } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 import GenericTable from './GenericTable'
+import apis from '../Helpers/api_endpoints'
 
 export default function ViewSponsorProfileDialog(props) {
   const orgProps = props.dialogProps.parentProps.parentProps.orgProps
@@ -60,8 +61,10 @@ export default function ViewSponsorProfileDialog(props) {
 
       // fetch and parse sponsor's driver's profiles
       if (props.dialogProps.selectedEntry) {
-        let GET_DRIVERDATA_LIST = `https://rb6nqfuvvg.execute-api.us-east-1.amazonaws.com/dev/driverdatabysponsor?SponsorUsername=${props.dialogProps.selectedEntry.Username}`
-        const driverdata_response = await fetch(GET_DRIVERDATA_LIST)
+        const driverdata_response = await fetch(
+          apis.GetDriverDataBySponsor +
+            props.dialogProps.selectedEntry.Username,
+        )
         const driverdata_json = await driverdata_response.json()
         const driverdata_parsed = JSON.parse(driverdata_json.body.toString())
         const driverdata_reformatted = driverdata_parsed.map((val) => {

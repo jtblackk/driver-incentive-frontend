@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import Typography from '@material-ui/core/Typography'
-import { Divider, Grid, TextField } from '@material-ui/core'
+import { Divider, Grid, Paper, TextField } from '@material-ui/core'
 import LoadingIcon from './LoadingIcon'
 import { useHistory } from 'react-router'
+import apis from '../Helpers/api_endpoints'
 
 export default function CartDialog(props) {
   let history = useHistory()
@@ -17,13 +18,20 @@ export default function CartDialog(props) {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [shippingAddress, setShippingAddress] = useState(null)
+  const [shippingAddressHelperText, setShippingAddressHelperText] = useState(
+    null,
+  )
+
   useEffect(() => {}, [])
 
   let cart_cost = props.dialogProps.cart.reduce((prev, curr) => {
     return (
       prev +
-      (curr.FullItemDetails.Price * curr.Quantity) /
-        props.dialogProps.activeSponsor.PointToDollarRatio
+      Math.ceil(
+        (curr.FullItemDetails.Price * curr.Quantity) /
+          props.dialogProps.activeSponsor.PointToDollarRatio,
+      )
     )
   }, 0)
 
@@ -56,7 +64,14 @@ export default function CartDialog(props) {
               {/* {JSON.stringify(props.dialogProps.cart)} */}
               {props.dialogProps.cart.map((element) => {
                 return (
-                  <Grid item xs={12} container spacing={2} alignItems="center">
+                  <Grid
+                    item
+                    xs={12}
+                    container
+                    spacing={2}
+                    justify="center"
+                    alignItems="center"
+                  >
                     <Grid item xs={12}>
                       <b> {element.FullItemDetails.Name}</b>
                     </Grid>
@@ -104,14 +119,17 @@ export default function CartDialog(props) {
                           ></TextField>
                         </Grid>
                         <Grid item>
-                          {element.FullItemDetails.Price /
-                            props.dialogProps.activeSponsor
-                              .PointToDollarRatio}{' '}
+                          {Math.ceil(
+                            element.FullItemDetails.Price /
+                              props.dialogProps.activeSponsor
+                                .PointToDollarRatio,
+                          )}{' '}
                           pts x {element.Quantity} ={' '}
-                          {(element.FullItemDetails.Price /
-                            props.dialogProps.activeSponsor
-                              .PointToDollarRatio) *
-                            element.Quantity}{' '}
+                          {Math.ceil(
+                            element.FullItemDetails.Price /
+                              props.dialogProps.activeSponsor
+                                .PointToDollarRatio,
+                          ) * element.Quantity}{' '}
                           pts
                         </Grid>
 
@@ -149,55 +167,88 @@ export default function CartDialog(props) {
               })}
               {cart_cost > 0 &&
               cart_cost < props.dialogProps.activeSponsor.Points ? (
-                <Grid item xs={12} container align="right" justify="flex-end">
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        if (
-                          cart_cost > 0 &&
-                          cart_cost < props.dialogProps.activeSponsor.Points
-                        ) {
-                          let ordered_products = props.dialogProps.cart
-                            .filter((element) => element.Quantity > 0)
-                            .map((element) => {
-                              return {
-                                ProductID: element.ProductID,
-                                Quantity: parseInt(element.Quantity),
-                                CostPerItem: Math.ceil(
-                                  parseFloat(element.FullItemDetails.Price),
-                                ),
-                              }
-                            })
+                <Grid item container xs={11} justify="space-between">
+                  <Grid item xs={8}>
+                    <TextField
+                      id="user-bio"
+                      label="Address"
+                      type="text"
+                      error={shippingAddressHelperText}
+                      helperText={shippingAddressHelperText}
+                      placeholder="Enter the shipping address"
+                      variant="filled"
+                      fullWidth
+                      onChange={(event) => {
+                        setShippingAddressHelperText(null)
+                        // update state
+                        setShippingAddress(event.target.value)
+                      }}
+                    />
+                  </Grid>
+                  <Grid item container align="right" justify="flex-end" xs={4}>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          if (!shippingAddress || shippingAddress === '') {
+                            setShippingAddressHelperText('Required')
+                            return
+                          }
 
-                          let MAKE_ORDER_URL =
-                            'https://jbcqty2yxb.execute-api.us-east-1.amazonaws.com/dev/createorder'
-                          let requestOptions = {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              SponsorID:
-                                props.dialogProps.activeSponsor.SponsorID,
-                              DriverID: props.dialogProps.activeDriver.Username,
-                              ProductIDs: ordered_products,
-                              Cost: Math.ceil(
-                                cart_cost *
+                          if (
+                            cart_cost > 0 &&
+                            cart_cost < props.dialogProps.activeSponsor.Points
+                          ) {
+                            let ordered_products = props.dialogProps.cart
+                              .filter((element) => element.Quantity > 0)
+                              .map((element) => {
+                                return {
+                                  ProductID: element.ProductID,
+                                  Quantity: parseInt(element.Quantity),
+                                  CostPerItem: parseFloat(
+                                    element.FullItemDetails.Price,
+                                  ),
+                                }
+                              })
+
+                            let requestOptions = {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                SponsorID: props.dialogProps.activeSponsor.SponsorID.replaceAll(
+                                  "'",
+                                  "''",
+                                ),
+                                DriverID: props.dialogProps.activeDriver.Username.replaceAll(
+                                  "'",
+                                  "''",
+                                ),
+                                ProductIDs: ordered_products,
+                                Cost:
+                                  cart_cost *
                                   props.dialogProps.activeSponsor
                                     .PointToDollarRatio,
-                              ),
-                            }),
+
+                                ShippingAddress: shippingAddress.replaceAll(
+                                  "'",
+                                  "''",
+                                ),
+                              }),
+                            }
+                            fetch(apis.CreateOrder, requestOptions).then(() => {
+                              history.push('/orders')
+                            })
                           }
-                          fetch(MAKE_ORDER_URL, requestOptions).then(() => {
-                            history.push('/orders')
-                          })
-                        }
-                      }}
-                    >
-                      Check out
-                    </Button>
+                        }}
+                      >
+                        Check out
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      {cart_cost} points
+                    </Grid>
                   </Grid>
-                  <Grid item>{cart_cost} points</Grid>
                 </Grid>
               ) : cart_cost > props.dialogProps.activeSponsor.Points ? (
                 <p>

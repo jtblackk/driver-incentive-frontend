@@ -35,7 +35,6 @@ function TopAppBar(props) {
                 <Typography variant="h6">{props.pageTitle}</Typography>
               </Grid>
               <Grid item>
-                {/* TODO: make this a profile widget */}
                 <Typography>{userData.Username.split('@')[0]}</Typography>
               </Grid>
             </Grid>
@@ -53,7 +52,6 @@ function TopAppBar(props) {
                 <Typography variant="h6">{props.pageTitle}</Typography>
               </Grid>
               <Grid item>
-                {/* TODO: make this a profile widget */}
                 <Typography>{userData.Username.split('@')[0]}</Typography>
               </Grid>
 

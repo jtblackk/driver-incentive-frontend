@@ -12,6 +12,7 @@ import EditAccountCard from '../Components/EditAccountCard'
 import LoadingIcon from '../Components/LoadingIcon'
 import Amplify from 'aws-amplify'
 import aws_exports from '../aws-exports'
+import apis from '../Helpers/api_endpoints'
 
 Amplify.configure(aws_exports)
 
@@ -134,20 +135,18 @@ function ProfilePageContent(props) {
                         AccountType: newData.AccountType,
                       })
 
-                      let SAVE_USER_PROFILE_URL =
-                        'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails'
                       let requestOptions = {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                          Username: newData.Username,
-                          FirstName: newData.FirstName,
-                          LastName: newData.LastName,
-                          Bio: newData.Bio,
+                          Username: newData.Username.replaceAll("'", "''"),
+                          FirstName: newData.FirstName.replaceAll("'", "''"),
+                          LastName: newData.LastName.replaceAll("'", "''"),
+                          Bio: newData.Bio.replaceAll("'", "''"),
                           AccountType: newData.AccountType,
                         }),
                       }
-                      fetch(SAVE_USER_PROFILE_URL, requestOptions).then(() => {
+                      fetch(apis.ChangeUserInfo, requestOptions).then(() => {
                         setIsLoading(false)
                         setIsEditing(!isEditing)
                       })

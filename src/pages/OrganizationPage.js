@@ -9,6 +9,7 @@ import { UserContext } from '../Helpers/UserContext'
 import { Grid } from '@material-ui/core'
 import SuperSponsorContent from '../Components/SuperSponsorOrganizationContent'
 import OrganizationContent from '../Components/OrganizationContent'
+import apis from '../Helpers/api_endpoints'
 // set up styling
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,8 +43,10 @@ function OrganizationPage() {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
-      let org_users_raw = await fetch(GET_ORG_USERS_URL)
+      // let GET_ORG_USERS_URL = `https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=${userData.Organization}`
+      let org_users_raw = await fetch(
+        apis.GetOrgUserData + userData.Organization,
+      )
       let org_users_json = await org_users_raw.json()
       let org_users_array = await JSON.parse(org_users_json.body.toString())
 
@@ -95,10 +98,16 @@ function OrganizationPage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Your organization"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )
@@ -112,7 +121,7 @@ function OrganizationPage() {
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Grid container justify="center">
+          <Grid container justify="flex-start">
             <Grid item container xs={10} xl={6}>
               <OrganizationContent
                 orgProps={{

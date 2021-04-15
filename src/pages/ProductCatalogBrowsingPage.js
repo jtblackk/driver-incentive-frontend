@@ -10,6 +10,7 @@ import {
   Grid,
   IconButton,
   MenuItem,
+  Paper,
   Select,
   Typography,
 } from '@material-ui/core'
@@ -18,6 +19,7 @@ import ChooseCatalogSponsorDialog from '../Components/ChooseCatalogSponsorDialog
 import CartDialog from '../Components/CartDialog'
 import LoadingIcon from '../Components/LoadingIcon'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,8 +133,7 @@ const ProductCatalogBrowsingPage = (props) => {
     setIsLoading(true)
     setActiveSponsor(state)
 
-    let CATALOG_ITEMS_URL = `https://bfv61oiy3h.execute-api.us-east-1.amazonaws.com/dev/getcatalogitems?SponsorID=${state.SponsorID}`
-    let catalog_items_raw = await fetch(CATALOG_ITEMS_URL)
+    let catalog_items_raw = await fetch(apis.GetCatalogItems + state.SponsorID)
     let catalog_items_json = await catalog_items_raw.json()
     let catalog_items_array = await JSON.parse(
       catalog_items_json.body.toString(),
@@ -142,8 +143,6 @@ const ProductCatalogBrowsingPage = (props) => {
       (element) => element.S,
     )
 
-    let GET_EBAY_ITEMS_URL =
-      'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
     let requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -151,7 +150,7 @@ const ProductCatalogBrowsingPage = (props) => {
         ProductIDs: catalog_items_formatted,
       }),
     }
-    let item_data_raw = await fetch(GET_EBAY_ITEMS_URL, requestOptions)
+    let item_data_raw = await fetch(apis.GetEbayItemsByIDs, requestOptions)
     let item_data_json = await item_data_raw.json()
     let item_data_parsed = JSON.parse(item_data_json.body)
 
@@ -162,7 +161,7 @@ const ProductCatalogBrowsingPage = (props) => {
         PhotoURL: element.PictureURL[0],
         Stock: element.Quantity - element.QuantitySold,
         Description: element.Description.slice(0, 550),
-        Price: Math.ceil(element.ConvertedCurrentPrice.Value),
+        Price: element.ConvertedCurrentPrice.Value,
         Location: element.Location,
       }
     }).filter((element) => element.Stock > 0)
@@ -174,8 +173,9 @@ const ProductCatalogBrowsingPage = (props) => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = await JSON.parse(
         partnered_sponsors_data.body.toString(),
@@ -239,13 +239,18 @@ const ProductCatalogBrowsingPage = (props) => {
           pageTitle="Product catalog"
           customItem={
             <Grid item xs={12} container justify="space-between">
-              <Grid item align="left">
+              <Grid item xs={2} align="left">
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={activeSponsor.SponsorID}
                   variant="standard"
-                  style={{ color: 'white' }}
+                  color="primary"
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
                   fullWidth
                 >
                   {registeredSponsors
@@ -273,7 +278,9 @@ const ProductCatalogBrowsingPage = (props) => {
                 justify="flex-end"
                 alignItems="center"
               >
-                <Grid item>{activeSponsor.Points} points</Grid>
+                <Grid item>
+                  {activeSponsor.Points ? activeSponsor.Points : 0} points
+                </Grid>
                 <Grid item>
                   <IconButton
                     onClick={() => {
@@ -339,35 +346,54 @@ const ProductCatalogBrowsingPage = (props) => {
                                 </Typography>
                               </Grid>
 
-                              <Grid item xs={12} align="right">
-                                <Typography>
-                                  {element.Stock} in stock
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} align="right">
-                                <Typography>
-                                  {Math.ceil(
-                                    element.Price /
-                                      activeSponsor.PointToDollarRatio,
-                                  )}{' '}
-                                  Points
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12} align="right">
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() => {
-                                    addItemToCart(element, 1)
-                                  }}
+                              <Grid
+                                item
+                                xs={12}
+                                container
+                                justify="flex-end"
+                                // component={Paper}
+                              >
+                                <Grid
+                                  item
+                                  xs={3}
+                                  container
+                                  justify="center"
+                                  alignItems="center"
+                                  // component={Paper}
                                 >
-                                  Add to cart
-                                </Button>
+                                  <Grid item container spacing={1}>
+                                    <Grid item xs={12} align="right">
+                                      <Typography>
+                                        {element.Stock} in stock
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} align="right">
+                                      <Typography>
+                                        {Math.ceil(
+                                          element.Price /
+                                            activeSponsor.PointToDollarRatio,
+                                        )}{' '}
+                                        Points
+                                      </Typography>
+                                    </Grid>
+
+                                    <Grid item xs={12} align="right">
+                                      <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                          addItemToCart(element, 1)
+                                        }}
+                                      >
+                                        Add to cart
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
                               </Grid>
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid item xs={10}>
                               <Divider />
                             </Grid>
                           </Grid>
@@ -390,7 +416,59 @@ const ProductCatalogBrowsingPage = (props) => {
       </div>
     )
   } else {
-    return <LoadingIcon />
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar
+          pageTitle="Product catalog"
+          customItem={
+            <Grid item xs={12} container justify="space-between">
+              <Grid item xs={2} align="left">
+                <Select
+                  variant="standard"
+                  color="primary"
+                  fullWidth
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
+                ></Select>
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                container
+                spacing={1}
+                justify="flex-end"
+                alignItems="center"
+              >
+                <Grid item>0 points</Grid>
+                <Grid item>
+                  <IconButton
+                    onClick={() => {
+                      setCartDialogIsOpenState(true)
+                    }}
+                  >
+                    <ShoppingCartIcon style={{ color: 'white' }} />
+                  </IconButton>
+                  {cart_count}
+                </Grid>
+              </Grid>
+            </Grid>
+          }
+        ></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
+        </main>
+      </div>
+    )
   }
 }
 

@@ -10,6 +10,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import GenericTable from '../Components/GenericTable'
 import DriverManagementDialog from '../Components/DriverManagementDialog'
 import SetAllPointRatiosDialog from '../Components/SetAllPointRatiosDialog'
+import getUserDetails from '../Helpers/CommonFunctions'
 import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,10 +27,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const DriverManagementPage = () => {
+const SponsorshipManagementView = (props) => {
   const classes = useStyles()
 
-  const userData = useContext(UserContext).user
+  const userData = { Username: props.SponsorID }
+
   const [isLoading, setIsLoading] = useState(true)
 
   // dialog control
@@ -51,25 +53,25 @@ const DriverManagementPage = () => {
       id: 'Username',
       label: 'Username',
       isDate: false,
-      width: 100,
+      width: 125,
     },
     {
       id: 'FirstName',
       label: 'First name',
       isDate: false,
-      width: 100,
+      width: 75,
     },
     {
       id: 'LastName',
       label: 'Last name',
       isDate: false,
-      width: 115,
+      width: 75,
     },
     {
       id: 'TotalPoints',
       label: 'Total points',
       isDate: false,
-      width: 100,
+      width: 75,
     },
     {
       id: 'PointValue',
@@ -121,7 +123,7 @@ const DriverManagementPage = () => {
   }
 
   useEffect(() => {
-    // setIsLoading(true)
+    setIsLoading(true)
     ;(async () => {
       // fetch and parse sponsor's driver's profiles
 
@@ -244,28 +246,7 @@ const DriverManagementPage = () => {
     })().then(() => {
       setIsLoading(false)
     })
-
-    // setTable2HeadCells([
-    //   {
-    //     id: 'Username',
-    //     label: 'Username',
-    //     isDate: false,
-    //     width: 100,
-    //   },
-    //   {
-    //     id: 'FirstName',
-    //     label: 'First name',
-    //     isDate: false,
-    //     width: 100,
-    //   },
-    //   {
-    //     id: 'LastName',
-    //     label: 'Last name',
-    //     isDate: false,
-    //     width: 115,
-    //   },
-    // ])
-  }, [pageUpdate])
+  }, [pageUpdate, props.SponsorID, props.updatePage.updateCount])
 
   const [pointRatioDialogIsOpen, setPointRatioDialogIsOpen] = useState(false)
   function setPointRatioDialogIsOpenState(state, refresh) {
@@ -285,154 +266,137 @@ const DriverManagementPage = () => {
 
   if (!isLoading) {
     return (
-      <div className={classes.root}>
+      <Grid
+        container
+        justify="flex-start"
+        alignContent="center"
+        direction="row"
+        // spacing={4}
+      >
         <SetAllPointRatiosDialog
           dialogIsOpen={pointRatioDialogIsOpen}
           setDialogIsOpen={setPointRatioDialogIsOpenState}
           SponsorID={userData.Username}
-          // setDialogResponse={setPointRatioDialogIsOpenState}
-          // fullPageUpdate={setPointRatioDialogIsOpenState}
         />
 
-        {/* layout stuff */}
-        <TopAppBar pageTitle="Drivers"></TopAppBar>
-        <LeftDrawer AccountType={userData.AccountType} />
-
         {/* page content (starts after first div) */}
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
+        {/* <main className={classes.content}> */}
+        {/* <div className={classes.toolbar} /> */}
 
-          {dialogIsOpen ? (
-            <DriverManagementDialog
-              // selectedEntry={selectedEntry}
-              dialogIsOpen={dialogIsOpen}
-              setDialogIsOpenState={setDialogIsOpenState}
-              setAllDriverDataState={setAllDriverDataState}
-              allDriverData={allDriverData}
-              selectedDriverData={allDriverData.find(
-                (entry) => entry.Username === selectedEntry.Username,
-              )}
-              fullPageUpdate={fullPageUpdateState}
-            />
-          ) : null}
+        {dialogIsOpen ? (
+          <DriverManagementDialog
+            // selectedEntry={selectedEntry}
+            dialogIsOpen={dialogIsOpen}
+            setDialogIsOpenState={setDialogIsOpenState}
+            setAllDriverDataState={setAllDriverDataState}
+            allDriverData={allDriverData}
+            selectedDriverData={allDriverData.find(
+              (entry) => entry.Username === selectedEntry.Username,
+            )}
+            fullPageUpdate={fullPageUpdateState}
+          />
+        ) : null}
 
+        {/* active drivers */}
+        <Grid item xs={12} component={Paper} style={{ padding: 20 }}>
+          {/* <Paper>
+              <div style={{ padding: 20 }}> */}
           <Grid
             container
-            justify="flex-start"
-            alignContent="center"
-            direction="row"
-            spacing={4}
+            justify="space-between"
+            alignItems="center"
+            spacing={2}
           >
-            {/* active drivers */}
-            <Grid item xs={10} xl={6}>
-              <Paper>
-                <div style={{ padding: 20 }}>
-                  <Grid
-                    container
-                    justify="space-between"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <Grid item xs={12}>
-                      <Typography variant="h6">Your drivers</Typography>
-                      <Typography>
-                        A list of the drivers you're sponsoring. Click on an
-                        entry for more information.
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <br></br>
-                  <Grid item container xs={12} justify="flex-end">
-                    {/* set all point values button */}
-                    <Grid item align="right">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // bring up dialog to set all point ratios
-                          setPointRatioDialogIsOpen(true)
-                        }}
-                      >
-                        SET ALL POINT VALUES
-                      </Button>
-                    </Grid>
-                  </Grid>
-
-                  <br></br>
-                  <GenericTable
-                    headCells={table1HeadCells}
-                    data={table1Data}
-                    setDataState={setTable1DataState}
-                    tableKey="Username"
-                    showKey={true}
-                    initialSortedColumn="LastName"
-                    initialSortedDirection="asc"
-                    selectedRow={selectedEntry}
-                    setSelectedRow={setSelectedEntryState}
-                    dialogIsOpen={dialogIsOpen}
-                    setDialogIsOpenState={setDialogIsOpenState}
-                  />
-                </div>
-              </Paper>
-            </Grid>
-
-            {/* active drivers */}
-            <Grid item xs={10} xl={6}>
-              <Paper>
-                <div style={{ padding: 20 }}>
-                  <Grid
-                    container
-                    justify="space-between"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <Grid item xs={12}>
-                      <Typography variant="h6">Past drivers</Typography>
-                      <Typography>
-                        A list of your past drivers (i.e., any driver whos
-                        sponsorship has been terminated)
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <br></br>
-
-                  <GenericTable
-                    headCells={table2HeadCells}
-                    data={table2Data}
-                    setDataState={setTable2DataState}
-                    tableKey="Username"
-                    showKey={true}
-                    initialSortedColumn="LastName"
-                    initialSortedDirection="asc"
-                    selectedRow={selectedEntry}
-                    setSelectedRow={setSelectedEntryState}
-                    dialogIsOpen={dialogIsOpen}
-                    setDialogIsOpenState={setDialogIsOpenState}
-                  />
-                </div>
-              </Paper>
+            <Grid item xs={12}>
+              <Typography variant="h6">Active drivers</Typography>
+              <Typography>A list of the sponsor's active drivers.</Typography>
             </Grid>
           </Grid>
-        </main>
-      </div>
+          {/* <br></br> */}
+          <Grid item container xs={12} justify="flex-end">
+            {/* set all point values button */}
+            <Grid item align="right">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  // bring up dialog to set all point ratios
+                  setPointRatioDialogIsOpen(true)
+                }}
+              >
+                SET ALL POINT VALUES
+              </Button>
+            </Grid>
+          </Grid>
+
+          <br></br>
+          <Grid item xs={12}>
+            <GenericTable
+              headCells={table1HeadCells}
+              data={table1Data}
+              setDataState={setTable1DataState}
+              tableKey="Username"
+              showKey={true}
+              initialSortedColumn="LastName"
+              initialSortedDirection="asc"
+              selectedRow={selectedEntry}
+              setSelectedRow={setSelectedEntryState}
+              dialogIsOpen={dialogIsOpen}
+              setDialogIsOpenState={setDialogIsOpenState}
+            />
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <br></br>
+        </Grid>
+
+        {/* inactive drivers */}
+        <Grid item xs={12} component={Paper} style={{ padding: 20 }}>
+          <Grid
+            container
+            justify="space-between"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item xs={12}>
+              <Typography variant="h6">Inactive drivers</Typography>
+              <Typography>
+                A list of the drivers that the sponsor no longer sponsors.
+              </Typography>
+            </Grid>
+          </Grid>
+          <br></br>
+
+          <GenericTable
+            headCells={table2HeadCells}
+            data={table2Data}
+            setDataState={setTable2DataState}
+            tableKey="Username"
+            showKey={true}
+            initialSortedColumn="LastName"
+            initialSortedDirection="asc"
+            selectedRow={selectedEntry}
+            setSelectedRow={setSelectedEntryState}
+            dialogIsOpen={dialogIsOpen}
+            setDialogIsOpenState={setDialogIsOpenState}
+          />
+          {/* </div> */}
+          {/* </Paper> */}
+        </Grid>
+      </Grid>
     )
   } else {
     return (
-      <div className={classes.root}>
-        {/* layout stuff */}
-        <TopAppBar pageTitle="Drivers"></TopAppBar>
-        <LeftDrawer AccountType={userData.AccountType} />
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Grid container justify="center">
-            <Grid item xs={12}>
-              <LoadingIcon />
-            </Grid>
-          </Grid>
-        </main>
-      </div>
+      <Grid container justify="center">
+        <Grid item xs={12}>
+          <br />
+        </Grid>
+        <Grid item align="left">
+          <LoadingIcon />
+        </Grid>
+      </Grid>
     )
   }
 }
 
-export default DriverManagementPage
+export default SponsorshipManagementView

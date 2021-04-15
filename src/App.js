@@ -24,6 +24,10 @@ import ViewSponsorsPage from './pages/ViewSponsorsPage'
 import OrganizationSetupPage from './pages/OrganizationSetupPage'
 import OrganizationPage from './pages/OrganizationPage'
 import OrderReviewPage from './pages/OrderReviewPage'
+import UserManagementPage from './pages/UserManagementPage'
+import SponsorshipManagementPage from './pages/SponsorshipManagementPage'
+import SponsorInvoicePage from './pages/SponsorInvoicePage'
+import AdminInvoicePage from './pages/AdminInvoicePage'
 
 Amplify.configure(awsconfig)
 
@@ -81,6 +85,22 @@ function App() {
               />
               <Route exact path="/organization" component={OrganizationPage} />
               <Route exact path="/orders" component={OrderReviewPage} />
+              <Route
+                exact
+                path="/user-management"
+                component={UserManagementPage}
+              />
+              <Route
+                exact
+                path="/sponsorship-management"
+                component={SponsorshipManagementPage}
+              />
+              <Route
+                exact
+                path="/sponsor-invoice"
+                component={SponsorInvoicePage}
+              />
+              <Route exact path="/invoices" component={AdminInvoicePage} />
 
               <Route component={PageNotFoundPage} />
             </Switch>
@@ -89,7 +109,7 @@ function App() {
       </div>
     )
   } else {
-    return <LoadingIcon></LoadingIcon>
+    return null
   }
 }
 

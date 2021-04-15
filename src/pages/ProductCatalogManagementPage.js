@@ -11,6 +11,7 @@ import CatalogItemDialog from '../Components/CatalogItemDialog'
 import LoadingIcon from '../Components/LoadingIcon'
 import AddCatalogItemDialog from '../Components/AddCatalogItemDialog'
 import DeleteCatalogItemDialog from '../Components/DeleteCatalogItemDialog'
+import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,8 +91,9 @@ const ProductCatalogManagementPage = () => {
   useEffect(() => {
     setIsLoading(true)
     ;(async () => {
-      let CATALOG_ITEMS_URL = `https://bfv61oiy3h.execute-api.us-east-1.amazonaws.com/dev/getcatalogitems?SponsorID=${userData.Username}`
-      let catalog_items_raw = await fetch(CATALOG_ITEMS_URL)
+      let catalog_items_raw = await fetch(
+        apis.GetCatalogItems + userData.Username,
+      )
       let catalog_items_json = await catalog_items_raw.json()
       let catalog_items_array = await JSON.parse(
         catalog_items_json.body.toString(),
@@ -101,8 +103,6 @@ const ProductCatalogManagementPage = () => {
         (element) => element.S,
       )
 
-      let GET_EBAY_ITEMS_URL =
-        'https://emdjjz0xd8.execute-api.us-east-1.amazonaws.com/dev/getebayitemsbyproductids'
       let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -110,7 +110,7 @@ const ProductCatalogManagementPage = () => {
           ProductIDs: catalog_items_formatted,
         }),
       }
-      let item_data_raw = await fetch(GET_EBAY_ITEMS_URL, requestOptions)
+      let item_data_raw = await fetch(apis.GetEbayItemsByIDs, requestOptions)
       let item_data_json = await item_data_raw.json()
       let item_data_parsed = await JSON.parse(item_data_json.body)
 
@@ -151,7 +151,21 @@ const ProductCatalogManagementPage = () => {
   }, [pageUpdate])
 
   if (isLoading) {
-    return <LoadingIcon />
+    return (
+      <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Catalog management"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
+        </main>
+      </div>
+    )
   } else {
     return (
       <div className={classes.root}>
@@ -227,7 +241,7 @@ const ProductCatalogManagementPage = () => {
             }}
           />
 
-          <Grid container justify="center">
+          <Grid container justify="flex-start">
             <Grid item sm={12} md={11} lg={9} xl={7}>
               <ChooseCatalogItemsPanel
                 tableProps={{

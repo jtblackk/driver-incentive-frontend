@@ -10,6 +10,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import GenericTable from '../Components/GenericTable'
 import { useHistory } from 'react-router'
 import ViewSponsorAsDriverDialog from '../Components/ViewSponsorAsDriverDialog'
+import apis from '../Helpers/api_endpoints'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,8 +94,9 @@ const ViewSponsorsPage = () => {
     setIsLoading(true)
     ;(async () => {
       // get the sponsors that the driver is partnered to
-      let GET_DRIVERS_SPONSORS_URL = `https://8mhdaeq2kl.execute-api.us-east-1.amazonaws.com/dev/getuserdetails/?DriverID=${userData.Username}`
-      let partnered_sponsors_response = await fetch(GET_DRIVERS_SPONSORS_URL)
+      let partnered_sponsors_response = await fetch(
+        apis.GetSponsorshipDetails + '?DriverID=' + userData.Username,
+      )
       let partnered_sponsors_data = await partnered_sponsors_response.json()
       let partnered_sponsors_array = JSON.parse(
         partnered_sponsors_data.body.toString(),
@@ -214,18 +216,21 @@ const ViewSponsorsPage = () => {
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <ViewSponsorAsDriverDialog
-            dialogProps={{
-              dialogIsOpen: dialogIsOpen,
-              setDialogIsOpen: setDialogIsOpenState,
-              selectedEntry: selectedEntry,
-              allSponsorshipsData: allSponsorshipsData,
-            }}
-          />
+
+          {allSponsorshipsData && selectedEntry ? (
+            <ViewSponsorAsDriverDialog
+              dialogProps={{
+                dialogIsOpen: dialogIsOpen,
+                setDialogIsOpen: setDialogIsOpenState,
+                selectedEntry: selectedEntry,
+                allSponsorshipsData: allSponsorshipsData,
+              }}
+            />
+          ) : null}
 
           <Grid
             container
-            justify="center"
+            justify="flex-start"
             alignContent="center"
             direction="row"
             spacing={4}
@@ -236,9 +241,7 @@ const ViewSponsorsPage = () => {
                   <Grid container justify="space-between" alignItems="center">
                     <Grid item>
                       <Typography variant="h6">Your sponsors</Typography>
-                      <Typography>
-                        A list of the sponsors you're registered to
-                      </Typography>
+                      <Typography>A list of your sponsors</Typography>
                     </Grid>
                   </Grid>
                   <br></br>
@@ -258,6 +261,8 @@ const ViewSponsorsPage = () => {
                 </div>
               </Paper>
             </Grid>
+
+            <Grid item xs={12}></Grid>
             <Grid item xs={10} xl={6}>
               <Paper>
                 <div style={{ padding: 20 }}>
@@ -304,9 +309,16 @@ const ViewSponsorsPage = () => {
   } else {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Sponsors"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )

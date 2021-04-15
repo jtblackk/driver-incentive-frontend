@@ -9,6 +9,7 @@ import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
 import { Grid, Paper } from '@material-ui/core'
 import GenericTable from '../Components/GenericTable'
+import apis from '../Helpers/api_endpoints'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +57,12 @@ const currentOrdersTableHeadCells = [
     isDate: true,
     width: 50,
   },
+  {
+    id: 'ShippingAddress',
+    label: 'Destination',
+    isDate: false,
+    width: 200,
+  },
 ]
 
 const previousOrdersTableHeadCells = [
@@ -80,6 +87,12 @@ const previousOrdersTableHeadCells = [
   {
     id: 'OrderDate',
     label: 'Ordered on',
+    isDate: false,
+    width: 200,
+  },
+  {
+    id: 'ShippingAddress',
+    label: 'Destination',
     isDate: false,
     width: 200,
   },
@@ -117,17 +130,16 @@ export default function OrderReviewPage() {
     ;(async () => {
       // start loading animation
       setIsLoading(true)
-      let USER_ORDERS_URL =
-        'https://45mkccncmi.execute-api.us-east-1.amazonaws.com/dev/getorder'
+
       let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          DriverID: userData.Username,
+          DriverID: userData.Username.replaceAll("'", "''"),
         }),
       }
 
-      let user_orders_resp = await fetch(USER_ORDERS_URL, requestOptions)
+      let user_orders_resp = await fetch(apis.GetOrder, requestOptions)
       let user_orders_json = await user_orders_resp.json()
       let user_orders_obj = JSON.parse(user_orders_json.body)
       let user_orders_arr = user_orders_obj.Items
@@ -139,9 +151,10 @@ export default function OrderReviewPage() {
           SponsorID: element.SponsorID.S,
           Organization: element.Organization.S,
           Status: parseInt(element.Status.N),
-          Cost: Math.ceil(parseFloat(element.Cost.N)),
+          Cost: parseFloat(element.Cost.N),
           PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
           OrderDate: element.OrderSubmitted.S,
+          ShippingAddress: element.ShippingAddress.S,
           Products: element.M
             ? element.ProductIDs.L.map((element) => {
                 return {
@@ -177,6 +190,7 @@ export default function OrderReviewPage() {
               : element.Status === 3
               ? 'Delivered'
               : 'Unknown status',
+          ShippingAddress: element.ShippingAddress,
         }
       })
 
@@ -187,6 +201,7 @@ export default function OrderReviewPage() {
           SponsorID: element.SponsorID,
           Cost: element.Cost / element.PointDollarRatio,
           OrderDate: element.OrderDate,
+          ShippingAddress: element.ShippingAddress,
         }
       })
 
@@ -204,10 +219,16 @@ export default function OrderReviewPage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        {/* layout stuff */}
+        <TopAppBar pageTitle="Your orders"></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-
-          <LoadingIcon />
+          <Grid container justify="center">
+            <Grid item xs={12}>
+              <LoadingIcon />
+            </Grid>
+          </Grid>
         </main>
       </div>
     )
@@ -218,20 +239,10 @@ export default function OrderReviewPage() {
         <TopAppBar pageTitle="Your orders"></TopAppBar>
         <LeftDrawer AccountType={userData.AccountType} />
 
-        {/* <ProfileSelectionDialog
-          dialogProps={{
-            profileSelectionDialogIsOpen: profileSelectionDialogIsOpen,
-            setProfileSelectionDialogIsOpenState: setProfileSelectionDialogIsOpenState,
-            fullPageUpdateState: fullPageUpdateState,
-            activeProfile: activeProfile,
-            setActiveProfile: setActiveProfile,
-          }}
-        /> */}
-
         {/* page content (starts after first div) */}
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Grid item container justify="center">
+          <Grid item container justify="flex-start">
             {/* <Grid item xs={12}> */}
             <Grid item xs={10} xl={6}>
               <Paper>

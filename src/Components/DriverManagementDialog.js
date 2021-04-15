@@ -21,6 +21,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close'
 import GenericTable from './GenericTable'
 import LoadingIcon from './LoadingIcon'
+import apis from '../Helpers/api_endpoints'
 require('datejs')
 
 function DriverManagementTab(props) {
@@ -201,18 +202,22 @@ function DriverManagementTab(props) {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  let UPDATE_SPONSORSHIP_URL =
-                    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
                   let requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      SponsorID: props.selectedDriverData.SponsorID,
-                      DriverID: props.selectedDriverData.DriverID,
+                      SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                        "'",
+                        "''",
+                      ),
+                      DriverID: props.selectedDriverData.DriverID.replaceAll(
+                        "'",
+                        "''",
+                      ),
                       Status: 2,
                     }),
                   }
-                  fetch(UPDATE_SPONSORSHIP_URL, requestOptions)
+                  fetch(apis.ChangeSponsorshipInfo, requestOptions)
 
                   props.handleClose(true)
                 }}
@@ -253,7 +258,7 @@ function EditPointDollarRatioMenu(props) {
       <Grid item xs={12}>
         <Typography variant="h6">Point value</Typography>
         <Typography>
-          View and edit the point to dollar value ratio for your driver. For
+          View and edit the point to dollar value ratio for the driver. For
           example, typing in .005 would mean that 1 point is worth .005 USD for
           this particular driver.
         </Typography>
@@ -289,20 +294,23 @@ function EditPointDollarRatioMenu(props) {
                 return
               }
 
-              let SAVE_APPLICATION_RESPONSE_URL =
-                'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
               let requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  SponsorID: props.selectedDriverData.SponsorID,
-                  DriverID: props.selectedDriverData.DriverID,
+                  SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                    "'",
+                    "''",
+                  ),
+                  DriverID: props.selectedDriverData.DriverID.replaceAll(
+                    "'",
+                    "''",
+                  ),
                   PointDollarRatio: parseFloat(newPointDollarRatio),
                 }),
               }
 
-              fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(() => {
+              fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
                 let newDriverDataState = props.allDriverData.map((element) => {
                   if (element.Username === props.selectedDriverData.DriverID) {
                     return {
@@ -396,47 +404,46 @@ function EditDriverPointsMenu(props) {
                 }
                 if (exit) return
 
-                let SAVE_APPLICATION_RESPONSE_URL =
-                  'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
                 let requestOptions = {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    SponsorID: props.selectedDriverData.SponsorID,
-                    DriverID: props.selectedDriverData.DriverID,
+                    SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                      "'",
+                      "''",
+                    ),
+                    DriverID: props.selectedDriverData.DriverID.replaceAll(
+                      "'",
+                      "''",
+                    ),
                     Points:
                       parseInt(props.selectedDriverData.Points) -
                       parseInt(pointQuantity),
-                    PointChangeReason: reason,
+                    PointChangeReason: reason.replaceAll("'", "''"),
                   }),
                 }
 
-                fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                  () => {
-                    let newDriverDataState = props.allDriverData.map(
-                      (element) => {
-                        if (
-                          element.Username === props.selectedDriverData.DriverID
-                        ) {
-                          return {
-                            ...element,
-                            Points:
-                              parseInt(props.selectedDriverData.Points) -
-                              parseInt(pointQuantity),
-                          }
-                        } else {
-                          return element
+                fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                  let newDriverDataState = props.allDriverData.map(
+                    (element) => {
+                      if (
+                        element.Username === props.selectedDriverData.DriverID
+                      ) {
+                        return {
+                          ...element,
+                          Points:
+                            parseInt(props.selectedDriverData.Points) -
+                            parseInt(pointQuantity),
                         }
-                      },
-                    )
+                      } else {
+                        return element
+                      }
+                    },
+                  )
 
-                    props.setAllDriverDataState(newDriverDataState)
-                    props.triggerPageUpdate()
-                  },
-                )
-
-                // TODO: make sure that the point history table reflects points changes. Waiting on api for point history logs.
+                  props.setAllDriverDataState(newDriverDataState)
+                  // props.triggerPageUpdate()
+                })
               }}
             >
               Deduct
@@ -461,49 +468,46 @@ function EditDriverPointsMenu(props) {
                 }
                 if (exit) return
 
-                let SAVE_APPLICATION_RESPONSE_URL =
-                  'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo'
-
                 let requestOptions = {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    SponsorID: props.selectedDriverData.SponsorID,
-                    DriverID: props.selectedDriverData.DriverID,
+                    SponsorID: props.selectedDriverData.SponsorID.replaceAll(
+                      "'",
+                      "''",
+                    ),
+                    DriverID: props.selectedDriverData.DriverID.replaceAll(
+                      "'",
+                      "''",
+                    ),
                     Points:
                       parseInt(props.selectedDriverData.Points) +
                       parseInt(pointQuantity),
-                    PointChangeReason: reason,
-                    // TODO: provide reason for point change. waiting on api/table for this
+                    PointChangeReason: reason.replaceAll("'", "''"),
                   }),
                 }
 
-                fetch(SAVE_APPLICATION_RESPONSE_URL, requestOptions).then(
-                  () => {
-                    let newDriverDataState = props.allDriverData.map(
-                      (element) => {
-                        if (
-                          element.Username === props.selectedDriverData.DriverID
-                        ) {
-                          return {
-                            ...element,
-                            Points:
-                              parseInt(props.selectedDriverData.Points) +
-                              parseInt(pointQuantity),
-                          }
-                        } else {
-                          return element
+                fetch(apis.ChangeSponsorshipInfo, requestOptions).then(() => {
+                  let newDriverDataState = props.allDriverData.map(
+                    (element) => {
+                      if (
+                        element.Username === props.selectedDriverData.DriverID
+                      ) {
+                        return {
+                          ...element,
+                          Points:
+                            parseInt(props.selectedDriverData.Points) +
+                            parseInt(pointQuantity),
                         }
-                      },
-                    )
+                      } else {
+                        return element
+                      }
+                    },
+                  )
 
-                    props.setAllDriverDataState(newDriverDataState)
-                    props.triggerPageUpdate()
-                  },
-                )
-
-                // props.triggerPageUpdate()
-                // TODO: make sure that the point history table reflects points changes. if it doesn't, fix it. waiting on api.
+                  props.setAllDriverDataState(newDriverDataState)
+                  // props.triggerPageUpdate()
+                })
               }}
             >
               Add
@@ -523,26 +527,26 @@ function DriverPointsTab(props) {
   // point history table
   const table1HeadCells = [
     {
-      id: 'Date',
+      id: 'ChangeDate',
       label: 'Date',
       isDate: true,
       width: 200,
     },
     {
-      id: 'Reason',
+      id: 'ChangeReason',
       label: 'Reason',
       isDate: false,
       width: 150,
     },
     {
-      id: 'TotalPoints',
-      label: 'Total points',
+      id: 'ChangeAmount',
+      label: 'Change',
       isDate: false,
       width: 50,
     },
     {
-      id: 'PointsChange',
-      label: 'Difference',
+      id: 'TotalPoints',
+      label: 'Total points',
       isDate: false,
       width: 50,
     },
@@ -564,26 +568,38 @@ function DriverPointsTab(props) {
   }
 
   useEffect(() => {
-    setIsLoading(true)
+    // setIsLoading(true)
     ;(async () => {
-      setTable1Data([
-        {
-          Date: '2021-03-11 23:08:19.748211',
-          Reason: '<a really good reason>',
-          TotalPoints: 1650,
-          PointsChange: (150 > 0 ? '+' : '-') + 150,
-        },
-        {
-          Date: '2021-03-11 23:08:50.891743',
-          Reason: '<please replace me with an actual api call please>',
-          TotalPoints: 1500,
-          PointsChange: (-150 > 0 ? '+' : null) + -150,
-        },
-      ])
+      // point change api data
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          SponsorID: props.selectedDriverData.SponsorID.replaceAll("'", "''"),
+          DriverID: props.selectedDriverData.DriverID.replaceAll("'", "''"),
+        }),
+      }
+      let point_history_resp = await fetch(
+        apis.GetPointHistoryBySonsorship,
+        requestOptions,
+      )
+      let point_history_json = await point_history_resp.json()
+
+      let point_history_array = point_history_json.body.map((element) => {
+        return {
+          ChangeID: element.ChangeID.S,
+          ChangeDate: element.TimeStamp.S.replace(' ', 'T').split('.')[0],
+          ChangeReason: element.PointChangeReason.S,
+          ChangeAmount: parseInt(element.PointDifference.N),
+          TotalPoints: parseInt(element.TotalPoints.N),
+        }
+      })
+
+      setTable1Data(point_history_array)
     })().then(() => {
       setIsLoading(false)
     })
-  }, [pageUpdate])
+  }, [pageUpdate, props.allDriverData])
 
   let COLUMN_SPACING = 1
 
@@ -651,9 +667,11 @@ function DriverPointsTab(props) {
                       <Typography>View the driver's point history</Typography>
                     )}
                   </Grid>
-
+                  <Grid item xs={12}>
+                    {/* <br /> */}
+                  </Grid>
                   {props.selectedDriverData.Status < 3 ? (
-                    <Grid item xs={6} align="right">
+                    <Grid item xs={12} align="right">
                       <Typography variant="h6">
                         {props.selectedDriverData.Points} points total
                       </Typography>
@@ -675,14 +693,231 @@ function DriverPointsTab(props) {
                     headCells={table1HeadCells}
                     data={table1Data}
                     setDataState={setTable1DataState}
-                    tableKey="Date"
+                    tableKey="ChangeID"
+                    showKey={false}
+                    initialSortedColumn="ChangeDate"
+                    initialSortedDirection="desc"
+                    // selectedRow={selectedEntry}
+                    // setSelectedRow={setSelectedEntryState}
+                    // dialogIsOpen={props.dialogIsOpen}
+                    // setDialogIsOpenState={props.setDialogIsOpenState}
+                  ></GenericTable>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                {' '}
+                <br />
+              </Grid>
+            </Grid>
+          </DialogContent>
+        </Grid>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <LoadingIcon />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+      </div>
+    )
+  }
+}
+
+function OrdersTab(props) {
+  const [isLoading, setIsLoading] = useState(true)
+
+  // point history table
+  const table1HeadCells = [
+    {
+      id: 'Cost',
+      label: 'Cost (points)',
+      isDate: true,
+      width: 30,
+    },
+
+    {
+      id: 'Status',
+      label: 'Status',
+      isDate: false,
+      width: 50,
+    },
+    {
+      id: 'OrderDate',
+      label: 'Ordered on',
+      isDate: false,
+      width: 250,
+    },
+    {
+      id: 'ShippingAddress',
+      label: 'Destination',
+      isDate: false,
+      width: 250,
+    },
+  ]
+
+  const [table1Data, setTable1Data] = useState(null)
+  function setTable1DataState(state) {
+    setTable1Data(state)
+  }
+
+  const [selectedEntry, setSelectedEntry] = useState(null)
+  function setSelectedEntryState(state) {
+    setSelectedEntry(state)
+  }
+
+  const [pageUpdate, setPageUpdate] = useState(0)
+  function triggerPageUpdate() {
+    setPageUpdate(pageUpdate + 1)
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    ;(async () => {
+      // order history api
+
+      let requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          DriverID: props.selectedDriverData.Username.replaceAll("'", "''"),
+        }),
+      }
+
+      let user_orders_resp = await fetch(apis.GetOrder, requestOptions)
+      let user_orders_json = await user_orders_resp.json()
+      let user_orders_obj = JSON.parse(user_orders_json.body)
+      let user_orders_arr = user_orders_obj.Items
+
+      let all_orders_parsed = user_orders_arr
+        .map((element) => {
+          return {
+            OrderID: element.OrderID.S,
+            DriverID: element.DriverID.S,
+            SponsorID: element.SponsorID.S,
+            Organization: element.Organization.S,
+            Status: parseInt(element.Status.N),
+            Cost: parseFloat(element.Cost.N),
+            PointDollarRatio: parseFloat(element.CurrentPointDollarRatio.N),
+            OrderDate: element.OrderSubmitted.S,
+            ShippingAddress: element.ShippingAddress.S,
+            Products: element.M
+              ? element.ProductIDs.L.map((element) => {
+                  return {
+                    ProductID: element.M.ProductID.S,
+                    Quantity: parseInt(element.M.Quantity.N),
+                    PricePerItem: parseFloat(element.M.CostPerItem.N).toFixed(
+                      2,
+                    ),
+                  }
+                })
+              : [],
+          }
+        })
+        .filter(
+          (element) => element.SponsorID === props.selectedDriverData.SponsorID,
+        )
+
+      let all_orders_table_data = all_orders_parsed.map((element) => {
+        return {
+          OrderID: element.OrderID,
+          Cost: Math.ceil(element.Cost / element.PointDollarRatio),
+          Status:
+            element.Status === 1
+              ? 'Processing'
+              : element.Status === 2
+              ? 'In transit'
+              : element.Status === 3
+              ? 'Delivered'
+              : 'Unknown status',
+          OrderDate: element.OrderDate,
+          ShippingAddress: element.ShippingAddress,
+        }
+      })
+
+      setTable1Data(all_orders_table_data)
+    })().then(() => {
+      setIsLoading(false)
+    })
+  }, [pageUpdate])
+
+  let COLUMN_SPACING = 1
+
+  if (!isLoading) {
+    return (
+      <div>
+        <Grid container item component={Paper} xs={12}>
+          <DialogContent>
+            <Grid
+              item
+              container
+              direction="row"
+              spacing={COLUMN_SPACING}
+              justify="center"
+            >
+              <Grid item xs={12}>
+                <br />
+              </Grid>
+
+              {/* point history table */}
+              <Grid
+                item
+                container
+                xs={9}
+                spacing={2}
+                justify="center"
+                component={Paper}
+                style={{ padding: 20 }}
+              >
+                <Grid item container xs={12} alignItems="center">
+                  <Grid item xs={6} align="left">
+                    <Typography variant="h6">Order history</Typography>
+
+                    <Typography>View the driver's order history</Typography>
+                  </Grid>
+
+                  <GenericTable
+                    headCells={table1HeadCells}
+                    data={table1Data}
+                    setDataState={setTable1DataState}
+                    tableKey="OrderID"
                     showKey={false}
                     initialSortedColumn="Date"
                     initialSortedDirection="desc"
-                    selectedRow={selectedEntry}
-                    setSelectedRow={setSelectedEntryState}
-                    dialogIsOpen={props.dialogIsOpen}
-                    setDialogIsOpenState={props.setDialogIsOpenState}
+                    // selectedRow={selectedEntry}
+                    // setSelectedRow={setSelectedEntryState}
+                    // dialogIsOpen={props.dialogIsOpen}
+                    // setDialogIsOpenState={props.setDialogIsOpenState}
                   ></GenericTable>
                 </Grid>
               </Grid>
@@ -728,7 +963,7 @@ export default function DriverManagementDialog(props) {
       <Dialog
         open={props.dialogIsOpen}
         onClose={() => {
-          handleClose(false)
+          handleClose(true)
         }}
         aria-labelledby="form-dialog-title"
         fullWidth
@@ -767,6 +1002,7 @@ export default function DriverManagementDialog(props) {
         <AppBar position="static">
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="Points"></Tab>
+            <Tab label="Orders"></Tab>
             <Tab label="Manage"></Tab>
           </Tabs>
         </AppBar>
@@ -784,6 +1020,15 @@ export default function DriverManagementDialog(props) {
             setAllDriverDataState={props.setAllDriverDataState}
           />
         ) : currentTab === 1 ? (
+          <OrdersTab
+            selectedDriverData={props.selectedDriverData}
+            allDriverData={props.allDriverData}
+            setAllDriverDataState={props.setAllDriverDataState}
+            handleClose={handleClose}
+            fullPageUpdate={props.fullPageUpdate}
+            setDialogIsOpenState={props.setDialogIsOpenState}
+          />
+        ) : currentTab === 2 ? (
           <DriverManagementTab
             selectedDriverData={props.selectedDriverData}
             allDriverData={props.allDriverData}

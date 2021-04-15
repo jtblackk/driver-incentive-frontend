@@ -24,6 +24,8 @@ import StorageIcon from '@material-ui/icons/Storage'
 import GroupIcon from '@material-ui/icons/Group'
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import ReceiptIcon from '@material-ui/icons/Receipt'
+import PaymentIcon from '@material-ui/icons/Payment'
+
 import { UserContext } from '../Helpers/UserContext'
 
 // pages to show on the upper part of the drawer
@@ -98,17 +100,36 @@ const LeftDrawer = (props) => {
       reqAccTypes: ['Driver'],
     },
     {
-      name: 'User management',
+      name: 'Users',
       route: '/user-management',
       icon: <GroupIcon />,
       reqAccTypes: ['Admin'],
     },
     {
-      name: 'My logs',
-      route: '/logs',
-      icon: <StorageIcon />,
-      reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+      name: 'Sponsorships',
+      route: '/sponsorship-management',
+      icon: <LocalShippingIcon />,
+      reqAccTypes: ['Admin'],
     },
+    {
+      name: 'My invoices',
+      route: '/sponsor-invoice',
+      icon: <PaymentIcon />,
+      reqAccTypes: ['Sponsor'],
+    },
+    {
+      name: 'Invoices',
+      route: '/invoices',
+      icon: <PaymentIcon />,
+      reqAccTypes: ['Admin'],
+    },
+
+    // {
+    //   name: 'My logs',
+    //   route: '/logs',
+    //   icon: <StorageIcon />,
+    //   reqAccTypes: ['Admin', 'Driver', 'Sponsor'],
+    // },
   ]
 
   let bottom_pages = [

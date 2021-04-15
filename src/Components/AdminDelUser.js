@@ -71,9 +71,9 @@ function AdminDelUser() {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                Email_id: userDetails.Email_ID,
-                IsSuspended: userDetails.IsSuspended,
-                AdminNotes: userDetails.AdminNotes,
+                Email_id: userDetails.Email_ID.replaceAll("'", "''"),
+                IsSuspended: userDetails.IsSuspended.replaceAll("'", "''"),
+                AdminNotes: userDetails.AdminNotes.replaceAll("'", "''"),
               }),
             }
           }}

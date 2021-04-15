@@ -7,6 +7,10 @@ const EditAccountCard = (props) => {
   const userDetails = props.userProfile
   const [isLoading, setIsLoading] = useState(false)
 
+  const [firstNameHelperText, setFirstNameHelperText] = useState(null)
+  const [lastNameHelperText, setLastNameHelperText] = useState(null)
+  const [bioHelperText, setBioHelperText] = useState(null)
+
   if (isLoading) {
     return <div></div>
   } else {
@@ -19,14 +23,25 @@ const EditAccountCard = (props) => {
         spacing={2}
       >
         {/* name row */}
-        <Grid container spacing={1} justify="center" direction="row">
+        <Grid
+          item
+          xs={10}
+          container
+          spacing={2}
+          justify="space-between"
+          direction="row"
+        >
           {/* first name */}
-          <Grid item xs={4} align="center">
+          <Grid item xs={6} align="center">
             <TextField
               id="FirstName"
               label="First name"
+              variant="filled"
+              error={firstNameHelperText}
+              helperText={firstNameHelperText}
               defaultValue={userDetails.FirstName}
               onChange={(event) => {
+                setFirstNameHelperText(null)
                 // update first name in state
                 let newUserDetails = userDetails
                 newUserDetails.FirstName = event.target.value
@@ -36,12 +51,16 @@ const EditAccountCard = (props) => {
           </Grid>
 
           {/* last name */}
-          <Grid item xs={4} align="center">
+          <Grid item xs={6} align="center">
             <TextField
               id="LastName"
               label="Last name"
+              error={lastNameHelperText}
+              helperText={lastNameHelperText}
               defaultValue={userDetails.LastName}
+              variant="filled"
               onChange={(event) => {
+                setLastNameHelperText(null)
                 // update last name in state
                 let newUserDetails = userDetails
                 newUserDetails.LastName = event.target.value
@@ -52,19 +71,22 @@ const EditAccountCard = (props) => {
         </Grid>
 
         {/* bio */}
-        <Grid item xs={8} align="center">
-          <br></br>
+        <Grid item xs={10} align="center">
+          {/* <br></br> */}
           <TextField
             id="user-bio"
             label="Bio"
             type="text"
+            error={bioHelperText}
+            helperText={bioHelperText}
             placeholder="Write a short bio"
             defaultValue={userDetails.Bio}
-            variant="outlined"
+            variant="filled"
             multiline
             fullWidth
             rows={4}
             onChange={(event) => {
+              setBioHelperText(null)
               // update UserBio in state
               let newUserDetails = userDetails
               newUserDetails.Bio = event.target.value
