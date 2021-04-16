@@ -63,6 +63,29 @@ export default function AdminInvoicePage() {
   if (isLoading) {
     return (
       <div className={classes.root}>
+        <TopAppBar
+          pageTitle="Invoices"
+          customItem={
+            <Grid item xs={12} container justify="space-between">
+              <Grid item xs={4} align="left" style={{ paddingBottom: 10 }}>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={currentOrganization ? currentOrganization : null}
+                  variant="standard"
+                  color="primary"
+                  style={{
+                    color: 'white',
+                    borderBottom: '1px solid white',
+                    margin: '2',
+                  }}
+                  fullWidth
+                ></Select>
+              </Grid>
+            </Grid>
+          }
+        ></TopAppBar>
+        <LeftDrawer AccountType={userData.AccountType} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
 
