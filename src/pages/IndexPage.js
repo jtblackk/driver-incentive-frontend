@@ -9,6 +9,7 @@ import { DRAWER_WIDTH } from '../Helpers/Constants'
 import LoadingIcon from '../Components/LoadingIcon'
 import { UserContext } from '../Helpers/UserContext'
 import ProfileSelectionDialog from '../Components/ProfileSelectionDialog'
+import { Auth } from 'aws-amplify'
 
 // set up styling
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +59,8 @@ function IndexPage() {
 
       if (userData.AccountStatus === 0) {
         history.push('/account-setup')
+      } else if (userData.AccountStatus === 2) {
+        Auth.signOut()
       } else if (
         userData.AccountType === 'Sponsor' &&
         !userData.Organization &&
