@@ -111,7 +111,7 @@ function IndexPage() {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Typography paragraph>
-            Welcome to better truckers. Click on a tab to use the app.
+            Welcome to Better Truckers. Click on a tab to use the app.
           </Typography>
         </main>
       </div>
