@@ -1,10 +1,11 @@
 let apis = {
+  // triggers lambda function: ChangeSponsorshipsInfo
+  ChangeSponsorshipInfo:
+    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo',
+
   // triggers lambda function: ChangeUserInfo
   ChangeUserInfo:
     'https://u902s79wa3.execute-api.us-east-1.amazonaws.com/dev/saveuserdetails',
-
-  SendCheckoutEmail:
-    'https://mwsws12vm3.execute-api.us-east-1.amazonaws.com/dev/checkoutEmail',
 
   // triggers lambda function: CreateUser
   CreateCognitoIdentity:
@@ -61,7 +62,7 @@ let apis = {
   GetOrgUserData:
     'https://xqgw415uwe.execute-api.us-east-1.amazonaws.com/dev/getorguserdata?Organization=',
 
-  // triggers lambda function: getPointHistoryBySonsorship
+  // triggers lambda function: getPointHistoryBySonsorship (getPointHistoryBySonsorshi in exported lambda functions) [ don't mind the typo :) ]
   GetPointHistoryBySonsorship:
     'https://b428t56xa7.execute-api.us-east-1.amazonaws.com/dev/getpointhistorybysponsorship',
 
@@ -73,8 +74,13 @@ let apis = {
   GetUsernames:
     'https://hym6oy13e9.execute-api.us-east-1.amazonaws.com/dev/getusernames',
 
+  // triggers lambda function: checkTest
+  SendCheckoutEmail:
+    'https://mwsws12vm3.execute-api.us-east-1.amazonaws.com/dev/checkoutEmail',
+
   // triggers lambda function: SetCatalogItems
   SetCatalogItems: `https://4hw5o2emwe.execute-api.us-east-1.amazonaws.com/dev/setcatalogitems`,
+
   // triggers lambda function: SetOrder
   SetOrder:
     'https://t1nrlz2fl4.execute-api.us-east-1.amazonaws.com/dev/setorder',
@@ -87,12 +93,9 @@ let apis = {
   UpdateOrgName:
     'https://waza1dohpl.execute-api.us-east-1.amazonaws.com/dev/updateorgname',
 
-  // triggers lambda function: UpdateSponsorshipPointRatio
+  // triggers lambda function: UpdateSponsorshipPointRatio (UpdateSponsorshipPR in exported functions)
   UpdateSponsorshipPDR:
     'https://q8z2hne254.execute-api.us-east-1.amazonaws.com/dev/updatesponsorship',
-
-  ChangeSponsorshipInfo:
-    'https://thuv0o9tqa.execute-api.us-east-1.amazonaws.com/dev/updatesponsorshipinfo',
 
   // triggers lambda function: UserSignup
   UserSignup:
