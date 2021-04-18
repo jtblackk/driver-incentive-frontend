@@ -97,7 +97,7 @@ function RenameOrganizationPanel(props) {
                     }),
                   }
                   fetch(apis.UpdateOrgName, requestOptions).then(() => {
-                    window.location.reload()
+                    // window.location.reload()
                   })
                 })
             }}
