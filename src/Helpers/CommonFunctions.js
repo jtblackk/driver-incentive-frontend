@@ -35,7 +35,7 @@ export default async function getUserDetails(username) {
         Bio: null,
         AccountType: null,
         AccountStatus: 0,
-        Organization: null,
+        Organization: '',
       }
 
   return profile_details

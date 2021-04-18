@@ -26,7 +26,9 @@ const OrganizationSetupCard = () => {
         let clean_sonsor_list = []
         let sponsor_array = JSON.parse(data.body.toString()).Items
         sponsor_array.forEach((val) => {
-          clean_sonsor_list.push(toLower(val.Organization.S))
+          if (val.Organization) {
+            clean_sonsor_list.push(toLower(val.Organization.S))
+          }
         })
         setOrganizationList(clean_sonsor_list)
       })
