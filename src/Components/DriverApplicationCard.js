@@ -13,8 +13,10 @@ import LoadingIcon from './LoadingIcon'
 import ApplyAgainDialog from './ApplyAgainDialog'
 import { sortBy } from 'lodash'
 import apis from '../Helpers/api_endpoints'
+import { useHistory } from 'react-router'
 
 const DriverApplicationCard = (props) => {
+  let history = useHistory()
   const userData = useContext(UserContext).user
   const [applicationDetails, setApplicationDetails] = useState({
     Username: userData.Username,
@@ -86,11 +88,11 @@ const DriverApplicationCard = (props) => {
         alignItems="center"
         spacing={1}
       >
-        <ApplyAgainDialog
+        {/* <ApplyAgainDialog
           dialogIsOpen={dialogIsOpen}
           setDialogIsOpen={setDialogIsOpenState}
           setDialogResponse={setDialogResponseState}
-        />
+        /> */}
 
         {/* sponsor */}
         <Grid item container xs={7} align="left">
@@ -185,7 +187,8 @@ const DriverApplicationCard = (props) => {
                 }),
               }
               fetch(apis.SubmitApplication, requestOptions).then(() => {
-                setDialogIsOpen(true)
+                // setDialogIsOpen(true)
+                history.push('/sponsors')
               })
             }}
           >
