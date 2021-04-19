@@ -1,6 +1,6 @@
 This is Helpers/api_endpoints.js from the frontend repo. You will have to go into this file and replace all the api endpoints with live endpoints if you decide to redeploy the AWS configuration, as the api endpoints will certainly change. 
 
-the lambda functions that you must connect apis to are listed. so for each lambda function, create an api endpoint of the appropriate type (as according to the **api tutorial**) and update the link.
+the lambda functions that you must connect apis to are listed. so for each lambda function, create an api endpoint of the appropriate type (as according to the **api tutorial**) and update the link. NOTE: some lambda functions use query strings. you must set them up using the query string parameters already displayed in the URLs. exact naming is important!
 
 let apis = {
   // triggers lambda function: ChangeSponsorshipsInfo
