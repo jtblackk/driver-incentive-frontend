@@ -918,7 +918,7 @@ function OrdersTab(props) {
                     setDataState={setTable1DataState}
                     tableKey="OrderID"
                     showKey={false}
-                    initialSortedColumn="Date"
+                    initialSortedColumn="OrderDate"
                     initialSortedDirection="desc"
                     // selectedRow={selectedEntry}
                     // setSelectedRow={setSelectedEntryState}
