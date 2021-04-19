@@ -60,7 +60,7 @@ export default function DeleteCatalogItemDialog(props) {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     SponsorID: userData.Username.replaceAll("'", "''"),
-                    ProductIDs: new_item_list.replaceAll("'", "''"),
+                    ProductIDs: new_item_list,
                   }),
                 }
 
