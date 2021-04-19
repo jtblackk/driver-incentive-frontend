@@ -60,6 +60,17 @@ export default function ApplicationManagementDialog(props) {
           ? 'Accepted'
           : null,
     },
+
+    {
+      name: 'Response reason',
+      prop: props.applicationDetails.AppDecisionReason,
+    },
+    {
+      name: 'Response date',
+      prop: props.applicationDetails.AppDecisionDate
+        ? Date.parse(props.applicationDetails.AppDecisionDate).toUTCString()
+        : null,
+    },
     {
       name: 'Status',
       prop:
@@ -70,16 +81,6 @@ export default function ApplicationManagementDialog(props) {
           : props.applicationDetails.Status === 3
           ? 'Terminated'
           : null,
-    },
-    {
-      name: 'Response reason',
-      prop: props.applicationDetails.AppDecisionReason,
-    },
-    {
-      name: 'Response date',
-      prop: props.applicationDetails.AppDecisionDate
-        ? Date.parse(props.applicationDetails.AppDecisionDate).toUTCString()
-        : null,
     },
   ]
 
