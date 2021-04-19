@@ -133,6 +133,9 @@ function ProfilePageContent(props) {
                         LastName: newData.LastName,
                         Bio: newData.Bio,
                         AccountType: newData.AccountType,
+                        Organization: props.userProfile.Organization
+                          ? props.userProfile.Organization
+                          : ' ',
                       })
 
                       let requestOptions = {

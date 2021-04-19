@@ -9,6 +9,7 @@ import OrganizationSponsorManagementPanel from './OrganizationSponsorManagementP
 
 function RenameOrganizationPanel(props) {
   const userData = useContext(UserContext).user
+  const setUserData = useContext(UserContext).setUser
 
   const [organizationName, setOrganizationName] = useState(
     userData.Organization,
@@ -99,6 +100,7 @@ function RenameOrganizationPanel(props) {
                   fetch(apis.UpdateOrgName, requestOptions).then(() => {
                     // window.location.reload()
                   })
+                  setUserData({ ...userData, Organization: organizationName })
                 })
             }}
           >
