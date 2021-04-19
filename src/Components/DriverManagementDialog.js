@@ -765,7 +765,12 @@ function OrdersTab(props) {
       isDate: true,
       width: 30,
     },
-
+    {
+      id: 'CostUSD',
+      label: 'Cost (USD)',
+      isDate: true,
+      width: 30,
+    },
     {
       id: 'Status',
       label: 'Status',
@@ -852,6 +857,7 @@ function OrdersTab(props) {
         return {
           OrderID: element.OrderID,
           Cost: Math.ceil(element.Cost / element.PointDollarRatio),
+          CostUSD: element.Cost,
           Status:
             element.Status === 1
               ? 'Processing'
