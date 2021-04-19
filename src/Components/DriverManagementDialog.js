@@ -530,13 +530,13 @@ function DriverPointsTab(props) {
       id: 'ChangeDate',
       label: 'Date',
       isDate: true,
-      width: 200,
+      width: 50,
     },
     {
       id: 'ChangeReason',
       label: 'Reason',
       isDate: false,
-      width: 150,
+      width: 200,
     },
     {
       id: 'ChangeAmount',
