@@ -64,7 +64,7 @@ export default function ApplicationManagementDialog(props) {
       name: 'Status',
       prop:
         props.applicationDetails.Status === 1
-          ? 'N/A'
+          ? 'Rejected'
           : props.applicationDetails.Status === 2
           ? 'Active'
           : props.applicationDetails.Status === 3
