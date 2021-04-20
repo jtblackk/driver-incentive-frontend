@@ -171,7 +171,7 @@ export default function UserManagementPage() {
       id: 'AccStatus',
       label: 'Account status',
       isDate: false,
-      width: 50,
+      width: 150,
     },
     // {
     //   id: 'InactiveDate',

@@ -71,12 +71,11 @@ const ProductCatalogBrowsingPage = (props) => {
 
   function addItemToCart(item, quantity) {
     let original_cart = [...cart]
-
-    // if item already exists in the cart, just change the quantity
     let search_result = original_cart.find((element) => {
       return element.ProductID === item.ProductID
     })
 
+    // if item already exists in the cart, just change the quantity
     if (!search_result) {
       original_cart.push({
         ProductID: item.ProductID,
@@ -87,7 +86,10 @@ const ProductCatalogBrowsingPage = (props) => {
     } else {
       // update cart
       let updated_cart = cart.map((element) => {
-        if (element.ProductID === item.ProductID) {
+        if (
+          element.ProductID === item.ProductID &&
+          element.Quantity < item.Stock
+        ) {
           return {
             ...element,
             Quantity: element.Quantity + quantity,

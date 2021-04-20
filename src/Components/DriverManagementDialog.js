@@ -760,6 +760,24 @@ function OrdersTab(props) {
   // point history table
   const table1HeadCells = [
     {
+      id: 'OrderDate',
+      label: 'Ordered on',
+      isDate: false,
+      width: 150,
+    },
+    {
+      id: 'ShippingAddress',
+      label: 'Destination',
+      isDate: false,
+      width: 250,
+    },
+    {
+      id: 'Status',
+      label: 'Status',
+      isDate: false,
+      width: 50,
+    },
+    {
       id: 'Cost',
       label: 'Cost (points)',
       isDate: true,
@@ -770,24 +788,6 @@ function OrdersTab(props) {
       label: 'Cost (USD)',
       isDate: true,
       width: 30,
-    },
-    {
-      id: 'Status',
-      label: 'Status',
-      isDate: false,
-      width: 50,
-    },
-    {
-      id: 'OrderDate',
-      label: 'Ordered on',
-      isDate: false,
-      width: 250,
-    },
-    {
-      id: 'ShippingAddress',
-      label: 'Destination',
-      isDate: false,
-      width: 250,
     },
   ]
 
@@ -855,9 +855,9 @@ function OrdersTab(props) {
 
       let all_orders_table_data = all_orders_parsed.map((element) => {
         return {
+          OrderDate: element.OrderDate,
           OrderID: element.OrderID,
-          Cost: Math.ceil(element.Cost / element.PointDollarRatio),
-          CostUSD: element.Cost,
+          ShippingAddress: element.ShippingAddress,
           Status:
             element.Status === 1
               ? 'Processing'
@@ -866,8 +866,9 @@ function OrdersTab(props) {
               : element.Status === 3
               ? 'Delivered'
               : 'Unknown status',
-          OrderDate: element.OrderDate,
-          ShippingAddress: element.ShippingAddress,
+
+          Cost: Math.ceil(element.Cost / element.PointDollarRatio),
+          CostUSD: element.Cost,
         }
       })
 

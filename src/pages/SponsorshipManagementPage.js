@@ -165,7 +165,7 @@ export default function SponsorshipManagementPage() {
               </Grid>
             ) : (
               <Grid container>
-                <Grid item xs={10} lg={6}>
+                <Grid item xs={10} lg={8} xl={6}>
                   <CreateNewSponsorshipCard
                     SponsorID={currentSponsor.Username}
                     updatePage={{
@@ -179,7 +179,7 @@ export default function SponsorshipManagementPage() {
                   <br />
                 </Grid>
 
-                <Grid item xs={10} lg={6}>
+                <Grid item xs={10} lg={8} xl={6}>
                   <SponsorshipManagementView
                     SponsorID={currentSponsor.Username}
                     updatePage={{
