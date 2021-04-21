@@ -31,7 +31,9 @@ function OrganizationInfoPanel(props) {
 
       let leader = props.parentProps.orgProps.organizationUsers.find(
         (element) => {
-          return element.Username.includes('@')
+          return (
+            element.Username.includes('@') && element.AccountType === 'Sponsor'
+          )
         },
       )
 
