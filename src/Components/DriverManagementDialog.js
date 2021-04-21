@@ -872,7 +872,7 @@ function OrdersTab(props) {
               : 'Unknown status',
 
           Cost: Math.ceil(element.Cost / element.PointDollarRatio),
-          CostUSD: element.Cost,
+          CostUSD: parseFloat(element.Cost.toFixed(2)),
         }
       })
 

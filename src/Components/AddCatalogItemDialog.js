@@ -86,7 +86,7 @@ export default function AddCatalogItemDialog(props) {
           ItemKey: element.ItemKey,
           Photo: <Avatar src={element.ItemPhotoURL} variant="square" />,
           ItemName: element.ItemName,
-          DollarPrice: parseFloat(element.Price).toFixed(2),
+          DollarPrice: parseFloat(element.Price),
         }
       })
 
