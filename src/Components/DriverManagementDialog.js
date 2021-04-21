@@ -442,7 +442,7 @@ function EditDriverPointsMenu(props) {
                     },
                   )
                   setReason('')
-                  setPointQuantity(0)
+                  setPointQuantity('')
                   props.setAllDriverDataState(newDriverDataState)
 
                   // props.triggerPageUpdate()
@@ -508,7 +508,7 @@ function EditDriverPointsMenu(props) {
                     },
                   )
                   setReason('')
-                  setPointQuantity(0)
+                  setPointQuantity('')
                   props.setAllDriverDataState(newDriverDataState)
                   // props.triggerPageUpdate()
                 })

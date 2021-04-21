@@ -123,7 +123,7 @@ const SponsorshipManagementView = (props) => {
   }
 
   useEffect(() => {
-    setIsLoading(true)
+    // setIsLoading(true)
     ;(async () => {
       // fetch and parse sponsor's driver's profiles
 
