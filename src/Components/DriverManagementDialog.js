@@ -338,7 +338,7 @@ function EditPointDollarRatioMenu(props) {
 }
 
 function EditDriverPointsMenu(props) {
-  const [reason, setReason] = useState(null)
+  const [reason, setReason] = useState('')
   const [reasonHelperText, setReasonHelperText] = useState(null)
 
   const [pointQuantity, setPointQuantity] = useState(null)
@@ -370,6 +370,7 @@ function EditDriverPointsMenu(props) {
             label="Reason"
             variant="filled"
             size="small"
+            value={reason}
             type="text"
             error={reasonHelperText}
             helperText={reasonHelperText}
@@ -440,8 +441,10 @@ function EditDriverPointsMenu(props) {
                       }
                     },
                   )
-
+                  setReason('')
+                  setPointQuantity(0)
                   props.setAllDriverDataState(newDriverDataState)
+
                   // props.triggerPageUpdate()
                 })
               }}
@@ -504,7 +507,8 @@ function EditDriverPointsMenu(props) {
                       }
                     },
                   )
-
+                  setReason('')
+                  setPointQuantity(0)
                   props.setAllDriverDataState(newDriverDataState)
                   // props.triggerPageUpdate()
                 })
