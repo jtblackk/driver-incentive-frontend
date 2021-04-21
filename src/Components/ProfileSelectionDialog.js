@@ -95,7 +95,7 @@ export default function ProfileSelectionDialog(props) {
                     </Grid>
                     <Grid item align="center" xs={12}>
                       {element.Username && element.Username.includes('@') ? (
-                        <b>{element.Username.split('@')[0]}</b>
+                        <b>{element.Username}</b>
                       ) : (
                         element.Username
                       )}
